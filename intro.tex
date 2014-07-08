@@ -1,2 +1,36 @@
+Unlike a typical desktop environment where it is usually sufficient to have a
+single software package installed to fulfill a particular purpose, HPC
+systems are normally used by a large user community with widely varying
+demands. In particular, there is often the need to make multiple versions of
+a software package available, and sometimes even conflicting packages
+providing either identical or significantly overlapping functionality, such
+as different implementations of the MPI standard (e.g., Open\,MPI vs.
+MVAPICH) or linear algebra packages (e.g., OpenBLAS vs. Intel MKL).
+
+A simple yet powerful solution to this issue are environment
+modules~\cite{environment_modules_paper}, which allow users to easily load,
+unload, and switch between software packages by  modifying the user's
+environment, that is, adjusting environment variables such as \texttt{PATH}
+or \texttt{MANPATH} and/or setting package-specific variables, for example,
+to define the DNS name of a license server. However, while environment
+modules are used by many HPC sites around the world, dealing with the
+subtleties of different implementations as well as organizing large numbers
+of modules that get added over time remains a major challenge.
+
+In addition to providing users an easy way to access the software available
+on the HPC system, installing scientific software packages is a non-trivial
+task in its own right. As these packages are often written by domain
+scientists with a strong focus on conducting their own research on platforms
+they have access to, less emphasis is placed on portable build systems.
+\remark{some more text needed}
+
+In this paper, we introduce an automated approach to installing scientific
+software and organizing the corresponding modules in a hierarchical way to
+address the aforementioned shortcomings. This is achieved by advantageously
+combining the functionality provided by the two community-driven tools
+EasyBuild and Lmod.
+
+The remainder of this paper is structured as follows: \ldots
+
 \remark{issues with installing \& providing scientific software}
 \remark{importance of appropriate tools \& community}

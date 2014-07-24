@@ -1,6 +1,100 @@
+In this section, we describe common approaches that are traditionally used at
+HPC sites to install scientific software and to deal with the growing number
+of modules over the lifetime of an HPC system. We start our discussion by a
+brief overview of the concept of module files and various module naming
+schemes which are in use today, followed by a description of the underlying
+module tools used by most sites. Next, we review commonly used workflows for
+installing scientific software and finally summarize the shortcomings we have
+identified with these approaches.
+
 \subsection{Tools \& policies}
 
 \subsubsection{Module files}
+
+In essence, module files are a textual description of what needs to be
+changed in the user's environment to make a particular software package
+available. Such changes may include the adjustment of environment variables
+such as \texttt{PATH} or setting additional package-specific variables, for
+example, to specify include and/or library paths. In addition, module files
+typically include a brief one-line description of the package displayed by
+\texttt{module whatis} as well as a longer help text printed by
+\texttt{module help} to describe the basic usage, where to find the package
+documentation, and whom to contact in case of usage problems (this may be the
+site's application support team or the developers of the package directly).
+
+Module files are recursively searched for in directories specified by the
+environment variable \texttt{MODULEPATH}. The name of a module then consists
+of the full path to the corresponding module file, starting from the
+specified search directory. For example, the module file located in
+\begin{verbatim}
+    <searchdir>/compiler/GCC/4.8.2
+\end{verbatim}
+provides a module for version 4.8.2 of the GNU Compiler Collection with the
+name `\texttt{compiler/GCC/4.8.2}'.
+
+The example above also shows one possible way to categorize modules by
+placing their module files into appropriately named subdirectories (e.g.,
+`\texttt{compiler}', `\texttt{mpi}', `\texttt{math}', etc.). Another common
+option is to list the individual subdirectories in \texttt{MODULEPATH}, so
+that the module names are shorter, but the modules are still nicely separated
+in the output of module avail, for example:
+\begin{verbatim}
+    % module avail
+    -------- <searchdir>/compiler --------
+    GCC/4.8.2   Intel/14.0  Clang/3.4
+    ---------- <searchdir>/mpi -----------
+    OpenMPI/1.7.3 MVAPICH/1.9
+    ...
+\end{verbatim}
+
+However, since packages such as MPI implementations are inherently tied to a
+particular compiler and most often even a particular version, disambiguating
+module names can be a daunting task. For example, for the three compilers
+shown above, the corresponding OpenMPI modules are often named as follows:
+\begin{verbatim}
+    OpenMPI/1.7.3-GCC-4.8.2
+    OpenMPI/1.7.3-Intel-14.0
+    OpenMPI/1.7.3-Clang-3.4
+\end{verbatim}
+
+Now considering a full-blown scientific software package like WRF compiled
+with a particular compiler \emph{and} MPI, module names get even messier,
+for example:
+\begin{verbatim}
+    WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
+    ...
+\end{verbatim}
+Note that such packages in many cases also depend on a set of mathematical
+libraries, such as BLAS+ScaLAPACK+FFTW vs. ACML vs. Intel MKL, which in a
+real scenario extends the module name even further.
+
+A common solution to this issue is to define so-called \emph{toolchain}
+modules, packaging a compiler, an MPI library, and one or more packages
+providing linear algebra and FFT functionality. For example, a \texttt{goolf}
+toolchain module may combine (i.e., implicitly load modules for) GCC,
+OpenMPI, OpenBLAS, ScaLAPACK and FFTW---each with a well-defined version. The
+WRF module as shown above may the simply refer to a toolchain instead of the
+individual packages:
+\begin{verbatim}
+    WRF/3.5-goolf-1.6.10
+\end{verbatim}
+The toolchain concept also offers the possibility to categorize modules by
+toolchain, however, the same software package will then show up in multiple
+sections of the \texttt{module avail} output. The downside of using
+toolchains, however, is that users have to be taught what is hidden behind
+the often rather cryptic toolchain names and that a toolchain version has no
+direct relationship with the versions of the encapsulated packages.
+
+It should be pointed out that all of the approaches to name and organize
+module files presented above offer a multitude of options for (especially
+novice) users to shoot themselves in the foot, that is, to load modules which
+are incompatible to each other. While module files in principle offer the
+possibility to specify conflicts and thereby prevent loading of incompatible
+modules, all conflicting modules have to be explicitly listed. For example,
+the OpenMPI module built for GCC may specify that it is incompatible with
+Intel and Clang modules. However, this means that these conflict
+specifications have to be adjusted once an additional compiler (e.g., PGI)
+gets installed on the system---which is clearly a maintenance nightmare.
 
 \remark{briefly explain concept of module files, flat naming scheme + variations (e.g. categorized, per toolchain, \ldots)}
 

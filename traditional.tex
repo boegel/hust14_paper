@@ -10,6 +10,7 @@ identified with these approaches.
 \subsection{Tools \& policies}
 
 \subsubsection{Module files}
+\label{sec:Module_files}
 
 In essence, module files are a textual description of what needs to be
 changed in the user's environment to make a particular software package
@@ -50,7 +51,7 @@ in the output of module avail, for example:
 However, since packages such as MPI implementations are inherently tied to a
 particular compiler and most often even a particular version, disambiguating
 module names can be a daunting task. For example, for the three compilers
-shown above, the corresponding OpenMPI modules are often named as follows:
+shown above, the corresponding Open\,MPI modules are often named as follows:
 \begin{verbatim}
     OpenMPI/1.7.3-GCC-4.8.2
     OpenMPI/1.7.3-Intel-14.0
@@ -71,7 +72,7 @@ A common solution to this issue is to define so-called \emph{toolchain}
 modules, packaging a compiler, an MPI library, and one or more packages
 providing linear algebra and FFT functionality. For example, a \texttt{goolf}
 toolchain module may combine (i.e., implicitly load modules for) GCC,
-OpenMPI, OpenBLAS, ScaLAPACK and FFTW---each with a well-defined version. The
+Open\,MPI, OpenBLAS, ScaLAPACK and FFTW---each with a well-defined version. The
 WRF module as shown above may the simply refer to a toolchain instead of the
 individual packages:
 \begin{verbatim}
@@ -85,19 +86,24 @@ to be taught what is hidden behind the often rather cryptic toolchain names
 and that a toolchain version has no direct relationship with the versions of
 the encapsulated packages.
 
-It should be pointed out that all of the approaches to name and organize
-module files presented above offer a multitude of options for (especially
-novice) users to shoot themselves in the foot, that is, to load modules which
-are incompatible to each other. While module files in principle offer the
-possibility to specify conflicts and thereby prevent loading of incompatible
-modules, all conflicting modules have to be explicitly listed. For example,
-the OpenMPI module built for GCC may specify that it is incompatible with
-modules providing Intel or Clang compilers. However, this means that these
-conflict specifications have to be adjusted once an additional compiler
-(e.g., PGI) gets installed on the system---which is clearly a maintenance
-nightmare.
+It should be pointed out that altough all of the approaches to name and
+categorize module files presented above try to improve the overall
+organization of the available modules, a typical module listing on an HPC
+system can still be overwhelming, as the total number of modules can easily
+be in the order of hundreds. Moreover, all traditional aproaches offer a
+multitude of options for (especially novice) users to shoot themselves in the
+foot, that is, to load modules which are incompatible to each other. While
+module files in principle offer the possibility to specify conflicts and
+thereby prevent loading of incompatible modules, all conflicting modules have
+to be explicitly listed. For example, the Open\,MPI module built for GCC may
+specify that it is incompatible with modules providing Intel or Clang
+compilers. However, this means that these conflict specifications have to be
+adjusted once an additional compiler (e.g., PGI) gets installed on the
+system---which is clearly a maintenance nightmare from the perspective of a
+system administrator.
 
-\remark{briefly explain concept of module files, flat naming scheme + variations (e.g. categorized, per toolchain, \ldots)}
+\remark{briefly explain concept of module files, flat naming scheme +
+variations (e.g. categorized, per toolchain, \ldots)}
 
 \subsubsection{Modules tool}
 
@@ -154,9 +160,17 @@ to include the patch?}
 \subsubsection{Installing scientific software}
 
 ???
-\remark{manual, in-house scripting, 'Jim', little to no collaboration across HPC sites (a few exceptions!)}
+
+\remark{manual, in-house scripting, 'Jim', little to no collaboration across
+HPC sites (a few exceptions!)}
+
+\remark{Does it make sense to also mention RPM and DEB packages? For a
+regular software install, the downside is that only one version can be
+available. But of course packaging systems can be combined with out proposed
+approach to roll out the software on a bunch of nodes (see TACC).}
 
 \subsection{Shortcomings \& unresolved issues}
 
 ???
-\remark{manual creating of module files (consistency issues), repetitive \& error-prone work of installing scientific software, \ldots}
+\remark{manual creating of module files (consistency issues), repetitive \&
+error-prone work of installing scientific software, \ldots}

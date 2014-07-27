@@ -1,7 +1,39 @@
 
 \subsection{Hierarchical module naming scheme}
 
+The idea behind a hierarchical module organization is to make different
+variants of module files only visible on demand. That is, initially only a
+small number of core modules are available to the user. Core modules are
+modules which are independent of a particular compiler toolchain, that is,
+either completely self-contained or only dependent on basic system software.
+Examples of this category are compiler modules, modules providing statically
+linked software (e.g., debuggers), and modules providing software packages
+using only (certain) scripting languages.
+
+By loading a compiler module, the \texttt{MODULEPATH} is then extended to
+make all modules visible which are built with---and therefore depend on---the
+corresponding compiler. That is, a separate module files directory is
+maintained for each version of each compiler. For the Open\,MPI example
+presented in Section~\ref{sec:Module_files}, this means that the user then
+only sees a single module file for Open\,MPI 1.7.3 instead of three, the one
+for the installation built with the corresponding compiler.
+
+Obviously, such a hierarchy is not limited to a single level. That is, the
+module files for different MPI implementations can further extend the
+\texttt{MODULEPATH} to enable all modules which depend on both the loaded
+compiler and the respective MPI installation.
+
 \subsubsection{Advantages over traditional scheme}
+
+A hierarchical module file organization has a number of significant
+advantages: First, at any point in time, users are only presented with the
+modules which are meaningful in the current context. That is, the list of
+available modules is much shorter and therefore less overwhelming. Second,
+encoding the dependency chain in the module name is no longer necessary for
+modules enabling another hierarchy level, thereby leading to more intuitive
+module names. And finally, loading of incompatible modules is automatically
+avoided, preventing users from making simple mistakes which may lead to
+subtle errors that are non-obvious and hard to debug.
 
 \remark{basic users make less mistakes, expert users retain full freedom}
 

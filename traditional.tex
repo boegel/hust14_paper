@@ -25,8 +25,8 @@ the package documentation, and whom to contact in case of usage problems
 package directly).
 
 Module files are recursively searched for in directories specified by the
-environment variable \texttt{MODULEPATH}. The name of a module then consists
-of the full path to the corresponding module file, starting from the
+environment variable \texttt{MODULEPATH}. The name of a module is defined
+as the full path to the corresponding module file, starting from the
 specified search directory. For example, the module file located in
 \begin{verbatim}
     <searchdir>/compiler/GCC/4.8.2
@@ -59,8 +59,8 @@ shown above, the corresponding Open\,MPI modules are often named as follows:
 \end{verbatim}
 
 Now considering a full-blown scientific software package like WRF compiled
-with a particular compiler \emph{and} MPI, module names get even messier,
-for example:
+with a particular compiler and linked against a particular MPI, module names
+get even messier, for example:
 \begin{verbatim}
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
 \end{verbatim}
@@ -124,10 +124,10 @@ library to parse and evaluate module files. A second implementation, which
 was never packaged as a release and is still marked as experimental by the
 authors, is written in Tcl only. For the most part, these two implementations
 offer identical functionality, however, they obviously suffer from the usual
-problem of keeping the different code bases consistent, which may lead to
-subtle effects when switching between them. In addition, there exists a fork
-of the Tcl-only implementation which has been heavily adjusted to meet the
-requirements of the DEISA (Distributed European Infrastructure for
+problem of keeping the different code bases consistent, which sometimes leads
+to subtle effects when switching between them. In addition, there exists a
+fork of the Tcl-only implementation which has been heavily adjusted to meet
+the requirements of the DEISA (Distributed European Infrastructure for
 Supercomputing Applications) project.
 
 \remark{briefly explain Tcl/C and Tcl-only environment module tools}
@@ -144,9 +144,9 @@ unlikely to happen any time soon.
 modules-interest mailing list. However, the answers from the maintainers
 suggest to me that they have no interest in changing things too much. What is
 your impression? I'm also not sure whether we should really write this down
-in a paper ;-)
+in a paper ;-)}
 
-One possible reviewer comment may be: Why didn't you contribute a patch to
+\markus{One possible reviewer comment may be: Why didn't you contribute a patch to
 the existing project rather than reinventing the wheel? Do we have a good
 answer to this? Robert, did you actually try to contribute and they rejected
 to include the patch?}
@@ -166,7 +166,7 @@ HPC sites (a few exceptions!)}
 
 \markus{Does it make sense to also mention RPM and DEB packages? For a
 regular software install, the downside is that only one version can be
-available. But of course packaging systems can be combined with out proposed
+available. But of course packaging systems can be combined with our proposed
 approach to roll out the software on a bunch of nodes (see TACC).}
 
 \subsection{Shortcomings \& unresolved issues}

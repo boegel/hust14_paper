@@ -10,20 +10,25 @@ Examples of this category are compiler modules, modules providing statically
 linked software (e.g., debuggers), and modules providing software packages
 using only (certain) scripting languages.
 
-By loading a compiler module, the \texttt{MODULEPATH} is then extended to
-make all modules visible which are built with---and therefore depend on---the
-corresponding compiler. That is, a separate module files directory is
-maintained for each version of each compiler. For the Open\,MPI example
-presented in Section~\ref{sec:Module_files}, this means that the user then
-only sees a single module file for Open\,MPI 1.7.3 instead of three, the one
-for the installation built with the corresponding compiler.
+Compiler modules implicitly extend the \texttt{MODULEPATH} to make all
+modules visible which are built with---and therefore depend on---the
+corresponding compiler. That is, separate software installation and module
+files directories are maintained for each version of each compiler. For the
+Open\,MPI example presented in Section~\ref{sec:Module_files}, this means
+that the user then only sees a single module file for Open\,MPI 1.7.3 instead
+of three, the one enabling the installation built using the compiler module
+that is currently loaded.
 
-Obviously, such a hierarchy is not limited to a single level. That is, the
-module files for different MPI implementations can further extend the
+Obviously, such a hierarchy is not limited to a single level. For example,
+the module files for different MPI implementations can further extend the
 \texttt{MODULEPATH} to enable all modules which depend on both the loaded
 compiler and the respective MPI installation.
 
 \subsubsection{Advantages over traditional scheme}
+
+\markus{This sub-subsection IMHO only makes sense if there would be a second
+one. I propose to remove it and simply list the advantages as part of Section
+III.A.}
 
 A hierarchical module file organization has a number of significant
 advantages: First, at any point in time, users are only presented with the

@@ -151,7 +151,21 @@ the existing project rather than reinventing the wheel? Do we have a good
 answer to this? Robert, did you actually try to contribute and they rejected
 to include the patch?}
 
+\robert{The truth was that I saw the same behaviour in
+  environment modules mailing list.  My extreme dislike of TCL and
+  complete lack of understanding of the internals of TCL/C modules
+  meant that I wasn't going to patch Env. Modules.   I really didn't
+  plan to take over the Env. Modules world.  I thought I'd prototype
+  this new module system, then someone who understood TCL/C and
+  modules would convert the prototype into TCL/C.}
 
+\robert{But it was very clear from the beginning that supporting
+  the hierarchy was going to require a major refactoring.  There has
+  to be a notion of inactive modules.  Lmod uses a table that it
+  encodes in the enviroment.  This made it easier to support inactive
+  modules, properties.}
+  
+  
 \paragraph{Other}
 
 ???

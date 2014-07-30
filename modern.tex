@@ -40,6 +40,12 @@ module names. And finally, loading of incompatible modules is automatically
 avoided, preventing users from making simple mistakes which may lead to
 subtle errors that are non-obvious and hard to debug.
 
+\markus{Somewhere, we should mention that the hierarchical module scheme as
+outlined above \textit{in principle} also works with C/Tcl or Tcl-only
+modules, but that specific features simplify usage a lot: ``stack-based'' swap,
+module deactivation, \texttt{module spider}, etc. But there is a small
+chicken/egg problem here \ldots}
+
 \remark{basic users make less mistakes, expert users retain full freedom}
 
 

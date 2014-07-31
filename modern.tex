@@ -1,4 +1,8 @@
 
+\remark{this section should outline the modern approach of using a hierarchical module naming scheme,
+highlighting how this makes things easier for end-users without limiting power users; forward references should
+be made to the EasyBuild \& Lmod sections when the consequences of using a module naming scheme like this are discussed}
+
 \subsection{Hierarchical module naming scheme}
 
 The idea behind a hierarchical module organization is to make different
@@ -31,7 +35,7 @@ one. I propose to remove it and simply list the advantages as part of Section
 III.A.}
 
 A hierarchical module file organization has a number of significant
-advantages: First, at any point in time, users are only presented with the
+advantages. First, at any point in time, users are only presented with the
 modules which are meaningful in the current context. That is, the list of
 available modules is much shorter and therefore less overwhelming. Second,
 encoding the dependency chain in the module name is no longer necessary for
@@ -52,6 +56,8 @@ chicken/egg problem here \ldots}
 
 \subsection{\easybuild{}: building software with ease}
 
+\remark{separate full section?}
+
 \subsubsection{\easybuild{} as a platform for collaboration}
 
 \subsubsection{Support for hierarchical modules}
@@ -59,6 +65,8 @@ chicken/egg problem here \ldots}
 
 
 \subsection{Lmod: easy software access without hindering experts}
+
+\remark{separate full section?}
 
 Lmod is a modern tool for consuming module files, with a strong focus on providing users
 easy access to their (scientific) software stack, without hindering experts. It is the

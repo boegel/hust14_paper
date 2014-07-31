@@ -24,6 +24,11 @@ the package documentation, and whom to contact in case of usage problems
 (this may be the site's application support team or the developers of the
 package directly).
 
+\remark{changes to environment can be reverted by 'unloading' the module, which further complicates things
+(more opportunities for users to shoot themselves in the foot)}
+
+\remark{module files are shell-independent}
+
 Module files are recursively searched for in directories specified by the
 environment variable \texttt{MODULEPATH}. The name of a module is defined
 as the full path to the corresponding module file, starting from the
@@ -63,23 +68,24 @@ with a particular compiler and linked against a particular MPI, module names
 get even messier, for example:
 \begin{verbatim}
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
+    WRF/3.5-Intel-14.0-OpenMPI-1.7.3
 \end{verbatim}
 Note that such packages in many cases also depend on a set of mathematical
-libraries, such as BLAS+ScaLAPACK+FFTW vs. ACML vs. Intel MKL, which in a
+libraries, such as OpenBLAS+(Sca)LAPACK+FFTW vs. ACML vs. Intel MKL, which in a
 real scenario extends the module name even further.
 
 A common solution to this issue is to define so-called \emph{toolchain}
 modules, packaging a compiler, an MPI library, and one or more packages
 providing linear algebra and FFT functionality. For example, a \texttt{goolf}
 toolchain module may combine (i.e., implicitly load modules for) GCC,
-Open\,MPI, OpenBLAS, ScaLAPACK and FFTW---each with a well-defined version. The
-WRF module as shown above may the simply refer to a toolchain instead of the
+Open\,MPI, OpenBLAS, (Sca)LAPACK and FFTW---each with a well-defined version. The
+first WRF module as shown above may then simply refer to a toolchain instead of the
 individual packages:
 \begin{verbatim}
     WRF/3.5-goolf-1.6.10
 \end{verbatim}
 The toolchain concept also offers the possibility to categorize modules by
-toolchain, however, if a software package is availabel for multiple
+toolchain, however, if a software package is available for multiple
 toolchains, it will then show up in multiple sections of the \texttt{module
 avail} output. The downside of using toolchains, however, is that users have
 to be taught what is hidden behind the often rather cryptic toolchain names
@@ -102,10 +108,20 @@ adjusted once an additional compiler (e.g., PGI) gets installed on the
 system---which is clearly a maintenance nightmare from the perspective of a
 system administrator.
 
-\remark{briefly explain concept of module files, flat naming scheme +
-variations (e.g. categorized, per toolchain, \ldots)}
+\remark{main issues with module files: maintaining consistency (contents of module files, naming),
+putting the burden on users to correctly align things and not run into trouble (avoiding conflicts, etc.)}
+
+\subsubsection{Module naming scheme}
+\label{sec:Module_naming_scheme}
+
+\remark{module naming scheme should be discussed separately from module files, different concepts,
+making the distinction is important in the paper context}
+
+\remark{flat naming scheme (most common?), categorized as first attempt to better structure things}
 
 \subsubsection{Modules tool}
+
+\kenneth{I feel like a more general explenation of what a modules tool does for the user is missing here}
 
 \paragraph{Environment modules}
 
@@ -129,6 +145,7 @@ to subtle effects when switching between them. In addition, there exists a
 fork of the Tcl-only implementation which has been heavily adjusted to meet
 the requirements of the DEISA (Distributed European Infrastructure for
 Supercomputing Applications) project.
+\remark{missing reference for the DEISA variant of modulecmd.tcl}
 
 \remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
@@ -182,6 +199,14 @@ HPC sites (a few exceptions!)}
 regular software install, the downside is that only one version can be
 available. But of course packaging systems can be combined with our proposed
 approach to roll out the software on a bunch of nodes (see TACC).}
+
+\kenneth{imho, yes, it makes sense to mention the open issues with traditional
+packaging systems: only one version/build per software package, usually little
+support for the mess you run into with scientific software, ...}
+
+\remark{issues with using packaging tools like RPM (cfr. TACC): requires tons of manpower,
+very little flexibility for site-specific modifications, little collaboration between sites thus
+lots of duplicate effort}
 
 \subsection{Shortcomings \& unresolved issues}
 

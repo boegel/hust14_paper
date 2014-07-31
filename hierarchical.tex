@@ -54,3 +54,12 @@ chicken/egg problem here \ldots}
 
 \label{sec:hierarchical_consequences}
 \subsection{Consequences of using a hierarchical naming scheme}
+
+\remark{\itemize{
+    \item complicates (manual) creation of module files due to hierarchical organization
+    \item requires enhanced modules too to deal with idiocracies of efficiently using the provided modules (search, swapping between module stacks)
+}}
+
+\easybuild{} (section~\ref{sec:easybuild}) automates creation of module files under a specified naming scheme;
+
+Lmod (section~\ref{sec:lmod}) provides required functionality to let users easily navigate and use modules in a hierarchical scheme

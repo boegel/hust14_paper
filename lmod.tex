@@ -1,0 +1,37 @@
+
+Lmod is a modern tool for consuming module files, with a strong focus on providing users
+easy access to their (scientific) software stack, without hindering experts. It is the
+handshake between the system administrators and end users, and delivers a powerful yet
+flexible way of configuring and managing their working software stack. Lmod is feature-rich,
+well supported, continously enhanced, and comes with a vibrant
+community.   This talk will cover the main concepts in a module
+system, the choice of module layout (hierarchical vs. flat),  The
+new features of Lmod and and how to leverage the module system to
+track how which software package user use and do not use.
+
+\remark{actively maintained}
+
+\subsection{Key features}
+
+\begin{itemize}
+    \item user-friendly
+    \begin{itemize}
+        \item ml
+        \item sensible version ordering
+        \item case-insensitive module avail
+        \item list/avail (can) go(es) to stdout
+        \item module load => swap if needed
+        \item recursive unload (is default)
+        \item spider cache => fast avail (\& spider)
+    \end{itemize}
+    \item hooks
+    \item path priorities
+    \item properties
+    \item families
+    \item load with version range
+    \item pushenv
+\end{itemize}
+\remark{too long a list to include all? AP Robert: which ones do we really need to mention?}
+\remark{module swap works}
+\remark{module avail vs module spider}
+\remark{(spider cache)}

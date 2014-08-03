@@ -8,14 +8,15 @@ as different implementations of the MPI standard (e.g., Open\,MPI vs.
 MVAPICH) or linear algebra packages (e.g., OpenBLAS vs. Intel MKL).
 
 A simple yet powerful solution to this issue are environment
-modules~\cite{environment_modules_paper}, which allow users to easily load,
-unload, and switch between software packages by  modifying the user's
-environment, that is, adjusting environment variables such as \texttt{PATH}
-and \texttt{MANPATH} and/or setting package-specific variables, for example,
-to specify the DNS name of a license server. However, while environment
-modules are used by many HPC sites around the world, dealing with the
-subtleties of different implementations as well as organizing large numbers
-of modules that get added over time remains a major challenge.
+modules~\cite{furlani91,furlani96,eadline,cmod,laytonEM1}, which allow
+users to easily load, unload, and switch between software packages by
+modifying the user's environment, that is, adjusting environment
+variables such as \texttt{PATH} and \texttt{MANPATH} and/or setting
+package-specific variables, for example, to specify the DNS name of a
+license server. However, while environment modules are used by many
+HPC sites around the world, dealing with the subtleties of different
+implementations as well as organizing large numbers of modules that
+get added over time remains a major challenge.
 
 In addition to providing users an easy way to access the software available
 on the HPC system, installing scientific software packages is a non-trivial

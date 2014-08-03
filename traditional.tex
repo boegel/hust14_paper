@@ -1,132 +1,46 @@
-In this section, we describe common approaches that are traditionally used at
-HPC sites to install scientific software and to deal with the growing number
-of modules over the lifetime of an HPC system. We start our discussion with a
-brief overview of the concept of module files and various module naming
-schemes which are in use today, followed by a description of the underlying
-module tools used by most sites. Next, we review commonly used workflows for
-installing scientific software and finally summarize the shortcomings we have
-identified with these approaches.
+In this section, we describe common approaches that are traditionally
+used at HPC sites to install scientific software and to deal with the
+growing number of modules over the lifetime of an HPC system. We start
+our discussion by module tools used by many sites followed by a brief
+overview of the concept of module files and various module naming
+schemes which are in use today.  Next, we review commonly used
+workflows for installing scientific software and finally summarize the
+shortcomings we have identified with these approaches.
 
 \subsection{Tools \& policies}
 
-\subsubsection{Module files}
-\label{sec:Module_files}
-
-In essence, module files are a textual description of what needs to be
-changed in the user's environment to make a particular software package
-available. Such changes may include the adjustment of environment variables
-such as \texttt{PATH} or setting additional package-specific variables, for
-example, convenience variables pointing to the include and/or library paths.
-In addition, module files typically include a brief one-line description of
-the package displayed by \texttt{module whatis} as well as a longer help text
-printed by \texttt{module help} to describe the basic usage, where to find
-the package documentation, and whom to contact in case of usage problems
-(this may be the site's application support team or the developers of the
-package directly).
-
-\remark{changes to environment can be reverted by 'unloading' the module, which further complicates things
-(more opportunities for users to shoot themselves in the foot)}
-
-\remark{module files are shell-independent}
-
-Module files are recursively searched for in directories specified by the
-environment variable \texttt{MODULEPATH}. The name of a module is defined
-as the full path to the corresponding module file, starting from the
-specified search directory. For example, the module file located in
-\begin{verbatim}
-    <searchdir>/compiler/GCC/4.8.2
-\end{verbatim}
-provides a module for version 4.8.2 of the GNU Compiler Collection with the
-name `\texttt{compiler/GCC/4.8.2}'.
-
-The example above also shows one possible way to categorize modules by
-placing their module files into appropriately named subdirectories (e.g.,
-`\texttt{compiler}', `\texttt{mpi}', `\texttt{math}', etc.). Another common
-option is to list the individual subdirectories in \texttt{MODULEPATH}, so
-that the module names are shorter, but the modules are still nicely separated
-in the output of module avail, for example:
-\begin{verbatim}
-    % module avail
-    -------- <searchdir>/compiler --------
-    GCC/4.8.2   Intel/14.0  Clang/3.4
-    ---------- <searchdir>/mpi -----------
-    OpenMPI/1.7.3 MVAPICH/1.9
-\end{verbatim}
-
-However, since packages such as MPI implementations are inherently tied to a
-particular compiler and most often even a particular version, disambiguating
-module names can be a daunting task. For example, for the three compilers
-shown above, the corresponding Open\,MPI modules are often named as follows:
-\begin{verbatim}
-    OpenMPI/1.7.3-GCC-4.8.2
-    OpenMPI/1.7.3-Intel-14.0
-    OpenMPI/1.7.3-Clang-3.4
-\end{verbatim}
-
-Now considering a full-blown scientific software package like WRF compiled
-with a particular compiler and linked against a particular MPI, module names
-get even messier, for example:
-\begin{verbatim}
-    WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
-    WRF/3.5-Intel-14.0-OpenMPI-1.7.3
-\end{verbatim}
-Note that such packages in many cases also depend on a set of mathematical
-libraries, such as OpenBLAS+(Sca)LAPACK+FFTW vs. ACML vs. Intel MKL, which in a
-real scenario extends the module name even further.
-
-A common solution to this issue is to define so-called \emph{toolchain}
-modules, packaging a compiler, an MPI library, and one or more packages
-providing linear algebra and FFT functionality. For example, a \texttt{goolf}
-toolchain module may combine (i.e., implicitly load modules for) GCC,
-Open\,MPI, OpenBLAS, (Sca)LAPACK and FFTW---each with a well-defined version. The
-first WRF module as shown above may then simply refer to a toolchain instead of the
-individual packages:
-\begin{verbatim}
-    WRF/3.5-goolf-1.6.10
-\end{verbatim}
-The toolchain concept also offers the possibility to categorize modules by
-toolchain, however, if a software package is available for multiple
-toolchains, it will then show up in multiple sections of the \texttt{module
-avail} output. The downside of using toolchains, however, is that users have
-to be taught what is hidden behind the often rather cryptic toolchain names
-and that a toolchain version has no direct relationship with the versions of
-the encapsulated packages.
-
-It should be pointed out that altough all of the approaches to name and
-categorize module files presented above try to improve the overall
-organization of the available modules, a typical module listing on an HPC
-system can still be overwhelming, as the total number of modules can easily
-be in the order of hundreds. Moreover, all traditional aproaches offer a
-multitude of options for (especially novice) users to shoot themselves in the
-foot, that is, to load modules which are incompatible to each other. While
-module files in principle offer the possibility to specify conflicts and
-thereby prevent loading of incompatible modules, all conflicting modules have
-to be explicitly listed. For example, the Open\,MPI module built for GCC may
-specify that it is incompatible with modules providing Intel or Clang
-compilers. However, this means that these conflict specifications have to be
-adjusted once an additional compiler (e.g., PGI) gets installed on the
-system---which is clearly a maintenance nightmare from the perspective of a
-system administrator.
-
-\remark{main issues with module files: maintaining consistency (contents of module files, naming),
-putting the burden on users to correctly align things and not run into trouble (avoiding conflicts, etc.)}
-
-\subsubsection{Module naming scheme}
-\label{sec:Module_naming_scheme}
-
-\remark{module naming scheme should be discussed separately from module files, different concepts,
-making the distinction is important in the paper context}
-
-\remark{flat naming scheme (most common?), categorized as first attempt to better structure things}
-
 \subsubsection{Modules tool}
-
-\kenneth{I feel like a more general explenation of what a modules tool does for the user is missing here}
 
 \paragraph{Environment modules}
 
-In the traditional environment modules
-implementation~\cite{environment_modules_paper}, the \texttt{module} command
+For software not installed in standard system locations a user's path must be
+modified to include the directory to a software package.  Other enviroment
+variables may also be required for this software to operate for the
+user (e.g. \texttt{LD\_LIBRARY\_PATH}, ...).  One approach for each package to
+provide shell scripts for the user to source to modify their
+environment. 
+  
+The environment modules system provides a technique with several major
+advantages. The first is that a single file provides a definitions
+required for a user to access the package.  There is no need for a
+separate file for each shell.  To access a particular software
+``\emph{package}'', the user simply does:
+{\small
+\begin{alltt}
+    % module load \emph{package}
+\end{alltt}
+}
+\noindent
+The second major advantage is that a user can unload
+``\emph{package}'' and revert their environment to before they loaded
+the ``\emph{package}''.  This ability revert or ``unload'' software 
+packages is the third major advantage.  This means that users can
+control their build environment by switching between version of the
+same package or changing between different compilers or mpi stacks.
+These power features show why the environment module system has widely
+used since the late 1990's.
+
+In the traditional implementation, the \texttt{module} command
 is implemented as a simple shell function (for Bourne-compatible shells) or
 alias (for csh-compatible shells) which evaluates the commands printed by a
 helper tool \texttt{modulecmd} to standard output. This helper tool
@@ -144,72 +58,245 @@ problem of keeping the different code bases consistent, which sometimes leads
 to subtle effects when switching between them. In addition, there exists a
 fork of the Tcl-only implementation which has been heavily adjusted to meet
 the requirements of the DEISA (Distributed European Infrastructure for
-Supercomputing Applications) project.
-\remark{missing reference for the DEISA variant of modulecmd.tcl}
+Supercomputing Applications) project~\cite{wikiDEISA}.
 
-\remark{briefly explain Tcl/C and Tcl-only environment module tools}
+%\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
-While all three implementations provide the desired basic functionality, they
-are barely maintained and development progresses slowly. For example, there
-has been no activity in the (publicly accessible) version control system of
-the Tcl-only implementation for about two years. That is, new features such
-as improved support for organizing modules in a hierarchical way are very
-unlikely to happen any time soon.
-\remark{works, but barely maintained, no further development/features, \ldots}
+While these implementations provide the desired basic functionality, they
+vary in how well maintained they are. In all cases, development
+progresses slowly. For example, there has been no activity in the
+(publicly accessible) version control system of the Tcl-only
+implementation for about two years. That is, new features such as
+improved support for organizing modules in a hierarchical way are very 
+unlikely to happen any time soon. In the case of the TCL/C modules
+there are active discussions on the modules-interest mailing list but
+improvements are infrequent.
 
-\markus{From what I can see, there are at least active discussions on the
-modules-interest mailing list. However, the answers from the maintainers
-suggest to me that they have no interest in changing things too much. What is
-your impression? I'm also not sure whether we should really write this down
-in a paper ;-)}
+\robert{How's that for finessing that thorny topic !??!}
 
-\markus{One possible reviewer comment may be: Why didn't you contribute a patch to
-the existing project rather than reinventing the wheel? Do we have a good
-answer to this? Robert, did you actually try to contribute and they rejected
-to include the patch?}
 
-\robert{The truth was that I saw the same behaviour in
-  environment modules mailing list.  My extreme dislike of TCL and
-  complete lack of understanding of the internals of TCL/C modules
-  meant that I wasn't going to patch Env. Modules.   I really didn't
-  plan to take over the Env. Modules world.  I thought I'd prototype
-  this new module system, then someone who understood TCL/C and
-  modules would convert the prototype into TCL/C.}
+%\markus{From what I can see, there are at least . However, the answers from the maintainers
+%suggest to me that they have no interest in changing things too much. What is
+%your impression? I'm also not sure whether we should really write this down
+%in a paper ;-)}
 
-\robert{But it was very clear from the beginning that supporting
-  the hierarchy was going to require a major refactoring.  There has
-  to be a notion of inactive modules.  Lmod uses a table that it
-  encodes in the enviroment.  This made it easier to support inactive
-  modules, properties.}
-  
-  
-\paragraph{Other}
+%\markus{One possible reviewer comment may be: Why didn't you contribute a patch to
+%the existing project rather than reinventing the wheel? Do we have a good
+%answer to this? Robert, did you actually try to contribute and they rejected
+%to include the patch?}
+%
+%\robert{The truth was that I saw the same behaviour in
+%  environment modules mailing list.  My extreme dislike of TCL and
+%  complete lack of understanding of the internals of TCL/C modules
+%  meant that I wasn't going to patch Env. Modules.   I really didn't
+%  plan to take over the Env. Modules world.  I thought I'd prototype
+%  this new module system, then someone who understood TCL/C and
+%  modules would convert the prototype into TCL/C.}
+%
+%\robert{But it was very clear from the beginning that supporting
+%  the hierarchy was going to require a major refactoring.  There has
+%  to be a notion of inactive modules.  Lmod uses a table that it
+%  encodes in the enviroment.  This made it easier to support inactive
+%  modules, properties.}
 
-???
-\remark{cmod, \ldots}
+\subsubsection{Module files}
+\label{sec:Module_files}
+
+In essence, module files are shell-independent textual description of
+what needs to be changed in the user's environment to make a
+particular software package available. Such changes may include the
+adjustment of environment variables such as \texttt{PATH} or setting
+additional package-specific variables, for example, convenience
+variables pointing to the include and/or library paths.  In addition,
+module files typically include a brief one-line description of the
+package displayed by \texttt{module whatis} as well as a longer help
+text printed by \texttt{module help} to describe the basic usage,
+where to find the package documentation, and whom to contact in case
+of usage problems (this may be the site's application support team or
+the developers of the package directly).
+
+%\remark{changes to environment can be reverted by 'unloading' the module, which further complicates things
+%(more opportunities for users to shoot themselves in the foot)}
+
+
+Module files are searched for in directories specified by the
+environment variable \texttt{MODULEPATH}. The name of a module is defined
+as the full path to the corresponding module file, starting from the
+specified search directory. For example, the module file located in
+{\small
+\begin{alltt}
+    <\emph{searchdir}>/compiler/GCC/4.8.2
+\end{alltt}
+}
+provides a module for version 4.8.2 of the GNU Compiler Collection with the
+name `\texttt{compiler/GCC/4.8.2}'.
+
+The example above also shows one possible way to categorize modules by
+placing their module files into appropriately named subdirectories (e.g.,
+`\texttt{compiler}', `\texttt{mpi}', `\texttt{math}', etc.). Another common
+option is to list the individual subdirectories in \texttt{MODULEPATH}, so
+that the module names are shorter, but the modules are still nicely separated
+in the output of module avail, for example:
+{\small
+\begin{alltt}
+    % module avail
+    -------- <\emph{searchdir}>/compiler --------
+    GCC/4.8.2   Intel/14.0  Clang/3.4
+    ---------- <s\emph{earchdi}r>/mpi -----------
+    OpenMPI/1.7.3 MVAPICH/1.9
+\end{alltt}
+}
+
+\subsubsection{Module naming scheme}
+\label{sec:Module_naming_scheme}
+When the environment module system was invented sites typically had
+one compiler period.  There was the system compiler and that was it.
+There weren't even multiple versions of the system compiler installed
+at the same time.  Now sites have multiple versions of the same
+compiler and multiple compilers (e.g. GCC, Intel, Clang, PGI, ...).
+While there is some interopability for pure C programs between
+compilers, there is none for Fortran and C++ programs.  This means
+that there has to be multiple version of libraries like the C++
+libraries like Boost for each compiler and compiler version. 
+
+Moreover, since packages such as MPI implementations are inherently tied to a
+particular compiler and most often even a particular version, disambiguating
+module names can be a daunting task. For example, for the three compilers
+shown above, the corresponding Open\,MPI modules are often named as follows:
+{\small
+\begin{alltt}
+    OpenMPI/1.7.3-GCC-4.8.2
+    OpenMPI/1.7.3-Intel-14.0
+    OpenMPI/1.7.3-Clang-3.4
+\end{alltt}
+}
+
+The situation is more complicated for full-blown scientific software
+package like WRF compiled with a particular compiler and linked
+against a particular MPI stack, for example:
+{\small
+\begin{alltt}
+    WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
+    WRF/3.5-Intel-14.0-OpenMPI-1.7.3
+\end{alltt}
+}
+\noindent
+Note that such packages in many cases also depend on a set of mathematical
+libraries, such as OpenBLAS+(Sca)LAPACK+FFTW vs. ACML vs. Intel MKL, which in a
+real scenario extends the module name even further.
+
+A common solution to this issue is to define so-called \emph{toolchain}
+modules, packaging a compiler, an MPI library, and one or more packages
+providing linear algebra and FFT functionality. For example, a \texttt{goolf}
+toolchain module may combine (i.e., implicitly load modules for) GCC,
+Open\,MPI, OpenBLAS, (Sca)LAPACK and FFTW---each with a well-defined version. The
+first WRF module as shown above may then simply refer to a toolchain instead of the
+individual packages:
+{\small
+\begin{alltt}
+    WRF/3.5-goolf-1.6.10
+\end{alltt}
+}
+The toolchain concept also offers the possibility to categorize modules by
+toolchain, however, if a software package is available for multiple
+toolchains, it will then show up in multiple sections of the \texttt{module
+avail} output. The downside of using toolchains, however, is that users have
+to be taught what is hidden behind the often rather cryptic toolchain names
+and that a toolchain version has no direct relationship with the versions of
+the encapsulated packages.
+
+It should be pointed out that although all of the approaches to name and
+categorize module files presented above try to improve the overall
+organization of the available modules, a typical module listing on an HPC
+system can still be overwhelming, as the total number of modules can easily
+be in the order of several hundreds. Moreover, all traditional aproaches offer a
+multitude of options for (especially novice) users to shoot themselves in the
+foot, that is, to load modules which are incompatible to each other. While
+module files in principle offer the possibility to specify conflicts and
+thereby prevent loading of incompatible modules, all conflicting modules have
+to be explicitly listed. For example, the Open\,MPI module built for GCC may
+specify that it is incompatible with modules providing Intel or Clang
+compilers. However, this means that these conflict specifications have to be
+adjusted once an additional compiler (e.g., PGI) gets installed on the
+system---which is clearly a maintenance nightmare from the perspective of a
+system administrator.
+
+This flat naming approach is common but it places burdens on users.
+If a user wants an application it is straight-forward to pick one such
+as WRF.  But when a developer is using multiple parallel libraries to
+build their own application, he or she is required to pick matching
+compiler, mpi stack and compiler dependent and parallel dependent
+libraries.  When developers chooses a mismatched set of module, they
+might get lucky and their application will fail to run or die
+immediately.  Otherwise, their application will fail in completely
+mysterous ways and can consume a great deal of system staff time
+trying to resolve the failure.  Section~\ref{sec:hierarchical} show
+another approach to remove this burden from users.
+
+
+%\remark{main issues with module files: maintaining consistency (contents of module files, naming),
+%putting the burden on users to correctly align things and not run into trouble (avoiding conflicts, etc.)}
+%
+%
+%\remark{module naming scheme should be discussed separately from module files, different concepts,
+%making the distinction is important in the paper context}
+
+%\remark{flat naming scheme (most common?), 
 
 \subsubsection{Installing scientific software}
 
-???
+Sites around the world use a wide variety methods and software to
+install scientific packages.  Some site use manual methods.  Some
+depend on one or a few individuals who know how to install
+and possibly remove packages.  Some sites use tools like puppet or
+chef to manage their installs.  Other have developed in-house to
+manage installing software.
 
-\remark{manual, in-house scripting, 'Jim', little to no collaboration across
-HPC sites (a few exceptions!)}
+Sites like TACC use an in-house developed tool called
+LosF~\cite{lmodSC11} to leverage in-house  built RPMS.  The spec files
+that control the RPMS are parameterized so that one spec file can be
+used to the plethora of versions required.  The site build RPMS
+include the modulefile.  Therefore installing the package installs the
+modulefile and removing the package removes the modulefile.
 
-\markus{Does it make sense to also mention RPM and DEB packages? For a
-regular software install, the downside is that only one version can be
-available. But of course packaging systems can be combined with our proposed
-approach to roll out the software on a bunch of nodes (see TACC).}
+Still there is little colboration between sites thus
+lots of duplicate effort across the HPC centers around the world.
 
-\kenneth{imho, yes, it makes sense to mention the open issues with traditional
-packaging systems: only one version/build per software package, usually little
-support for the mess you run into with scientific software, ...}
+\robert{Kenneth: feel free to add to this section. But note that our
+  system at TACC does provide a great deal of flexibility (so there !!)}
 
-\remark{issues with using packaging tools like RPM (cfr. TACC): requires tons of manpower,
-very little flexibility for site-specific modifications, little collaboration between sites thus
-lots of duplicate effort}
+%%???
+%%
+%%\remark{manual, in-house scripting, 'Jim', little to no collaboration across
+%%HPC sites (a few exceptions!)}
+%%
+%%\markus{Does it make sense to also mention RPM and DEB packages? For a
+%%regular software install, the downside is that only one version can be
+%%available. But of course packaging systems can be combined with our proposed
+%%approach to roll out the software on a bunch of nodes (see TACC).}
+%%
+%%\kenneth{imho, yes, it makes sense to mention the open issues with traditional
+%%packaging systems: only one version/build per software package, usually little
+%%support for the mess you run into with scientific software, ...}
+%%
+%%\remark{issues with using packaging tools like RPM (cfr. TACC): requires tons of manpower,
+%%very little flexibility for site-specific modifications, little collaboration between sites thus
+%%lots of duplicate effort}
 
 \subsection{Shortcomings \& unresolved issues}
 
-???
-\remark{manual creating of module files (consistency issues), repetitive \&
-error-prone work of installing scientific software, \ldots}
+Without some tools, managing the building and installing the software
+packages becomes a great burden on small staffs that run HPC systems.
+Modulefiles must be written for each package and version.  If done
+manually by different individuals it becomes difficult to maintain
+consistancy.  Are the modules catagorized similarly or are the
+different molecular dynamics packages know as MD, QMD, Chemistry, etc.
+What do the help message say (if anything?).  Can the information in
+the modulefile be used to generate a software page?  The list is
+endless.
+
+\robert{Kenneth: feel free to add to this section.}
+
+%???
+%\remark{manual creating of module files (consistency issues), repetitive \&
+%error-prone work of installing scientific software, \ldots}

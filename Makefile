@@ -1,5 +1,5 @@
 PAPER    := main.pdf
-TEX_SUFS := .aux .log .nav .out .snm .toc .vrb .fdb_latexmk
+TEX_SUFS := .aux .log .nav .out .snm .toc .vrb .fdb_latexmk .fls .blg .bbl
 
 export TEXINPUTS := .::
 
@@ -10,7 +10,7 @@ export TEXINPUTS := .::
 
 all: $(PAPER)
 
-talk.pdf: spec1.pdf
+main.pdf: main.bib
 
 
 clean:

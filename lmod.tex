@@ -1,37 +1,162 @@
+Lmod~\cite{laytonLmod,taccSecretSauce,taccLmod} is a modern
+replacement for environment modules.  With rare exceptions it is a
+drop in replacement for TCL/C modules. It can consume modulefiles
+written in TCL as well as Lua\cite{LuaBook}.  It has strong focus on
+providing users easy access to their software stack, without hindering
+experts.  
 
-Lmod is a modern tool for consuming module files, with a strong focus on providing users
-easy access to their (scientific) software stack, without hindering experts. It is the
-handshake between the system administrators and end users, and delivers a powerful yet
-flexible way of configuring and managing their working software stack. Lmod is feature-rich,
-well supported, continously enhanced, and comes with a vibrant
-community.   This talk will cover the main concepts in a module
-system, the choice of module layout (hierarchical vs. flat),  The
-new features of Lmod and and how to leverage the module system to
-track how which software package user use and do not use.
+The original idea for Lmod was to prototype a module system to test
+ideas about how to handle a hierarchical module system.  It was clear
+at the beginning that it was going to require a complete rewrite of
+the system so the Lua language was choosen because of clean yet
+powerful constructs.  It also fills the same niche that TCL was
+originally designed for.  Namely, Lua embeds and extends easily into
+other programs.  It is also very fast for a scripting language.  As
+time went on it was clear that the Lua implementation was fast enough
+to use directly.  
 
-\remark{actively maintained}
+The key idea that Lmod exploits is that it watches changes to
+MODULEPATH.  In a hierarchical layout, a compiler modulefile adds to
+MODULEPATH a new directory of compatible modules.  Similarly an MPI
+implementation's modulefile will add a directory for the compatible
+parallel libraries and parallel applications that work with that
+compiler and MPI pairing.  When swapping one compiler for another will
+cause a chain of events.  First the old compiler module is unloaded
+which causes the mpi and parallel packages to be unloaded because the
+modulefiles can no-longer be found.  These modules are marked
+inactive.
 
-\subsection{Key features}
+Second step is to load the new compiler.  This means that a new entry
+is added to MODULEPATH and any inactive modules will search the new
+directory for compatible modules as show below:
+{\small
+  \begin{alltt}
+    \% module swap gcc clang
 
-\begin{itemize}
-    \item user-friendly
-    \begin{itemize}
-        \item ml
-        \item sensible version ordering
-        \item case-insensitive module avail
-        \item list/avail (can) go(es) to stdout
-        \item module load => swap if needed
-        \item recursive unload (is default)
-        \item spider cache => fast avail (\& spider)
-    \end{itemize}
-    \item hooks
-    \item path priorities
-    \item properties
-    \item families
-    \item load with version range
-    \item pushenv
-\end{itemize}
-\remark{too long a list to include all? AP Robert: which ones do we really need to mention?}
-\remark{module swap works}
-\remark{module avail vs module spider}
-\remark{(spider cache)}
+    The following have been reloaded:
+    1) petsc/3.4  2) mpich/3.1.1
+      
+\end{alltt}
+}
+\noindent
+In this case swapping the compilers swapped out a parallel solver
+library, \emph{petsc} and the mpi stack, \emph{mpich}. This ability
+to maintain a consistent set of modules when coupled with a
+hierarchical module layout is Lmod's key strength but there are many
+more features.  Many of these have been in response to community
+requests.  
+
+One of the first problems that shows up with a hierarchical module
+layout, is that you can't see all the modules with avail.
+Unfortunately, in the module command context.  ``\texttt{module avail}''
+reports all the modules that you can load right now.  Lmod added a new
+command ``\texttt{module spider}'' to walk the whole module tree and
+report every possible module.
+
+
+The module system is a key interface between users and system
+administrators.  
+%For sites that use Modules systems,  it is how users
+%access the software that they need to get their work done.   
+As the computer systems change so too do the requirements on the module
+system.  One of these adding properties to modules.  Many
+supercomputers now have one or more accelerators currently either GPU's
+or XEON Phi's also known as MIC's.   In particular, XEON Phi's are a
+daughter card across the PCI bus and to create applications to run on
+the XEON Phi's requires cross compilation.  This means that libraries
+are needed for the Phi's.  Due to the way the environment variables
+are handled, a single modulefile can serve regular and Phi libraries.
+
+But user's won't know which libraries are Phi-aware.  Lmod added
+functions so that properties could be added to modulefiles.  This way
+when modules are listed via module list, and avail the properties can
+be reported.  This is just one use of properties.  It is under site
+control what properties are reported.  For example, some sites use it
+to mark alpha and beta releases of software packages.
+
+Added support for properties added a complication to the module
+system.  Without properties, the avail command just needed the name of
+the module not the contents.  With properties, the contents of every
+module needed to be read and evaluated, whether the modulefile had
+properties or not. On parallel filesystems such as lustre this can be
+slow.  To mitigate this, Lmod added the ability to have cache files.
+It turns out that reading one large file is much faster than walking a
+directory tree and reading several small files.  There is support for
+both user and system cache files.  Keeping the cache files current can
+be a challenge when installed software is being updated.  One approach
+is to have the installing software system recomputes the cache after
+completing the system update or the cache file is updated frequently
+and hooks are in-place to know when the cache file is valid or not.
+
+One of upshots of this is that Lmod trusts the cache files for
+everything except for loading a modulefile.  This way a module can be
+loaded even if the cache is out-of-date.  This can happen while
+installing software (e.g. for EasyBuild) but users will see an updated
+cache file.
+
+Lmod is actively maintained and responsive to its community.  Since
+February of 2011, there have been 153 tagged version and 30+ official
+releases of Lmod.  Many of the improvements to Lmod have come from
+requests from the user community.  
+
+One of the improvement to Lmod is that there is the family function.
+The way this works is that a compiler or mpi stack can be marked to be
+part of a family and you only get one member of the family loaded at
+one time.  It is possible to override this for the few expert user who
+wish to have two compilers loaded at the same time.
+
+Another key feature is the ability for sites to create a
+\texttt{SitePackage.lua} file to modify the behavior of Lmod to suit
+their needs.  Lmod provides ``hook'' functions that site can add
+functionality.  There is a load hook.  This means that
+every time a module is loaded a call to syslog can be
+made to record a modules use.  Data from syslog can be collected to
+know what modules are being used or not.
+
+There have been many improvement to improve usability for both users
+and staff.  One of these is sensible version ordering.  Originally all
+module systems use lexicological ordering.  This means that version
+9.0 is considered newer than 10.0.  Now Lmod knows that version 10.0 >
+9.7.1 > 9.7 > 9.7rc1 > 9.7a2 and so on.
+
+Among the many feature that the Easybuild community have requested,
+two stand out.  The first one ``\texttt{pushenv}''.  The module system
+has supported \texttt{setenv} function which sets an environment variable 
+upon load a module and clears its value upon unload.  There are times
+when users and administrators would like the previous value recovered
+rather than cleared.  This is what \texttt{pushenv} does.  It
+maintains a hidden stack in the environment so it can recover old
+values.
+
+The second feature was an speed improvement.  Internally EasyBuild
+builds the software package and creates the module file.  Then it
+checks to see if it is available and loads and unloads it.  Lmod has
+to walk the tree and read the modules to know what properties are
+there. However EB is performing a ``module --terse avail'' is provides
+an easily parsed output.  Since this output does not provide any
+module properties the modulefiles do not need to be read.  Tests done
+show that cuts the testing time significantly.
+
+%\subsection{Key features}
+%
+%\begin{itemize}
+%    \item user-friendly
+%    \begin{itemize}
+%        \item ml
+%        \item sensible version ordering
+%        \item case-insensitive module avail
+%        \item module load => swap if needed
+%        \item recursive unload (is default)
+%        \item spider cache => fast avail (\& spider)
+%    \end{itemize}
+%    \item hooks
+%    \item path priorities
+%    \item properties
+%    \item families
+%    \item load with version range
+%    \item pushenv
+%\end{itemize}
+%\remark{too long a list to include all? AP Robert: which ones do we really need to mention?}
+%\remark{module swap works}
+%\remark{module avail vs module spider}
+%\remark{(spider cache)}

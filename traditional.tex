@@ -7,16 +7,12 @@ schemes which are in use today.  Next, we review commonly used
 workflows for installing scientific software and finally summarize the
 shortcomings we have identified with these approaches.
 
-\subsection{Tools \& policies}
+\subsection{Environment modules system}
 
-\subsubsection{Modules tool}
-
-\paragraph{Environment modules}
-
-For software not installed in standard system locations a user's path must be
-modified to include the directory to a software package.  Other enviroment
+For software not installed in standard system locations a user's \texttt{\$PATH}
+must be modified to include the directory to a software package.  Other enviroment
 variables may also be required for this software to operate for the
-user (e.g. \texttt{LD\_LIBRARY\_PATH}, ...).  One approach for each package to
+user (e.g. \texttt{\$LD\_LIBRARY\_PATH}, ...).  One approach for each package to
 provide shell scripts for the user to source to modify their
 environment. 
   
@@ -24,32 +20,35 @@ The environment modules system provides a technique with several major
 advantages. The first is that a single file provides a definitions
 required for a user to access the package.  There is no need for a
 separate file for each shell.  To access a particular software
-``\emph{package}'', the user simply does:
+``\emph{package}'', the user simply \emph{loads} a module:
 {\small
 \begin{alltt}
     % module load \emph{package}
 \end{alltt}
 }
 \noindent
-The second major advantage is that a user can unload
-``\emph{package}'' and revert their environment to before they loaded
-the ``\emph{package}''.  This ability revert or ``unload'' software 
+The second major advantage is that a user can \emph{unload} previously
+loaded modules, to revert changes in the environment and restore
+their environment to the one before they loaded that module.
+This ability revert or ``unload'' software 
 packages is the third major advantage.  This means that users can
 control their build environment by switching between version of the
 same package or changing between different compilers or mpi stacks.
 These power features show why the environment module system has widely
 used since the late 1990's.
 
-In the traditional implementation, the \texttt{module} command
+\kenneth{2nd and 3rd advantage is both unloading? difference is not clear imho}
+
+In the traditional implementation, a command named \texttt{module}
 is implemented as a simple shell function (for Bourne-compatible shells) or
 alias (for csh-compatible shells) which evaluates the commands printed by a
-helper tool \texttt{modulecmd} to standard output. This helper tool
+helper tool (e.g., \texttt{modulecmd}) to standard output. This helper tool
 implements the actual functionality of identifying the requested command,
 locating and parsing the corresponding module files, and generating the
 commands necessary to modify the user's environment.
 
-Over time, multiple implementations of the \texttt{modulecmd} helper tool
-have been developed. The traditional version is written in C, using the Tcl
+Over time, multiple implementations of the helper tool
+have been developed. The most commonly used version is written in C, using the Tcl
 library to parse and evaluate module files. A second implementation, which
 was never packaged as a release and is still marked as experimental by the
 authors, is written in Tcl only. For the most part, these two implementations
@@ -59,6 +58,12 @@ to subtle effects when switching between them. In addition, there exists a
 fork of the Tcl-only implementation which has been heavily adjusted to meet
 the requirements of the DEISA (Distributed European Infrastructure for
 Supercomputing Applications) project~\cite{wikiDEISA}.
+
+\kenneth{refer to the respective websites for the different tools?}
+\kenneth{maybe already include a forward reference to Lmod here? ``More recently,
+Lmod has been made available, an entirely new modules tool implemented in Lua,
+providing functionality that is (mostly) compatible with the Tcl-based implementations.
+We discuss Lmod in detail in Section~\ref{sec:lmod}."} 
 
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
@@ -73,6 +78,8 @@ there are active discussions on the modules-interest mailing list but
 improvements are infrequent.
 
 \robert{How's that for finessing that thorny topic !??!}
+\kenneth{nice job :) Maybe also include something like ``Lmod on the other hand is currently
+actively developed and maintained, and has an active and thriving community." to make the contrast?}
 
 
 %\markus{From what I can see, there are at least . However, the answers from the maintainers
@@ -99,14 +106,14 @@ improvements are infrequent.
 %  encodes in the enviroment.  This made it easier to support inactive
 %  modules, properties.}
 
-\subsubsection{Module files}
+\subsection{Module files}
 \label{sec:Module_files}
 
 In essence, module files are shell-independent textual description of
 what needs to be changed in the user's environment to make a
 particular software package available. Such changes may include the
-adjustment of environment variables such as \texttt{PATH} or setting
-additional package-specific variables, for example, convenience
+adjustment of environment variables such as \texttt{\$PATH} or setting
+additional package-specific variables, e.g., convenience
 variables pointing to the include and/or library paths.  In addition,
 module files typically include a brief one-line description of the
 package displayed by \texttt{module whatis} as well as a longer help
@@ -115,39 +122,19 @@ where to find the package documentation, and whom to contact in case
 of usage problems (this may be the site's application support team or
 the developers of the package directly).
 
-%\remark{changes to environment can be reverted by 'unloading' the module, which further complicates things
-%(more opportunities for users to shoot themselves in the foot)}
-
-
 Module files are searched for in directories specified by the
-environment variable \texttt{MODULEPATH}. The name of a module is defined
-as the full path to the corresponding module file, starting from the
-specified search directory. For example, the module file located in
+environment variable \texttt{\$MODULEPATH}. The name of a module is defined
+as the path to the corresponding module file in one of directories that are
+part of \texttt{\$MODULEPATH}. For example, the module file located in
 {\small
 \begin{alltt}
-    <\emph{searchdir}>/compiler/GCC/4.8.2
+    <\emph{prefix}>/GCC/4.8.2
 \end{alltt}
 }
 provides a module for version 4.8.2 of the GNU Compiler Collection with the
-name `\texttt{compiler/GCC/4.8.2}'.
+name `\texttt{GCC/4.8.2}'.
 
-The example above also shows one possible way to categorize modules by
-placing their module files into appropriately named subdirectories (e.g.,
-`\texttt{compiler}', `\texttt{mpi}', `\texttt{math}', etc.). Another common
-option is to list the individual subdirectories in \texttt{MODULEPATH}, so
-that the module names are shorter, but the modules are still nicely separated
-in the output of module avail, for example:
-{\small
-\begin{alltt}
-    % module avail
-    -------- <\emph{searchdir}>/compiler --------
-    GCC/4.8.2   Intel/14.0  Clang/3.4
-    ---------- <s\emph{earchdi}r>/mpi -----------
-    OpenMPI/1.7.3 MVAPICH/1.9
-\end{alltt}
-}
-
-\subsubsection{Module naming scheme}
+\subsection{Module naming scheme}
 \label{sec:Module_naming_scheme}
 When the environment module system was invented sites typically had
 one compiler period.  There was the system compiler and that was it.
@@ -172,8 +159,8 @@ shown above, the corresponding Open\,MPI modules are often named as follows:
 }
 
 The situation is more complicated for full-blown scientific software
-package like WRF compiled with a particular compiler and linked
-against a particular MPI stack, for example:
+packages like WRF compiled with a particular compiler and linked
+against a particular MPI stack, e.g.:
 {\small
 \begin{alltt}
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
@@ -201,9 +188,26 @@ The toolchain concept also offers the possibility to categorize modules by
 toolchain, however, if a software package is available for multiple
 toolchains, it will then show up in multiple sections of the \texttt{module
 avail} output. The downside of using toolchains, however, is that users have
-to be taught what is hidden behind the often rather cryptic toolchain names
+to be aware what is hidden behind the (often rather cryptic) toolchain names,
 and that a toolchain version has no direct relationship with the versions of
 the encapsulated packages.
+
+\remark{the paragraph below needs to be integrated in this text}
+The example above also shows one possible way to categorize modules by
+placing their module files into appropriately named subdirectories (e.g.,
+`\texttt{compiler}', `\texttt{mpi}', `\texttt{math}', etc.). Another common
+option is to list the individual subdirectories in \texttt{\$MODULEPATH}, so
+that the module names are shorter, but the modules are still nicely separated
+in the output of module avail, e.g.:
+{\small
+\begin{alltt}
+    \textbf{% module avail}
+    ----- <\emph{prefix}>/compiler -----
+    GCC/4.8.2   Intel/14.0  Clang/3.4
+    ----- <s\emph{prefix}r>/mpi -----
+    OpenMPI/1.7.3 MVAPICH/1.9
+\end{alltt}
+}
 
 It should be pointed out that although all of the approaches to name and
 categorize module files presented above try to improve the overall
@@ -243,7 +247,7 @@ another approach to remove this burden from users.
 
 %\remark{flat naming scheme (most common?), 
 
-\subsubsection{Installing scientific software}
+\subsection{Installing scientific software}
 
 Sites around the world use a wide variety methods and software to
 install scientific packages.  Some site use manual methods.  Some
@@ -283,13 +287,14 @@ lots of duplicate effort across the HPC centers around the world.
 %%very little flexibility for site-specific modifications, little collaboration between sites thus
 %%lots of duplicate effort}
 
+\label{sec:issues_traditional}
 \subsection{Shortcomings \& unresolved issues}
 
-Without some tools, managing the building and installing the software
-packages becomes a great burden on small staffs that run HPC systems.
-Modulefiles must be written for each package and version.  If done
+Without appropriate tools, managing the building and installing the software
+packages becomes a great burden for HPC user support teams, especially smaller ones.
+Module files must be written for each package and version.  If done
 manually by different individuals it becomes difficult to maintain
-consistancy.  Are the modules catagorized similarly or are the
+consistency.  Are the modules catagorized similarly or are the
 different molecular dynamics packages know as MD, QMD, Chemistry, etc.
 What do the help message say (if anything?).  Can the information in
 the modulefile be used to generate a software page?  The list is

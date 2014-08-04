@@ -63,7 +63,7 @@ Supercomputing Applications) project~\cite{wikiDEISA}.
 \kenneth{maybe already include a forward reference to Lmod here? ``More recently,
 Lmod has been made available, an entirely new modules tool implemented in Lua,
 providing functionality that is (mostly) compatible with the Tcl-based implementations.
-We discuss Lmod in detail in section~\ref{sec:lmod}."} 
+We discuss Lmod in detail in Section~\ref{sec:lmod}."} 
 
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
@@ -128,7 +128,7 @@ as the path to the corresponding module file in one of directories that are
 part of \texttt{\$MODULEPATH}. For example, the module file located in
 {\small
 \begin{alltt}
-    <\emph{searchdir}>/GCC/4.8.2
+    <\emph{prefix}>/GCC/4.8.2
 \end{alltt}
 }
 provides a module for version 4.8.2 of the GNU Compiler Collection with the
@@ -201,10 +201,10 @@ that the module names are shorter, but the modules are still nicely separated
 in the output of module avail, e.g.:
 {\small
 \begin{alltt}
-    % module avail
-    -------- <\emph{searchdir}>/compiler --------
+    \textbf{% module avail}
+    ----- <\emph{prefix}>/compiler -----
     GCC/4.8.2   Intel/14.0  Clang/3.4
-    ---------- <s\emph{earchdi}r>/mpi -----------
+    ----- <s\emph{prefix}r>/mpi -----
     OpenMPI/1.7.3 MVAPICH/1.9
 \end{alltt}
 }
@@ -287,6 +287,7 @@ lots of duplicate effort across the HPC centers around the world.
 %%very little flexibility for site-specific modifications, little collaboration between sites thus
 %%lots of duplicate effort}
 
+\label{sec:issues_traditional}
 \subsection{Shortcomings \& unresolved issues}
 
 Without appropriate tools, managing the building and installing the software

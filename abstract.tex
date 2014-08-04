@@ -1,15 +1,14 @@
-\remark{
-desired takebacks:
-\itemize{
-    \item available manpower to provide end-user software is limited
-    \item hierarchical module naming scheme is the way to go
-    \item avoid manual software installation and creation of module files (tedious) with EasyBuild
-    \item required Lmod to allow users to easily 'navigate'
-    \itemize{
-        \item module spider for looking beyond the current \$MODULEPATH
-        \item module swap + deactivation of modules
-    }
-    \item synergy between EasyBuild \& Lmod
-    \item community-driven development of both tools
-}
-}
+\remark{limit is 1000 characters, now at 984}
+
+HPC user support teams invest a lot of time and effort in installing scientific
+software for their users. A well-esthablish pratice is providing module files,
+with the intention to make it easy for users to set up their working environment.
+Several problems reamin however: user support teams lack appropriate tools to maintain a
+scientific software stack consistently, users still struggle to set up their working
+environment correctly, etc.
+In this paper we present a modern approach to installing scientific software, which provides
+a solution to these commonly problems. We show how EasyBuild, a software build and
+installation framework, can be used to fully automate the installation of scientific software.
+By using a hierarchical module naming scheme to offer module files to users in a more structured
+way and providing Lmod, a modern tool for working with modules, we avoid many of the common
+mistakes made by users while retaining the flexibility required by power users. 

@@ -1,22 +1,25 @@
 Lmod~\cite{laytonLmod,taccSecretSauce,taccLmod} is a modern
 replacement for environment modules.  With rare exceptions it is a
-drop in replacement for TCL/C modules. It can consume modulefiles
-written in TCL as well as Lua\cite{LuaBook}.  It has strong focus on
+drop in replacement for Tcl/C modules. It can consume modulefiles
+written in Tcl as well as Lua\cite{LuaBook}.  It has strong focus on
 providing users easy access to their software stack, without hindering
 experts.  
 
 The original idea for Lmod was to prototype a module system to test
 ideas about how to handle a hierarchical module system.  It was clear
 at the beginning that it was going to require a complete rewrite of
-the system so the Lua language was choosen because of clean yet
-powerful constructs.  It also fills the same niche that TCL was
-originally designed for.  Namely, Lua embeds and extends easily into
+the system, so the Lua language was choosen because of clean yet
+powerful constructs.  Lua also fills the same niche that Tcl was
+originally designed for, namely, it embeds and extends easily into
 other programs.  It is also very fast for a scripting language.  As
 time went on it was clear that the Lua implementation was fast enough
 to use directly.  
 
+\kenneth{saying it's "very fast" and then saying it's "fast enough" feels
+contradictory}
+
 The key idea that Lmod exploits is that it watches changes to
-MODULEPATH.  In a hierarchical layout, a compiler modulefile adds to
+\texttt{\$MODULEPATH}.  In a hierarchical layout, a compiler modulefile adds to
 MODULEPATH a new directory of compatible modules.  Similarly an MPI
 implementation's modulefile will add a directory for the compatible
 parallel libraries and parallel applications that work with that

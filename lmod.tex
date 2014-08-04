@@ -11,12 +11,11 @@ at the beginning that it was going to require a complete rewrite of
 the system, so the Lua language was choosen because of clean yet
 powerful constructs.  Lua also fills the same niche that Tcl was
 originally designed for, namely, it embeds and extends easily into
-other programs.  It is also very fast for a scripting language.  As
-time went on it was clear that the Lua implementation was fast enough
-to use directly.  
+other programs.  As time went on, it was clear that the Lmod modules
+system written in Lua implementation was fast enough to use directly.  
 
-\kenneth{saying it's "very fast" and then saying it's "fast enough" feels
-contradictory}
+%\kenneth{saying it's "very fast" and then saying it's "fast enough" feels
+%contradictory}
 
 The key idea that Lmod exploits is that it watches changes to
 \texttt{\$MODULEPATH}.  In a hierarchical layout, a compiler modulefile adds to

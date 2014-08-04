@@ -28,16 +28,12 @@ separate file for each shell.  To access a particular software
 }
 \noindent
 The second major advantage is that a user can \emph{unload} previously
-loaded modules, to revert changes in the environment and restore
-their environment to the one before they loaded that module.
-This ability revert or ``unload'' software 
-packages is the third major advantage.  This means that users can
-control their build environment by switching between version of the
-same package or changing between different compilers or mpi stacks.
-These power features show why the environment module system has widely
-used since the late 1990's.
-
-\kenneth{2nd and 3rd advantage is both unloading? difference is not clear imho}
+loaded modules, to revert changes in the environment and restore their
+environment to the one before they loaded that module.  This means
+that users can control their build environment by switching between
+version of the same package or changing between different compilers or
+mpi stacks.  These power features show why the environment module
+system has widely used since the late 1990's.
 
 In the traditional implementation, a command named \texttt{module}
 is implemented as a simple shell function (for Bourne-compatible shells) or
@@ -61,9 +57,7 @@ Supercomputing Applications) project~\cite{wikiDEISA}.
 
 \kenneth{refer to the respective websites for the different tools?}
 \kenneth{maybe already include a forward reference to Lmod here? ``More recently,
-Lmod has been made available, an entirely new modules tool implemented in Lua,
-providing functionality that is (mostly) compatible with the Tcl-based implementations.
-We discuss Lmod in detail in Section~\ref{sec:lmod}."} 
+Lmod has been made available, a"} 
 
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
@@ -77,10 +71,12 @@ unlikely to happen any time soon. In the case of the TCL/C modules
 there are active discussions on the modules-interest mailing list but
 improvements are infrequent.
 
-\robert{How's that for finessing that thorny topic !??!}
-\kenneth{nice job :) Maybe also include something like ``Lmod on the other hand is currently
-actively developed and maintained, and has an active and thriving community." to make the contrast?}
-
+Recently a new implementation of the module system called Lmod has
+been made available. It is an entirely new modules tool implemented in
+Lua, providing functionality that is compatible with the Tcl-based
+implementations.  Lmod is actively developed and maintained, and has
+an active and thriving community. We discuss Lmod in detail in
+Section~\ref{sec:lmod}. 
 
 %\markus{From what I can see, there are at least . However, the answers from the maintainers
 %suggest to me that they have no interest in changing things too much. What is

@@ -45,7 +45,7 @@ that is currently loaded:
 Obviously, such a hierarchy is not limited to a single level. For example,
 the module files for different MPI implementations can further extend
 \texttt{\$MODULEPATH} to enable all modules which depend on both the loaded
-compiler and the respective MPI installation.
+compiler and the respective MPI library.
 
 
 \label{sec:hierarchical_advantages}
@@ -55,32 +55,105 @@ compiler and the respective MPI installation.
 one. I propose to remove it and simply list the advantages as part of Section
 III.A.}
 
-A hierarchical module file organization has a number of significant
+Using a hierarchical module naming scheme has multiple important
 advantages. First, at any point in time, users are only presented with the
 modules which are meaningful in the current context. That is, the list of
-available modules is much shorter and therefore less overwhelming. Second,
-encoding the dependency chain in the module name is no longer necessary for
-modules enabling another hierarchy level, thereby leading to more intuitive
-module names. And finally, loading of incompatible modules is automatically
-avoided, preventing users from making simple mistakes which may lead to
-subtle errors that are non-obvious and hard to debug.
+available modules is much shorter and grouped by level of the hierarchy,
+and therefore a lot less overwhelming when tens to hundreds of modules are
+available (which is often the case on HPC systems that have been in
+production for a while).
 
-\markus{Somewhere, we should mention that the hierarchical module scheme as
-outlined above \textit{in principle} also works with C/Tcl or Tcl-only
-modules, but that specific features simplify usage a lot: ``stack-based'' swap,
-module deactivation, \texttt{module spider}, etc. But there is a small
-chicken/egg problem here \ldots}
+Second, encoding the dependency chain in the module name is no longer
+necessary, since this can be encoded in the subdirectory that serves as a
+extension to
+\texttt{\$MODULEPATH}. This leads to significantly shorter and more intuitive
+module names, usually consisting of the software name and version, e.g.,
+\texttt{WRF/3.5} rather than the long and cryptic module names shown in
+Section~\ref{sec:Module_files}.
 
-\remark{basic users make less mistakes, expert users retain full freedom}
+Third, loading of incompatible
+modules is automatically avoided, preventing users from making simple
+mistakes which may lead to subtle errors that are non-obvious and hard to
+debug. Not only does this enable a better user experience, it also avoids
+that user support teams have to spend time on resolving tickets related
+to issues caused by incompatible modules being loaded together.
+
+Finally, the more structural organization of module files can be exploited
+to provide new possibilities, a major one being supporting \emph{swapping}
+out a loaded module on a particular level of the hierarchy with another
+(e.g., a compiler module), while automatically reloading any module depending
+on the previously loaded module. This notion needs to be supported be the
+modules tool used to consume the module files however (see also
+Section~\ref{sec:hierarchical_consequences}).
+
+%\remark{basic users make less mistakes, expert users retain full freedom}
 
 \label{sec:hierarchical_consequences}
 \subsection{Consequences of using a hierarchical naming scheme}
 
-\remark{\itemize{
-    \item complicates (manual) creation of module files due to hierarchical organization
-    \item requires enhanced modules too to deal with idiocracies of efficiently using the provided modules (search, swapping between module stacks)
-}}
+Although the commonly used Tcl/C and Tcl-only environment modules tools
+both support the concept of hierarchical modules (since they're mostly
+oblivious to how the module files are structured), a couple of consequences
+to using a hierarchical module naming scheme need to be taken into account.
 
+First of all, not all existing module files are visible by default, since
+a particular core module and potentially additional lower-level modules
+that further extend the module search path may need to be loaded first.
+Although users can rely on standard Unix tools as for example `find`, this
+is an important aspect that needs to be dealt with. Since the modules that
+users may be interested in, i.e., the ones for the scientific software
+packages they care about, are not listed in the output of \texttt{module
+avail}, another way of quering the set of existing module files (outside
+of the currently active \texttt{\$MODULEPATH}) needs to be
+provided.
+
+Second, the modules tool needs to be aware of the module path extensions that
+may occur when loading modules in a hierarchical scheme. This is of
+particular importance for supporting the notion of automatically reloading
+dependent modules after swapping modules on one of the hierarchy level.
+Basically, the modules tool needs to be able to i) detect that a particular
+module depends on the module being swapped out, or in other words on which
+level of the hierarchy each module lives, and ii) to unload the dependent
+modules whenever a \texttt{module swap} is being executed, and afterwards
+automatically (try to) reload the unloaded modules, meanwhile taking into
+account the order in which the modules were loaded.
+
+On top of this, the modules tool needs to take into account that it is
+possible that not all dependent modules are available after swapping e.g.
+one compiler module for another. This is required to avoid that the user
+ends up with a hopelessly broken environment that got stuck somewhere in
+between the original state before initiating the swap and the goal state
+in which the alternative module and all its dependent module are loaded.
+When such a situation occurs, the module tool should simply notify the user
+that certain dependent modules could not be reloaded. If the modules tool
+can somehow keep track of which modules failed to reload during a
+\texttt{module swap}, the user-friendly possibility to revert the swap
+operation could be supported as well, e.g. by making sure that the reverse
+swap operation (\texttt{module swap B A} after a \texttt{module swap A B}
+restores the original state of the environment.
+
+Finally, \remark{saved collections to set default compiler/MPI to avoid that
+novice users need to pick a compiler/MPI stack before they can get anything
+done}
+\kenneth{Robert: does this make sense to include it? or is this not
+related enough to a hierarchical scheme?}
+
+None of these issues are taken into account in the latest versions of the
+Tcl/C and Tcl-only implementations of environment modules. At some point,
+the notion of reloading depedent modules after a \texttt{module swap}
+\emph{was} supported by the Tcl-only implementation, but this change was
+undone again later on because ...
+\kenneth{why exactly? Robert?} 
+However, the previously mentioned alternative modules tool Lmod does
+provide all the necessary functionality (and more) to deal with each of
+these issues, see Section~\ref{sec:lmod}.
+
+%\markus{Somewhere, we should mention that the hierarchical module scheme as
+%outlined above \textit{in principle} also works with C/Tcl or Tcl-only
+%modules, but that specific features simplify usage a lot: ``stack-based'' swap,
+%module deactivation, \texttt{module spider}, etc. But there is a small
+%chicken/egg problem here \ldots}
+
+\kenneth{below is still todo, to make \easybuild{} stand out a bit more}
+\remark{complicates (manual) creation of module files due to hierarchical organization}
 \easybuild{} (section~\ref{sec:easybuild}) automates creation of module files under a specified naming scheme;
-
-Lmod (section~\ref{sec:lmod}) provides required functionality to let users easily navigate and use modules in a hierarchical scheme

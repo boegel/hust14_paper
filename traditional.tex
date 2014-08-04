@@ -35,6 +35,11 @@ version of the same package or changing between different compilers or
 mpi stacks.  These power features show why the environment module
 system has widely used since the late 1990's.
 
+There have been several environment module system that have been
+developed over the years.  The original
+implementation~\cite{furlani91} was collection of shell scripts.  At
+some point this was rewritten in a TCL/C combinations~\cite{em}. 
+
 In the traditional implementation, a command named \texttt{module}
 is implemented as a simple shell function (for Bourne-compatible shells) or
 alias (for csh-compatible shells) which evaluates the commands printed by a
@@ -45,19 +50,17 @@ commands necessary to modify the user's environment.
 
 Over time, multiple implementations of the helper tool
 have been developed. The most commonly used version is written in C, using the Tcl
-library to parse and evaluate module files. A second implementation, which
+library to parse and evaluate module files~\cite{em}. A second implementation, which
 was never packaged as a release and is still marked as experimental by the
-authors, is written in Tcl only. For the most part, these two implementations
+authors, is written in Tcl only~\cite{em}. For the most part, these two implementations
 offer identical functionality, however, they obviously suffer from the usual
 problem of keeping the different code bases consistent, which sometimes leads
 to subtle effects when switching between them. In addition, there exists a
 fork of the Tcl-only implementation which has been heavily adjusted to meet
 the requirements of the DEISA (Distributed European Infrastructure for
-Supercomputing Applications) project~\cite{wikiDEISA}.
-
-\kenneth{refer to the respective websites for the different tools?}
-\kenneth{maybe already include a forward reference to Lmod here? ``More recently,
-Lmod has been made available, a"} 
+Supercomputing Applications) project~\cite{wikiDEISA}.  In
+1997, a completely C based implementation was made
+available~\cite{cmod}.  It has not been updated since 1998.  
 
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
@@ -71,7 +74,7 @@ unlikely to happen any time soon. In the case of the TCL/C modules
 there are active discussions on the modules-interest mailing list but
 improvements are infrequent.
 
-Recently a new implementation of the module system called Lmod has
+In 2009, a new implementation of the module system called Lmod~\cite{taccLmod} has
 been made available. It is an entirely new modules tool implemented in
 Lua, providing functionality that is compatible with the Tcl-based
 implementations.  Lmod is actively developed and maintained, and has

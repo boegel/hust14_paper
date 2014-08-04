@@ -132,18 +132,23 @@ operation could be supported as well, e.g. by making sure that the reverse
 swap operation (\texttt{module swap B A} after a \texttt{module swap A B}
 restores the original state of the environment.
 
-Finally, \remark{saved collections to set default compiler/MPI to avoid that
-novice users need to pick a compiler/MPI stack before they can get anything
-done}
-\kenneth{Robert: does this make sense to include it? or is this not
-related enough to a hierarchical scheme?}
+% moved to lmod.tex
+
+%Finally, \remark{saved collections to set default compiler/MPI to avoid that
+%novice users need to pick a compiler/MPI stack before they can get anything
+%done}
+%\kenneth{Robert: does this make sense to include it? or is this not
+%related enough to a hierarchical scheme?}
+%\robert{I would remove from Finally ... to here.  It is a mixing of
+%  concepts. At TACC we provide a default set of modules which the user
+%  can override with their own personal collection of modules}
 
 None of these issues are taken into account in the latest versions of the
 Tcl/C and Tcl-only implementations of environment modules. At some point,
 the notion of reloading depedent modules after a \texttt{module swap}
 \emph{was} supported by the Tcl-only implementation, but this change was
-undone again later on because ...
-\kenneth{why exactly? Robert?} 
+undone again later on because it led to incompatible behavior between
+these two versions.
 However, the previously mentioned alternative modules tool Lmod does
 provide all the necessary functionality (and more) to deal with each of
 these issues, see Section~\ref{sec:lmod}.

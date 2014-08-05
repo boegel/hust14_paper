@@ -11,12 +11,13 @@ A simple yet powerful solution to this issue are environment
 modules~\cite{furlani91,furlani96,eadline,cmod,laytonEM1}, which allow
 users to easily load, unload, and switch between software packages by
 modifying the user's environment, that is, adjusting environment
-variables such as \texttt{PATH} and \texttt{MANPATH} and/or setting
+variables such as \texttt{\$PATH} and \texttt{\$MANPATH} and/or setting
 package-specific variables, for example, to specify the DNS name of a
 license server. However, while environment modules are used by many
 HPC sites around the world, dealing with the subtleties of different
 implementations as well as organizing large numbers of modules that
-get added over time remains a major challenge.
+get added over time such that users can easily set up their working environment
+remains a major challenge.
 
 In addition to providing users an easy way to access the software available
 on the HPC system, installing scientific software packages is a non-trivial
@@ -41,7 +42,18 @@ software build and installation framework with a particular focus on
 scientific software packages---with the intention to collect and share the
 knowledge that is currently distributed in the HPC community.
 
-The remainder of this paper is structured as follows: \ldots
+The remainder of this paper is structured as follows. First, we describe the
+tradiotional way of installing scientific software stacks on HPC systems in
+Section~\ref{sec:traditional}, highlighting the common problems that both user
+support teams and end users run into. In Section~\ref{sec:hierarchical} we
+present the use of a hierarchical module naming scheme as an alternative, and
+explain how it can help in overcoming these problems. Subsequently, in
+Sections~\ref{sec:easybuild} and \ref{sec:lmod}, we discuss how \easybuild{} and
+Lmod are appropriate tools for effectively dealing with the highlighted issues, 
+and how they can further enhance both the user experience and efficiency of user
+support teams. We discuss future work in Section~\ref{sec:future_work} and related
+work in Section~\ref{sec:related_work}. Finally, we conclude in
+Section~\ref{sec:conclusion}.
 
-\remark{issues with installing \& providing scientific software}
-\remark{importance of appropriate tools \& community}
+%\remark{issues with installing \& providing scientific software}
+%\remark{importance of appropriate tools \& community}

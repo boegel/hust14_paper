@@ -35,6 +35,11 @@ version of the same package or changing between different compilers or
 mpi stacks.  These power features show why the environment module
 system has widely used since the late 1990's.
 
+\kenneth{we also need to briefly describe \texttt{module avail} and
+\texttt{module list}, since they're used in examples; maybe we also need to briefly
+mention that the user interacts with module files via the \texttt{module} command,
+which accepts various subcommands}
+
 There have been several environment module system that have been
 developed over the years.  The original
 implementation~\cite{furlani91} was collection of shell scripts.  At
@@ -246,27 +251,92 @@ another approach to remove this burden from users.
 
 %\remark{flat naming scheme (most common?),
 
+\label{sec:installing}
 \subsection{Installing scientific software}
 
-Sites around the world use a wide variety methods and software to
-install scientific packages.  Some site use manual methods.  Some
-depend on one or a few individuals who know how to install
-and possibly remove packages.  Some sites use tools like puppet or
-chef to manage their installs.  Other have developed in-house to
-manage installing software.
+HPC sites around the world use a wide variety of methods and tools to
+install scientific software.
 
-Sites like TACC use an in-house developed tool called
-LosF~\cite{lmodSC11} to leverage in-house  built RPMS.  The spec files
-that control the RPMS are parameterized so that one spec file can be
-used to the plethora of versions required.  The site build RPMS
-include the modulefile.  Therefore installing the package installs the
-modulefile and removing the package removes the modulefile.
+\subsubsection{Manual installation}
 
-Still there is little colboration between sites thus
-lots of duplicate effort across the HPC centers around the world.
+Commonly, sites rely heavily on the manpower of (a part of)
+the user support team, and simply manually install software packages following
+the install guides that are either composed by themselves over time or are provided
+by the respective software development teams (that is, if those are available, and
+sufficiently detailed and up-to-date).
 
-\robert{Kenneth: feel free to add to this section. But note that our
-  system at TACC does provide a great deal of flexibility (so there !!)}
+\subsubsection{Scripting}
+
+Frequently, sites end up resorting to putting together a collection of (most
+commonly bash) scripts to automate the often repititive and error-prone tasks of
+configuring, building and installing the software packages, in whichever scripting
+language is of preference at that time. Typically, this quickly results in a pile of
+loosely coupled hard-to-maintain scripts, which are more often than not only really
+understood by just a small fraction or even a single member of the user support
+teams, even though they are (heavily) relied upon.
+\kenneth{refer to the Jim cartoon here?}
+On top of this, these scripts
+tend to have the site software installation policies (which are likely quite
+site-specific) hard-wired into them, leaving little flexibility for other HPC
+sites using a slightly different policy to reuse them as is (assuming the scripts
+are made available to others).
+
+\subsubsection{Package managers}
+
+Yet another approach is to rely on the packaging and package managing tools used
+by the operating system, e.g. RPMs and \texttt{yum} for RedHat-based systems,
+\texttt{apt-get}, Debian packages for Debian-like systems, Portage for Gentoo, etc.
+Package managers have more than adequate solutions for some aspects of
+installing large software stacks, including dependency tracking/resolution, software
+updates, uninstalling software, etc. However, they are ill-suited for dealing with
+certain peculiarities that come into play when installing scientific software on
+HPC systems, such as requiring multiple builds/versions of the same software package
+to be installed at the same time and heavily customized install procedures involving
+non-standard tools (as opposed to the
+\texttt{configure}-\texttt{make}-\texttt{make install} paradigm commonly used by
+system software). Also, the package specification formats (e.g., \texttt{.spec}
+files used for generating RPMs) tend to have little support for factoring out
+common patterns in install procedures, resulting in lots of copy-pasting and thus
+a hard to maintain softeware and install build infrastructure.
+
+Nevertheless, a couple of the larger HPC sites in the world
+(e.g., TACC, see Section~\ref{sec:related_work}) are taking this packaging approach,
+since they are able to dedicate large amounts of manpower to the task of getting
+scientific software installed; this is typically infeasible for smaller HPC sites
+however. Besides these concerns, the efforts spent on shoe-horning the install
+procedures of scientific software into the package specifications (e.g., 
+\texttt{.spec} files for generating RPMs) are unlikely to benefit other HPC sites
+due to, again, little control to apply their own site-specific installation
+policies without spending significant additional time to modify the packages to
+their needs.
+
+\subsubsection{Other tools}
+
+Some sites (ab)use configuration management tools like Puppet or Chef to manage
+their software installations. Since these tools are intended for entirely different
+purposes this is clearly not a good approach either, yet it may possible to come up
+with a workflow that is manageable, by lack of a better alternative.
+
+Other solutions include tools custom-made for installing scientific software
+on HPC systems. We will briefly discuss a number of these in
+Section~\ref{sec:related_work}. Generally this concerns tools which were
+developed in-house over the years, after having started as yet another bunch of
+scripts being hacked together, up to the point where they were deemed potentially
+useful for other HPC sites as well. Unfortunately, these projects typically die a
+silent death as quickly as they surfaced, due to basically being a one-man project,
+lack of production usage across different HPC sites (for whatever reason),
+inadequate flexibility and features, missing support funds to keep development
+active, etc.
+
+\subsubsection{Module files}
+
+Usually, the creation of module files remain to be handled manually since the
+procedure is often deemed ``simple enough". However, this significantly impedes
+maintaining a consistent set of module files, and again is likely to result in
+imposing the responsibility of creating module files for software installations
+on one person or, at best, a handful of people. This is obviously a major concern
+on production systems w.r.t.~ensuring continuity of support for installing
+scientific software for end users.
 
 %%???
 %%
@@ -300,6 +370,11 @@ the modulefile be used to generate a software page?  The list is
 endless.
 
 \robert{Kenneth: feel free to add to this section.}
+
+\remark{refer to the results of the "Getting Scientific Software Installed BoF sessions at SC13 \& ISC14 to support the concerns mentioned in Section~\ref{sec:installing}}
+
+Still there is little colboration between sites thus
+lots of duplicate effort across the HPC centers around the world.
 
 %???
 %\remark{manual creating of module files (consistency issues), repetitive \&

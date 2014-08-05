@@ -14,9 +14,6 @@ originally designed for, namely, it embeds and extends easily into
 other programs.  As time went on, it was clear that the Lmod modules
 system written in Lua implementation was fast enough to use directly.
 
-%\kenneth{saying it's "very fast" and then saying it's "fast enough" feels
-%contradictory}
-
 \subsection{Support for hierarchical module naming schemes}
 
 The key idea that Lmod exploits is that it watches changes to
@@ -43,21 +40,29 @@ is added to the \texttt{\$MODULEPATH}, which will trigger a search
 for compatible modules in the new module search path for each of the
 inactive modules.
 
-For example, swapping the loaded GCC compiler module for the (default)
-Clang module results in reloading the loaded module for the
-\emph{PETSc} parallel solver library and the \emph{MPICH} MPI stack:
+For example, swapping the loaded \emph{gcc} compiler module for the (default)
+\emph{clang} module results in reloading the loaded module for the
+\emph{fftw3} a parallel fft library and the \emph{mpich} MPI stack:
 {\small
   \begin{alltt}
     \textbf{\% module list}
     Currently loaded modules:
-    1) GCC/4.8.2  2) MPICH/3.1.1  3) PETSc/3.4
-    \textbf{\% module swap GCC Clang}
+    1) gcc/4.8.2  2) mpich/3.1.1  3) fftw3/3.3.2
+    \textbf{\% module swap gcc clang}
     The following have been reloaded:
-    1) PETSc/3.4  2) MPICH/3.1.1
+    1) fftw3/3.3.2  2) mpich/3.1.1
+    \textbf{\% module list}
+    Currently loaded modules:
+    1) clang/3.4  2) mpich/3.1.1  3) fftw3/3.3.2
 \end{alltt}
 }
+\noindent
+To ease testing the list of module reloaded are printed out
+alphabetically. Each ``\texttt{module list}'' command shows the
+order in which the modules are loaded.
 
-\kenneth{does the order of the reloaded modules make sense? shouldn't MPICH be reloaded first, since PETSc depends on it?}
+% \kenneth{does the order of the reloaded modules make sense? shouldn't
+%   MPICH be reloaded first, since PETSc depends on it?}
 
 Another key issue with a hierarchical layout of modules is that not all
 existing modules are visible via \texttt{module avail} (see
@@ -77,13 +82,34 @@ requests by the members of the Lmod community.
 
 \subsection{\texttt{ml} shorthand}
 
-\texttt{ml} is a short-hand for the commonly used \texttt{module list}
+Lmod provides a short-hand to those who misspell the \texttt{moduel}, \texttt{mdoule}, \emph{err}
+\texttt{module} command.  It is common to want a list of the currently loaded
+modules or load a new module.  So Lmod provides a command named
+\texttt{ml}.  With no arguments, \texttt{ml} is the same as
+\texttt{module list}, and \texttt{ml} \emph{X} is the same as \texttt{module
+  load} \emph{X}.  When used with a leading minus a single command can
+swap compilers and mpi stacks: 
+{\small
+  \begin{alltt}
+      \% ml -gcc -mpich clang openmpi
+  \end{alltt}
+}  
+\noindent
+Is the same as:
+{\small
+  \begin{alltt}
+      \% module swap gcc clang
+      \% module swap mpich openmpi
+  \end{alltt}
+}  
 
-while \texttt{ml X} is a short-hand for the command used \texttt{module load X}
+\texttt{ml} accepts other subcommands just like \texttt{module} does,
+i.e. \texttt{ml avail} and \texttt{module avail} are equivalent.  If a
+module name is the same as a module command does require a little
+finessing.  So trying to load the spider modulefile has to be written
+as \texttt{ml load spider}. 
 
-\texttt{ml} accepts other subcommands just like \texttt{module} does, i.e. \texttt{ml avail} and \texttt{module avail} are equivalent
-
-\remark{needs to be fleshed out}
+%\remark{needs to be fleshed out}
 
 \subsection{Properties}
 
@@ -103,11 +129,25 @@ are handled, a single modulefile can serve regular and Phi libraries.
 But user's won't know which libraries are Phi-aware.  Lmod added
 functions so that properties could be added to modulefiles.  This way
 when modules are listed via module list, and avail the properties can
-be reported.  This is just one use of properties.  It is under site
+be reported.  
+{\small
+\begin{alltt}
+  \textbf{\% module list}    
+  Currently Loaded Modules:
+    1) intel/14.0.2       3) mpich/3.1.2   
+    2) mkl/mkl      \textbf{(*)}   4) boost/1.55.0 \textbf{(P)}
+
+  Where:
+   \textbf{(*)}:  Supports host, native and offload
+   \textbf{(P)}:  built for host and native Phi
+\end{alltt}
+}
+\noindent
+This shows the the intel mkl library and the C++ boost libraries are Phi-aware.
+This is just one use of properties.  It is under site
 control what properties are reported.  For example, some sites use it
 to mark alpha and beta releases of software packages.
-
-\kenneth{include an example output, use bold face rather than a color for Phi-aware modules?}
+%\kenneth{include an example output, use bold face rather than a color for Phi-aware modules?}
 
 \subsection{Caching}
 
@@ -132,6 +172,7 @@ installing software (e.g. for EasyBuild) but users will see an updated
 cache file.
 
 \kenneth{also mention system vs user cache?}
+\robert{I don't know}
 
 \subsection{Module families}
 
@@ -141,7 +182,23 @@ part of a family and you only get one member of the family loaded at
 one time.  It is possible to override this for the few expert user who
 wish to have two compilers loaded at the same time.
 
-\kenneth{example of error message when loading two modules of the same family? mention how experts can override this exactly}
+{\small
+  \begin{alltt}
+  \% module load gcc
+  Lmod has detected the following error:
+  You can only have one compiler module loaded.
+  To correct this, please do the following:
+
+  \%  module swap intel gcc/4.8.1
+  \end{alltt}
+}
+\noindent
+Users wanting to load two compilers can set the environment variable
+\texttt{LMOD\_EXPERT}. to bypass this check.
+
+
+
+%\kenneth{example of error message when loading two modules of the same family? mention how experts can override this exactly}
 
 \subsection{Hooks}
 
@@ -159,9 +216,11 @@ There have been many improvement to improve usability for both users
 and staff.  One of these is sensible version ordering.  Originally all
 module systems use lexicological ordering.  This means that version
 9.0 is considered newer than 10.0.  Now Lmod knows that version 10.0 $>$
-9.7.1 $>$ 9.7 $>$ 9.7rc1 $>$ 9.7a2 and so on.
+9.7.1 $>$ 9.7 $>$ 9.7rc1 $>$ 9.7a2 and so on.  It knows about
+numerical order in any of the digits so 1.10.12 $>$ 1.10.9 $>$ 1.9.10 $>$ 1.9.2
+and so on.
 
-\kenneth{mention version since when Lmod support sensible version ordering, and maybe flesh out the example a bit more? you can use EasyBuild v1.9.10 vs v1.10.0 as an example ;-)}
+%\kenneth{mention version since when Lmod support sensible version ordering, and maybe flesh out the example a bit more? you can use EasyBuild v1.9.10 vs v1.10.0 as an example ;-)}
 
 \subsection{\texttt{pushenv}: stack-based setting of environment variables}
 
@@ -174,7 +233,25 @@ rather than cleared.  This is what \texttt{pushenv} does.  It
 maintains a hidden stack in the environment so it can recover old
 values.
 
-\kenneth{include an example of the effect of using \texttt{pushenv} rather than \texttt{setenv}, maybe using \texttt{\$CC}?}
+Suppose the gcc module defines \texttt{CC} to be gcc and the mpich module
+defines \texttt{CC} to mpicc.  The following table shows the value of \texttt{CC}
+depending on whether \texttt{pushenv} or \texttt{setenv} is used:
+\begin{center}
+    \begin{tabular}{l|l|l}
+       command                    & \texttt{setenv} & \texttt{pushenv} \\ \hline
+       (1)\% module load   gcc    & \texttt{gcc}    & \texttt{gcc}     \\ 
+       (2)\% module load   mpich  & \texttt{mpicc}  & \texttt{mpicc}   \\
+       (3)\% module unload mpich  & \emph{unset}    & \texttt{gcc}     \\
+       (4)\% module unload gcc    & \emph{unset}    & \emph{unset}     \\ \hline
+    \end{tabular}
+\end{center}
+\noindent
+After command 1 and 2 the value of \texttt{CC} is the same.  It is the unload
+with command 3 where the behavior changes.  With \texttt{setenv} \texttt{CC} is unset
+whereas with \texttt{pushenv} recovers the previous value of
+\texttt{gcc} in the third command.  
+
+%\kenneth{include an example of the effect of using \texttt{pushenv} rather than \texttt{setenv}, maybe using \texttt{\$CC}?}
 
 \subsection{Speed improvements triggere by EasyBuild}
 
@@ -202,9 +279,12 @@ collection of modules as they like.
 Lmod is actively maintained and responsive to its community.  Since
 February of 2011, there have been 153 tagged version and 30+ official
 releases of Lmod.  Many of the improvements to Lmod have come from
-requests from the user community.
-
-\kenneth{try and give a rough idea of the size of the Lmod community?}
+requests from the user community.  It is difficult to know the actual
+size of the Lmod community.  Current there are about 50 users on the
+mailing list and about another 50 users watching it via the github.  
+Given the usual rule that 5 to 20 percent of the users join up, this
+the gives a minimum of about 400 sites using or testing Lmod.
+%\kenneth{try and give a rough idea of the size of the Lmod community?}
 
 %\subsection{Key features}
 %

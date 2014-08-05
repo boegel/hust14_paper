@@ -96,6 +96,8 @@ both support the concept of hierarchical modules (since they're mostly
 oblivious to how the module files are structured), a couple of consequences
 to using a hierarchical module naming scheme need to be taken into account.
 
+\label{sec:hierarchical_consequences_visibility}
+\subsubsection{Visibility of modules}
 First of all, not all existing module files are visible by default, since
 a particular core module and potentially additional lower-level modules
 that further extend the module search path may need to be loaded first.
@@ -107,6 +109,8 @@ avail}, another way of quering the set of existing module files (outside
 of the currently active \texttt{\$MODULEPATH}) needs to be
 provided.
 
+\label{sec:hierarchical_consequences_extensions}
+\subsubsection{Awareness of module path extensions}
 Second, the modules tool needs to be aware of the module path extensions that
 may occur when loading modules in a hierarchical scheme. This is of
 particular importance for supporting the notion of automatically reloading
@@ -118,6 +122,8 @@ modules whenever a \texttt{module swap} is being executed, and afterwards
 automatically (try to) reload the unloaded modules, meanwhile taking into
 account the order in which the modules were loaded.
 
+\label{sec:hierarchical_consequences_availability}
+\subsubsection{Module availability on different paths in the hierarchy}
 On top of this, the modules tool needs to take into account that it is
 possible that not all dependent modules are available after swapping e.g.
 one compiler module for another. This is required to avoid that the user

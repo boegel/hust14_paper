@@ -9,13 +9,13 @@ shortcomings we have identified with these approaches.
 
 \subsection{Environment modules system}
 
-For software not installed in standard system locations a user's \texttt{\$PATH}
-must be modified to include the directory to a software package.  Other enviroment
-variables may also be required for this software to operate for the
-user (e.g. \texttt{\$LD\_LIBRARY\_PATH}, ...).  One approach for each package to
-provide shell scripts for the user to source to modify their
-environment. 
-  
+For software not installed in standard system locations a user's
+\texttt{\$PATH} must be modified to include the directory to a software
+package.  Other enviroment variables may also be required for this
+software to operate for the user (e.g. \texttt{\$LD\_LIBRARY\_PATH}, ...).
+One approach for each package to provide shell scripts for the user to
+source to modify their environment.
+
 The environment modules system provides a technique with several major
 advantages. The first is that a single file provides a definitions
 required for a user to access the package.  There is no need for a
@@ -38,7 +38,7 @@ system has widely used since the late 1990's.
 There have been several environment module system that have been
 developed over the years.  The original
 implementation~\cite{furlani91} was collection of shell scripts.  At
-some point this was rewritten in a TCL/C combinations~\cite{em}. 
+some point this was rewritten in a TCL/C combinations~\cite{em}.
 
 In the traditional implementation, a command named \texttt{module}
 is implemented as a simple shell function (for Bourne-compatible shells) or
@@ -60,7 +60,7 @@ fork of the Tcl-only implementation which has been heavily adjusted to meet
 the requirements of the DEISA (Distributed European Infrastructure for
 Supercomputing Applications) project~\cite{wikiDEISA}.  In
 1997, a completely C based implementation was made
-available~\cite{cmod}.  It has not been updated since 1998.  
+available~\cite{cmod}.  It has not been updated since 1998.
 
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
@@ -69,7 +69,7 @@ vary in how well maintained they are. In all cases, development
 progresses slowly. For example, there has been no activity in the
 (publicly accessible) version control system of the Tcl-only
 implementation for about two years. That is, new features such as
-improved support for organizing modules in a hierarchical way are very 
+improved support for organizing modules in a hierarchical way are very
 unlikely to happen any time soon. In the case of the Tcl/C modules
 there are active discussions on the modules-interest mailing list but
 improvements are infrequent.
@@ -79,7 +79,7 @@ been made available. It is an entirely new modules tool implemented in
 Lua, providing functionality that is compatible with the Tcl-based
 implementations.  Lmod is actively developed and maintained, and has
 an active and thriving community. We discuss Lmod in detail in
-Section~\ref{sec:lmod}. 
+Section~\ref{sec:lmod}.
 
 %\markus{From what I can see, there are at least . However, the answers from the maintainers
 %suggest to me that they have no interest in changing things too much. What is
@@ -143,7 +143,7 @@ compiler and multiple compilers (e.g. GCC, Intel, Clang, PGI, ...).
 While there is some interopability for pure C programs between
 compilers, there is none for Fortran and C++ programs.  This means
 that there has to be multiple version of libraries like the C++
-libraries like Boost for each compiler and compiler version. 
+libraries like Boost for each compiler and compiler version.
 
 Moreover, since packages such as MPI implementations are inherently tied to a
 particular compiler and most often even a particular version, disambiguating
@@ -244,7 +244,7 @@ another approach to remove this burden from users.
 %\remark{module naming scheme should be discussed separately from module files, different concepts,
 %making the distinction is important in the paper context}
 
-%\remark{flat naming scheme (most common?), 
+%\remark{flat naming scheme (most common?),
 
 \subsection{Installing scientific software}
 

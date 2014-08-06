@@ -88,26 +88,20 @@ modules or load a new module.  So Lmod provides a command named
 \texttt{ml}.  With no arguments, \texttt{ml} is the same as
 \texttt{module list}, and \texttt{ml} \emph{X} is the same as \texttt{module
   load} \emph{X}.  When used with a leading minus a single command can
-swap compilers and mpi stacks: 
+swap compilers and mpi stacks:
 {\small
-  \begin{alltt}
-      \% ml -gcc -mpich clang openmpi
-  \end{alltt}
-}  
+  \begin{alltt}      \textbf{\% ml -gcc -mpich clang openmpi}\end{alltt}
+}
 \noindent
 Is the same as:
-{\small
-  \begin{alltt}
-      \% module swap gcc clang
-      \% module swap mpich openmpi
-  \end{alltt}
-}  
+{\small\begin{alltt}      \textbf{\% module swap gcc clang}
+      \textbf{\% module swap mpich openmpi}\end{alltt}}
 
 \texttt{ml} accepts other subcommands just like \texttt{module} does,
 i.e. \texttt{ml avail} and \texttt{module avail} are equivalent.  If a
 module name is the same as a module command does require a little
 finessing.  So trying to load the spider modulefile has to be written
-as \texttt{ml load spider}. 
+as \texttt{ml load spider}.
 
 %\remark{needs to be fleshed out}
 
@@ -129,12 +123,12 @@ are handled, a single modulefile can serve regular and Phi libraries.
 But user's won't know which libraries are Phi-aware.  Lmod added
 functions so that properties could be added to modulefiles.  This way
 when modules are listed via module list, and avail the properties can
-be reported.  
+be reported.
 {\small
 \begin{alltt}
-  \textbf{\% module list}    
+  \textbf{\% module list}
   Currently Loaded Modules:
-    1) intel/14.0.2       3) mpich/3.1.2   
+    1) intel/14.0.2       3) mpich/3.1.2
     2) mkl/mkl      \textbf{(*)}   4) boost/1.55.0 \textbf{(P)}
 
   Where:
@@ -182,16 +176,12 @@ part of a family and you only get one member of the family loaded at
 one time.  It is possible to override this for the few expert user who
 wish to have two compilers loaded at the same time.
 
-{\small
-  \begin{alltt}
-  \% module load gcc
+{\small\begin{alltt}  \textbf{\% module load gcc}
   Lmod has detected the following error:
   You can only have one compiler module loaded.
   To correct this, please do the following:
 
-  \%  module swap intel gcc/4.8.1
-  \end{alltt}
-}
+  \textbf{\% module swap intel gcc/4.8.1}\end{alltt}}
 \noindent
 Users wanting to load two compilers can set the environment variable
 \texttt{LMOD\_EXPERT}. to bypass this check.
@@ -233,23 +223,25 @@ rather than cleared.  This is what \texttt{pushenv} does.  It
 maintains a hidden stack in the environment so it can recover old
 values.
 
-Suppose the gcc module defines \texttt{CC} to be gcc and the mpich module
-defines \texttt{CC} to mpicc.  The following table shows the value of \texttt{CC}
-depending on whether \texttt{pushenv} or \texttt{setenv} is used:
+Suppose the gcc module defines \texttt{\$CC} to be \texttt{gcc} and the mpich module
+defines \texttt{\$CC} to \texttt{mpicc}.  The following table shows the value of
+\texttt{\$CC} depending on whether \texttt{pushenv} or \texttt{setenv} is used:
 \begin{center}
-    \begin{tabular}{l|l|l}
-       command                    & \texttt{setenv} & \texttt{pushenv} \\ \hline
-       (1)\% module load   gcc    & \texttt{gcc}    & \texttt{gcc}     \\ 
-       (2)\% module load   mpich  & \texttt{mpicc}  & \texttt{mpicc}   \\
-       (3)\% module unload mpich  & \emph{unset}    & \texttt{gcc}     \\
-       (4)\% module unload gcc    & \emph{unset}    & \emph{unset}     \\ \hline
+ \begin{tabular}{c|l|l|l}
+ nr & command                                 & \texttt{setenv} & \texttt{pushenv}\\
+ \hline
+ 1 & \textbf{\texttt{module load   gcc}}   & \texttt{gcc}    & \texttt{gcc}  \\
+ 2 & \textbf{\texttt{module load   mpich}} & \texttt{mpicc}  & \texttt{mpicc} \\
+ 3 & \textbf{\texttt{module unload mpich}} & \emph{(none)}   & \texttt{gcc}  \\
+ 4 & \textbf{\texttt{module unload gcc}}   & \emph{(none)}   & \emph{(none)} \\
+  \hline
     \end{tabular}
 \end{center}
 \noindent
 After command 1 and 2 the value of \texttt{CC} is the same.  It is the unload
-with command 3 where the behavior changes.  With \texttt{setenv} \texttt{CC} is unset
+with command 3 where the behavior changes.  With \texttt{setenv} \texttt{\$CC} is unset
 whereas with \texttt{pushenv} recovers the previous value of
-\texttt{gcc} in the third command.  
+\texttt{gcc} in the third command.
 
 %\kenneth{include an example of the effect of using \texttt{pushenv} rather than \texttt{setenv}, maybe using \texttt{\$CC}?}
 
@@ -281,7 +273,7 @@ February of 2011, there have been 153 tagged version and 30+ official
 releases of Lmod.  Many of the improvements to Lmod have come from
 requests from the user community.  It is difficult to know the actual
 size of the Lmod community.  Current there are about 50 users on the
-mailing list and about another 50 users watching it via the github.  
+mailing list and about another 50 users watching it via the github.
 Given the usual rule that 5 to 20 percent of the users join up, this
 the gives a minimum of about 400 sites using or testing Lmod.  The
 number of actual users using Lmod should be 10 to 100 times that.

@@ -79,7 +79,8 @@ unlikely to happen any time soon. In the case of the Tcl/C modules
 there are active discussions on the modules-interest mailing list but
 improvements are infrequent.
 
-In 2009, a new implementation of the module system called Lmod~\cite{taccLmod} has
+In 2009, a new implementation of the module system called
+\emph{Lmod}~\cite{taccLmod} has
 been made available. It is an entirely new modules tool implemented in
 Lua, providing functionality that is (mostly) compatible with the Tcl-based
 implementations.  Lmod is actively developed and maintained, and has
@@ -256,6 +257,7 @@ another approach to remove this burden from users.
 
 HPC sites around the world use a wide variety of methods and tools to
 install scientific software.
+\remark{refer to the results of the "Getting Scientific Software Installed BoF sessions at SC13 \& ISC14 to support the concerns mentioned in Section~\ref{sec:installing}}
 
 \subsubsection{Manual installation}
 
@@ -310,23 +312,27 @@ due to, again, little control to apply their own site-specific installation
 policies without spending significant additional time to modify the packages to
 their needs.
 
-\subsubsection{Other tools}
+\subsubsection{Configuration management tools}
 
-Some sites (ab)use configuration management tools like Puppet or Chef to manage
+Some sites (ab)use configuration management tools like Puppet or Chef to help manage
 their software installations. Since these tools are intended for entirely different
 purposes this is clearly not a good approach either, yet it may possible to come up
-with a workflow that is manageable, by lack of a better alternative.
+with a pragmatic workflow, although it is unlikely that it provides an adequate
+solution that is easy to use and maintain.
+
+\subsubsection{Custom tools}
 
 Other solutions include tools custom-made for installing scientific software
 on HPC systems. We will briefly discuss a number of these in
-Section~\ref{sec:related_work}. Generally this concerns tools which were
-developed in-house over the years, after having started as yet another bunch of
+Section~\ref{sec:related_work}. Typically, these tools were developed in-house for
+a certain period of time, after having started as yet another bunch of
 scripts being hacked together, up to the point where they were deemed potentially
 useful for other HPC sites as well. Unfortunately, these projects typically die a
 silent death as quickly as they surfaced, due to basically being a one-man project,
-lack of production usage across different HPC sites (for whatever reason),
-inadequate flexibility and features, missing support funds to keep development
-active, etc.
+lack of documentation and production usage by different HPC sites (for whatever
+reason), inadequate flexibility and features, etc. We discuss one notable 
+exception, \emph{\easybuild{}}~\cite{EasyBuildSC12}, in detail in
+Section~\ref{sec:easybuild}.
 
 \subsubsection{Creating module files}
 
@@ -356,25 +362,23 @@ scientific software for end users.
 %%very little flexibility for site-specific modifications, little collaboration between sites thus
 %%lots of duplicate effort}
 
-\subsection{Shortcomings \& unresolved issues}
-\label{sec:issues_traditional}
+\subsection{Lack of collaboration, tools and policies}
+\label{sec:traditional_lack}
 
-Without appropriate tools, managing the building and installing the software
-packages becomes a great burden for HPC user support teams, especially smaller ones.
-Module files must be written for each package and version.  If done
-manually by different individuals it becomes difficult to maintain
-consistency.  Are the modules catagorized similarly or are the
-different molecular dynamics packages know as MD, QMD, Chemistry, etc.
-What do the help message say (if anything?).  Can the information in
-the modulefile be used to generate a software page?  The list is
-endless.
+Even though the problems w.r.t. installing scientific software and using
+traditional module naming schemes are well recognized, there is an abundant lack
+of available tools and policies that try to provide a solution to these problems.
+Additionally, there has been very little collaboration between HPC sites on these
+issues, despite them being a significant burden for HPC user support teams
+(especially the smaller ones). Even though HPC sites around the world are facing
+very similar problems in this area, lots of duplicate effort is still being done,
+resulting in a tremendous waste of manpower (and hence time and money), and a loss
+of oopportunities to benefit from a collaborative effort, e.g., capturing the
+immensely valuable expertise that is wide spread across HPC sites worldwide.
 
-\robert{Kenneth: feel free to add to this section.}
+In the remainder of this paper we present a modern alternative approach to
+installing scientific software, with the intent to resolve these common issues.
 
-\remark{refer to the results of the "Getting Scientific Software Installed BoF sessions at SC13 \& ISC14 to support the concerns mentioned in Section~\ref{sec:installing}}
-
-Still there is little colboration between sites thus
-lots of duplicate effort across the HPC centers around the world.
 
 %???
 %\remark{manual creating of module files (consistency issues), repetitive \&

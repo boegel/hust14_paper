@@ -81,7 +81,7 @@ improvements are infrequent.
 
 In 2009, a new implementation of the module system called Lmod~\cite{taccLmod} has
 been made available. It is an entirely new modules tool implemented in
-Lua, providing functionality that is compatible with the Tcl-based
+Lua, providing functionality that is (mostly) compatible with the Tcl-based
 implementations.  Lmod is actively developed and maintained, and has
 an active and thriving community. We discuss Lmod in detail in
 Section~\ref{sec:lmod}.
@@ -251,8 +251,8 @@ another approach to remove this burden from users.
 
 %\remark{flat naming scheme (most common?),
 
-\label{sec:installing}
 \subsection{Installing scientific software}
+\label{sec:installing}
 
 HPC sites around the world use a wide variety of methods and tools to
 install scientific software.
@@ -328,7 +328,7 @@ lack of production usage across different HPC sites (for whatever reason),
 inadequate flexibility and features, missing support funds to keep development
 active, etc.
 
-\subsubsection{Module files}
+\subsubsection{Creating module files}
 
 Usually, the creation of module files remain to be handled manually since the
 procedure is often deemed ``simple enough". However, this significantly impedes
@@ -356,8 +356,8 @@ scientific software for end users.
 %%very little flexibility for site-specific modifications, little collaboration between sites thus
 %%lots of duplicate effort}
 
-\label{sec:issues_traditional}
 \subsection{Shortcomings \& unresolved issues}
+\label{sec:issues_traditional}
 
 Without appropriate tools, managing the building and installing the software
 packages becomes a great burden for HPC user support teams, especially smaller ones.

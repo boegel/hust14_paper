@@ -35,10 +35,12 @@ version of the same package or changing between different compilers or
 mpi stacks.  These power features show why the environment module
 system has widely used since the late 1990's.
 
-\kenneth{we also need to briefly describe \texttt{module avail} and
-\texttt{module list}, since they're used in examples; maybe we also need to briefly
-mention that the user interacts with module files via the \texttt{module} command,
-which accepts various subcommands}
+
+%\kenneth{we also need to briefly describe \texttt{module avail} and
+%\texttt{module list}, since they're used in examples; maybe we also need to briefly
+%mention that the user interacts with module files via the \texttt{module} command,
+%which accepts various subcommands}
+%
 
 There have been several environment module system that have been
 developed over the years.  The original
@@ -66,6 +68,19 @@ the requirements of the DEISA (Distributed European Infrastructure for
 Supercomputing Applications) project~\cite{wikiDEISA}.  In
 1997, a completely C based implementation was made
 available~\cite{cmod}.  It has not been updated since 1998.
+
+All of the enviroment module systems have the same user interface.
+The command is given by:
+{\small
+\begin{alltt}
+    \textbf{\% module} \emph{[options]} \emph{command} ...
+\end{alltt}
+}
+\noindent
+Where \emph{command} can be \texttt{load} to load modules \texttt{unload}
+to unload modules, \texttt{list} to list the loaded modules, or
+\texttt{avail} to print the modules that can be currently loaded.
+
 
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 

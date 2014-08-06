@@ -47,9 +47,9 @@
 
 
 \newcommand{\ignore}[1]{}
-\newcommand{\markus}[1]{\textcolor{cyan}{\bf Markus: #1}}
-\newcommand{\kenneth}[1]{\textcolor{magenta}{\bf Kenneth: #1}}
-\newcommand{\robert}[1]{\textcolor{blue}{\bf Robert: #1}}
+\newcommand{\markus}[1]{\ifremark\textcolor{cyan}{\bf Markus: #1}\fi}
+\newcommand{\kenneth}[1]{\ifremark\textcolor{magenta}{\bf Kenneth: #1}\fi}
+\newcommand{\robert}[1]{\ifremark\textcolor{blue}{\bf Robert: #1}\fi}
 %\newcommand{\markus}[1]{}
 %\newcommand{\kenneth}[1]{}
 %\newcommand{\robert}[1]{}
@@ -73,6 +73,7 @@
 \fi}
 
 \remarktrue
+%\remarkfalse
 
 \newif\ifpaper
 \long\def\paper#1{

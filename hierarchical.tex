@@ -1,4 +1,3 @@
-
 \remark{this section should outline the modern approach of using a hierarchical module naming scheme,
 highlighting how this makes things easier for end-users without limiting power users; forward references should
 be made to the EasyBuild \& Lmod sections when the consequences of using a module naming scheme like this are discussed}
@@ -45,15 +44,15 @@ that is currently loaded:
 Obviously, such a hierarchy is not limited to a single level. For example,
 the module files for different MPI implementations can further extend
 \texttt{\$MODULEPATH} to enable all modules which depend on both the loaded
-compiler and the respective MPI library.
+compiler and the respective MPI library, etc.
 
 
-\label{sec:hierarchical_advantages}
 \subsection{Advantages over traditional module naming schemes}
+\label{sec:hierarchical_advantages}
 
-\markus{This sub-subsection IMHO only makes sense if there would be a second
-one. I propose to remove it and simply list the advantages as part of Section
-III.A.}
+%\markus{This sub-subsection IMHO only makes sense if there would be a second
+%one. I propose to remove it and simply list the advantages as part of Section
+%III.A.}
 
 Using a hierarchical module naming scheme has multiple important
 advantages. First, at any point in time, users are only presented with the
@@ -84,20 +83,21 @@ out a loaded module on a particular level of the hierarchy with another
 (e.g., a compiler module), while automatically reloading any module depending
 on the previously loaded module. This notion needs to be supported be the
 modules tool used to consume the module files however (see also
-Section~\ref{sec:hierarchical_consequences}).
+Section~\ref{sec:using_a_hierarchy}).
 
 %\remark{basic users make less mistakes, expert users retain full freedom}
 
-\label{sec:hierarchical_consequences}
-\subsection{Consequences of using a hierarchical naming scheme}
+\subsection{Using a hierarchical module naming scheme}
+\label{sec:using_a_hierarchy}
 
 Although the commonly used Tcl/C and Tcl-only environment modules tools
 both support the concept of hierarchical modules (since they're mostly
 oblivious to how the module files are structured), a couple of consequences
 to using a hierarchical module naming scheme need to be taken into account.
 
-\label{sec:hierarchical_consequences_visibility}
 \subsubsection{Visibility of modules}
+\label{sec:hierarchical_consequences_visibility}
+
 First of all, not all existing module files are visible by default, since
 a particular core module and potentially additional lower-level modules
 that further extend the module search path may need to be loaded first.
@@ -109,8 +109,9 @@ avail}, another way of quering the set of existing module files (outside
 of the currently active \texttt{\$MODULEPATH}) needs to be
 provided.
 
-\label{sec:hierarchical_consequences_extensions}
 \subsubsection{Awareness of module path extensions}
+\label{sec:hierarchical_consequences_extensions}
+
 Second, the modules tool needs to be aware of the module path extensions that
 may occur when loading modules in a hierarchical scheme. This is of
 particular importance for supporting the notion of automatically reloading
@@ -122,8 +123,9 @@ modules whenever a \texttt{module swap} is being executed, and afterwards
 automatically (try to) reload the unloaded modules, meanwhile taking into
 account the order in which the modules were loaded.
 
-\label{sec:hierarchical_consequences_availability}
 \subsubsection{Module availability on different paths in the hierarchy}
+\label{sec:hierarchical_consequences_availability}
+
 On top of this, the modules tool needs to take into account that it is
 possible that not all dependent modules are available after swapping e.g.
 one compiler module for another. This is required to avoid that the user
@@ -138,6 +140,13 @@ operation could be supported as well, e.g. by making sure that the reverse
 swap operation (\texttt{module swap B A} after a \texttt{module swap A B}
 restores the original state of the environment.
 
+None of these issues are taken into account in the latest versions of the
+Tcl/C and Tcl-only implementations of the environment modules tools. At some point,
+the notion of reloading depedent modules after a \texttt{module swap}
+\emph{was} supported by the Tcl-only implementation, but this change was
+reverted later on because it led to incompatible behavior between
+these two versions which was deemed undesirable.
+
 % moved to lmod.tex
 
 %Finally, \remark{saved collections to set default compiler/MPI to avoid that
@@ -149,22 +158,52 @@ restores the original state of the environment.
 %  concepts. At TACC we provide a default set of modules which the user
 %  can override with their own personal collection of modules}
 
-None of these issues are taken into account in the latest versions of the
-Tcl/C and Tcl-only implementations of environment modules. At some point,
-the notion of reloading depedent modules after a \texttt{module swap}
-\emph{was} supported by the Tcl-only implementation, but this change was
-undone again later on because it led to incompatible behavior between
-these two versions.
-However, the previously mentioned alternative modules tool Lmod does
-provide all the necessary functionality (and more) to deal with each of
-these issues, see Section~\ref{sec:lmod}.
-
 %\markus{Somewhere, we should mention that the hierarchical module scheme as
 %outlined above \textit{in principle} also works with C/Tcl or Tcl-only
 %modules, but that specific features simplify usage a lot: ``stack-based'' swap,
 %module deactivation, \texttt{module spider}, etc. But there is a small
 %chicken/egg problem here \ldots}
 
-\kenneth{below is still todo, to make \easybuild{} stand out a bit more}
-\remark{complicates (manual) creation of module files due to hierarchical organization}
-\easybuild{} (section~\ref{sec:easybuild}) automates creation of module files under a specified naming scheme;
+\subsection{Maintaining a module hierarchy}
+\label{sec:maintaining_a_hierarchy}
+
+Next to the peculiarities of using a hierarchical module naming scheme discussed in
+the previous section that need to be taken into account, maintaining a module stack
+that is organized hierarchically is also more involved for user support teams,
+compared to a straightforward 'flat' module naming scheme.
+
+In particular, significantly more care has to taken when creating
+module files. For one, the module path extensions that are included in modules
+on the different levels of the hierarchy make it less straightforward to compose
+module files. Determining the location of module files also becomes
+non-trivial, since the dependencies of the software package being dealt with need
+to be taken into account. Next to this, the \texttt{module load} statements included
+in module files for these dependencies need to be determined carefully, to ensure
+that unloading and swapping of modules doesn't yield unexpected results.
+
+Furthermore, each module can be reffered to using two names in a hierarchical scheme:
+the 'full' name (e.g., \texttt{MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}), which
+starts from the root of the module hierarchy and thus matches it's install location,
+and the 'short' name (e.g., \texttt{WRF/3.5}), which is the name under which modules
+will be referred to by users and in \texttt{module load} statements included in
+module files for dependencies. This may cause confusion or mistakes for people who
+are unsufficiently familiar with the particular hierarchical module naming scheme
+being used.
+
+All these aspects significantly complicate the manual creation of module files, which
+is already a tedious task because of consistency requirements and the usual problems
+like dependency tracking, etc. Combining these concerns with the time-consuming
+nature of the prerequisite of getting scientific software to build only further
+highlights the indispensable need of an appropriate and flexible tool to
+\emph{automate} installing scientific software on HPC systems.
+
+\subsection{Tools}
+\label{sec:tools_for_hierarchical}
+
+The issues discussed in Sections~\ref{sec:using_a_hierarchy} and
+\ref{sec:maintaining_a_hierarchy} clearly motivate the need for more advanced tools.
+In the remainder of this paper, we present how the community-driven tools
+\easybuild{}, a software build and installation framework, and Lmod, a modern
+alternative to the environment modules tools, have the required features (and more)
+and flexibility for efficiently dealing with a hierarchical module naming scheme,
+see Sections~\ref{sec:easybuild} and \ref{sec:lmod} respectively.

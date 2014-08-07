@@ -181,14 +181,18 @@ to be taken into account. Next to this, the \texttt{module load} statements incl
 in module files for these dependencies need to be determined carefully, to ensure
 that unloading and swapping of modules doesn't yield unexpected results.
 
-Furthermore, each module can be reffered to using two names in a hierarchical scheme:
-the 'full' name (e.g., \texttt{MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}), which
+Furthermore, each module can be refered to using two names in a hierarchical scheme:
+the 'full' name (e.g., \texttt{MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}
+\robert{Not with Lmod you can}), which
 starts from the root of the module hierarchy and thus matches it's install location,
 and the 'short' name (e.g., \texttt{WRF/3.5}), which is the name under which modules
 will be referred to by users and in \texttt{module load} statements included in
 module files for dependencies. This may cause confusion or mistakes for people who
 are unsufficiently familiar with the particular hierarchical module naming scheme
 being used.
+
+
+
 
 All these aspects significantly complicate the manual creation of module files, which
 is already a tedious task because of consistency requirements and the usual problems

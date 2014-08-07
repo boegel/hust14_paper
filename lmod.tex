@@ -90,12 +90,18 @@ modules or load a new module.  So Lmod provides a command named
   load} \emph{X}.  When used with a leading minus a single command can
 swap compilers and mpi stacks:
 {\small
-  \begin{alltt}      \textbf{\% ml -gcc -mpich clang openmpi}\end{alltt}
+  \begin{alltt}
+      \textbf{\% ml -gcc -mpich clang openmpi}
+  \end{alltt}
 }
 \noindent
 Is the same as:
-{\small\begin{alltt}      \textbf{\% module swap gcc clang}
-      \textbf{\% module swap mpich openmpi}\end{alltt}}
+{\small
+  \begin{alltt}
+      \textbf{\% module swap gcc clang}
+      \textbf{\% module swap mpich openmpi}
+  \end{alltt}
+}
 
 \texttt{ml} accepts other subcommands just like \texttt{module} does,
 i.e. \texttt{ml avail} and \texttt{module avail} are equivalent.  If a
@@ -165,8 +171,8 @@ loaded even if the cache is out-of-date.  This can happen while
 installing software (e.g. for EasyBuild) but users will see an updated
 cache file.
 
-\kenneth{also mention system vs user cache?}
-\robert{I don't know}
+%\kenneth{also mention system vs user cache?}
+%\robert{I don't know}
 
 \subsection{Module families}
 
@@ -245,7 +251,7 @@ whereas with \texttt{pushenv} recovers the previous value of
 
 %\kenneth{include an example of the effect of using \texttt{pushenv} rather than \texttt{setenv}, maybe using \texttt{\$CC}?}
 
-\subsection{Speed improvements triggere by EasyBuild}
+\subsection{Speed improvements triggered by EasyBuild}
 
 The second feature was an speed improvement.  Internally EasyBuild
 builds the software package and creates the module file.  Then it
@@ -273,9 +279,9 @@ February of 2011, there have been 153 tagged version and 30+ official
 releases of Lmod.  Many of the improvements to Lmod have come from
 requests from the user community.  It is difficult to know the actual
 size of the Lmod community.  Current there are about 50 users on the
-mailing list and about another 50 users watching it via the github.
+mailing list.
 Given the usual rule that 5 to 20 percent of the users join up, this
-the gives a minimum of about 400 sites using or testing Lmod.  The
+the gives a minimum of about 250 sites using or testing Lmod.  The
 number of actual users using Lmod should be 10 to 100 times that.
 Note that TACC is running Lmod and has 15 to 20 thousand users over
 three systems.  The number of downloads from the of all the version of

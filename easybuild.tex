@@ -36,13 +36,13 @@ providing functionality commonly need when installing scientific software on HPC
 systems. For example, it deals with:
 \begin{itemize}
     \item downloading, unpacking and patching software sources;
-    \item setting up the build enviroment,  e.g., loading environment modules for
-    the software dependencies, defining environment variable like \texttt{\$CC},
-    \texttt{\$CXXFLAGS}, \texttt{\$LDFLAGS} and \texttt{\$LIBS}, etc.;
+    \item loading environment modules for software dependencies;
+    \item setting up the build enviroment, i.e, defining environment variables
+    like \texttt{\$CC},
+    \texttt{\$CXXFLAGS}, etc.;
     \item running shell commands (e.g., \texttt{make}), including running
     interactive commands autonomously;
     \item creating module files that match the specification files;
-    \item etc.
 \end{itemize}
 
 Included in the framework is an `abstract' implementation of a software build and
@@ -107,15 +107,21 @@ libraries for specific functionality, e.g., using an MPI stack for distributed
 computing, or which provide optimized routines for commonly used math operations,
 e.g., the well-known BLAS/LAPACK APIs for linear algebra routines. For each software
 package being built, a toolchain must be specified that should be used
-(see Section~\ref{sec:eb_easyconfigs}). The \easybuild{} framework prepares the
-build environment for the different toolchain components, by loading their respective
-modules and defining environment variables to specify compiler commands
-(e.g., via \texttt{\$F90}), compiler and linker options (e.g., via \texttt{\$CFLAGS}
-and \texttt{\$LDFLAGS}), the list of library names to supply to the linker (via
-\texttt{\$LIBS}), etc. This enables making easyblocks largely toolchain-agnostic since
-they can simply rely on these environment variables; that is, unless they need to be
-aware of for example the particular compiler being used to determine the build
-configuration options.
+(see Section~\ref{sec:eb_easyconfigs}).
+
+The \easybuild{} framework prepares the build environment for the different
+toolchain components, by loading their respective modules and defining environment
+variables to specify compiler commands (e.g., via \texttt{\$F90}), compiler and
+linker options (e.g., via \texttt{\$CFLAGS} and \texttt{\$LDFLAGS}), the list of
+library names to supply to the linker (via \texttt{\$LIBS}), etc. This enables
+making easyblocks largely toolchain-agnostic since they can simply rely on these
+environment variables; that is, unless they need to be aware of for example the
+particular compiler being used to determine the build configuration options.
+
+Recent releases of \easybuild{} include out-of-the-box support for the GCC, Intel,
+Clang, and CUDA compilers, next to common MPI libraries such as Intel MPI, MPICH2,
+MVAPICH2, and OpenMPI, various BLAS/LAPACK libraries including ATLAS, Intel MKL,
+OpenBLAS, and ScaLAPACK, and libraries providing FFT routines like FFTW.
 
 \subsubsection{Easyconfig files}
 \label{sec:eb_easyconfigs}

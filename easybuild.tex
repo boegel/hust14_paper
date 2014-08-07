@@ -142,22 +142,29 @@ software package should be installed, and which settings should be using for bui
 it. \easybuild{} copies the used easyconfig file after completing an installation
 to the install directory, and also supports maintaining an easyconfig archive which
 is updated on every successful installation. Therefore, reproducing installations
-becomes trivial (see also Section~\ref{sec:eb_reproducability}).
-
+becomes trivial.
 
 \subsection{Basic functionality}
 
-As the name suggests, \easybuild{} is particularly easy to use. It provides
+As the name suggests, \easybuild{} is particularly easy to use. The provided
+\texttt{eb} command consumes a list of file paths for or directory of easyconfig
+files, next to command line options (see \texttt{eb --help}).
 
-automatic download/configure/build/install/module
+Launching \texttt{eb} with an easyconfig file as an argument will trigger a
+series of events. First of all, the easyconfig file will be parsed by the \easybuild{}
+framework to determine which software package needs to be installed, and which
+easyblock and parameters should be used. Next, the appropriate build and install
+procedure will be executed, consisting of a series of steps defined by the framework
+and selected easyblock. If the installation is successful, this will result in a 
+module file being generated that matches the specifications.
 
-\remark{include figure showing schematic representation of easyconfig, easyblock, framework relation}
+For example, the following command instructs \easybuild{} to install WRF v3.5
+with the \texttt{goolf} toolchain v1.6.10, as specified by the provided easyconfig
+file:
 
+\texttt{eb WRF-3.5-goolf-1.6.10.eb --robot}
 
 \subsection{Feature highlights}
-
-\subsubsection{Support for reproducible software installations}
-\label{sec:eb_reproducability}
 
 \subsubsection{Automatic dependency resolution}
 

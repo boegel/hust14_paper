@@ -99,6 +99,7 @@ and painful install procedures, such as CP2K, NWChem, OpenFOAM, QuantumESPRESSO,
 WRF.
 
 \subsubsection{Compiler toolchains}
+\label{sec:eb_toolchains}
 
 \easybuild{} also employs so-called `compiler toolchains' (or simply `toolchains'
 for short), which were already mentioned in Section~\ref{sec:Module_naming_scheme}.
@@ -135,7 +136,8 @@ parameters are mandatory, like \texttt{name} and \texttt{version} to specify whi
 which compiler toolchain should be used, etc. Others are optional, and have
 appropriate defaults set for them in the \easybuild{} framework; examples include
 \texttt{buildopts} to specify options for the build command, and \texttt{dependencies}
-to list the software dependencies that should be taken into account.
+to list the software dependencies that should be taken into account. A complete
+list of supported easyconfig parameters can be obtained using \texttt{eb -a}.
 
 As such, each easyconfig file provides a complete specification of which particular
 software package should be installed, and which settings should be using for building
@@ -144,34 +146,74 @@ to the install directory, and also supports maintaining an easyconfig archive wh
 is updated on every successful installation. Therefore, reproducing installations
 becomes trivial.
 
-\subsection{Basic functionality}
+\subsection{Basic usage}
 
-As the name suggests, \easybuild{} is particularly easy to use. The provided
-\texttt{eb} command consumes a list of file paths for or directory of easyconfig
-files, next to command line options (see \texttt{eb --help}).
+As the name suggests, \easybuild{} is particularly easy to use. A command aptly named
+\texttt{eb} is provided to interact with the \easybuild{} framework, which accepts
+the usual \texttt{--help} command line option yielding a summary of all supported
+command line options.
 
-Launching \texttt{eb} with an easyconfig file as an argument will trigger a
-series of events. First of all, the easyconfig file will be parsed by the \easybuild{}
+Launching \texttt{eb} with an easyconfig file as an argument triggers a
+series of events. First, the easyconfig file will be parsed by the \easybuild{}
 framework to determine which software package needs to be installed, and which
-easyblock and parameters should be used. Next, the appropriate build and install
-procedure will be executed, consisting of a series of steps defined by the framework
-and selected easyblock. If the installation is successful, this will result in a 
-module file being generated that matches the specifications.
+easyblock and parameters should be used. Afterwards, the environment is prepared by
+loading the modules for the specified toolchain and dependencies, if those are
+available, and the toolchain support in the framework defines the additional
+environment variables as discussed in Section~\ref{sec:eb_toolchains}. If the
+required modules are not available, an appropriate error message is shown, unless
+the dependency resolution mechanism is enabled via \texttt{--robot} (see
+Section~\ref{sec:eb_dependency_resolution} for more details). Next,
+the appropriate build and install procedure is executed step by step, as defined by
+the framework and selected easyblock. Finally, a module is generated, that is if the
+installation is successful, a module file is generated that matches the used
+specifications in terms of module name and contents.
 
 For example, the following command instructs \easybuild{} to install WRF v3.5
 with the \texttt{goolf} toolchain v1.6.10, as specified by the provided easyconfig
 file:
 
-\texttt{eb WRF-3.5-goolf-1.6.10.eb --robot}
+\texttt{eb WRF-3.5-goolf-1.6.10.eb}
+
+Further details on using \texttt{eb} are beyond the scope of this paper; we refer
+to \texttt{eb --help} and the \easybuild{} wiki~\cite{ebwiki} for extensive
+documentation.
 
 \subsection{Feature highlights}
 
+We now briefly highlight a couple of key features of \easybuild{}, which are relevant
+to the topic of this paper. Other noteworthy features which are not discussed here
+include, but are not limited to, thorough logging of the build and install procedure,
+support for tweaking provided easyconfig files directly from the \texttt{eb} command
+line, and off-loading individual \easybuild{} invocations to a (PBS) resource manager.
+
 \subsubsection{Automatic dependency resolution}
+\label{sec:eb_dependency_resolution}
+
+\easybuild{} supports installing a entire software stack, including the required
+toolchain if needed, with a single \texttt{eb} invocation. By using the
+\texttt{--robot} command line option the dependency resolution mechanism will
+construct a full dependency graph for the software package(s) being installed, after
+which a list of dependencies is composed for which no module is available yet. Each of
+the retained dependencies will then be built and installed, in the required order as
+indicated by the dependency graph(s). This is particularly useful for software
+packages that have an extensive list of dependencies, or when rebuilding software
+with a different toolchain.
 
 \subsubsection{Flexibility}
 \label{sec:eb_flexible}
 
-configuration, module naming scheme,
+Allowing users to modify \easybuild{}'s default behavior to their needs is another
+important feature. \easybuild{} can be configured in three different ways: via one or
+more configuration files, via environment variables prefixed with
+\texttt{EASYBUILD\_}, and via command line options. For each command line option a
+matching environment variable can be set, and matching parameter can be defined in an
+configuration file. Command line options overrule environment variables, while they
+in turn overrule configuration files, resulting in intuitive yet powerful support for
+controlling \easybuild{}'s behavior. Configuration parameters are available for
+straightforward aspects such as the installation prefix for software and module files,
+but also for example the log level, modules tool and module naming scheme that should
+be used. A full overview of the available configuration parameters can be consulted
+via \texttt{eb --help}.
 
 \subsubsection{Dynamic extensibility}
 \label{sec:eb_extensible}

@@ -13,9 +13,9 @@ following a `release early, release often' strategy with a new major release eve
 Under the motto ``\emph{building software with ease}", \easybuild{} provides an easy
 yet powerful way to automatically install (scientific) software stacks, in a robust,
 consistent and reproducible way. Its design is deliberately made very flexible and
-modular (see Sections~\ref{sec:eb_flexible} and \ref{sec:eb_extensible}) making it
-an ideally suited platform for collaboration across HPC sites, as is confirmed by
-the steadily growing \easybuild{} community (see
+modular (see Sections~\ref{sec:eb_configurability} and \ref{sec:eb_extensible})
+making it an ideally suited platform for collaboration across HPC sites, as is
+confirmed by the steadily growing \easybuild{} community (see
 Section~\ref{sec:communities_synergy}).
 
 \subsection{Concepts and design}
@@ -179,12 +179,15 @@ to \texttt{eb --help} and the \easybuild{} wiki~\cite{ebwiki} for extensive
 documentation.
 
 \subsection{Feature highlights}
+\label{sec:eb_features}
 
 We now briefly highlight a couple of key features of \easybuild{}, which are relevant
-to the topic of this paper. Other noteworthy features which are not discussed here
-include, but are not limited to, thorough logging of the build and install procedure,
-support for tweaking provided easyconfig files directly from the \texttt{eb} command
-line, and off-loading individual \easybuild{} invocations to a (PBS) resource manager.
+to the topic of this paper, including automatically resolving dependencies and
+the flexibility of the \easybuild{} framework. Other noteworthy features which are
+not discussed here include, but are not limited to, thorough logging of the build
+and install process, support for tweaking provided easyconfig files directly from
+the \texttt{eb} command line, and off-loading individual \easybuild{} invocations to
+a (PBS) resource manager.
 
 \subsubsection{Automatic dependency resolution}
 \label{sec:eb_dependency_resolution}
@@ -196,11 +199,11 @@ construct a full dependency graph for the software package(s) being installed, a
 which a list of dependencies is composed for which no module is available yet. Each of
 the retained dependencies will then be built and installed, in the required order as
 indicated by the dependency graph(s). This is particularly useful for software
-packages that have an extensive list of dependencies, or when rebuilding software
-with a different toolchain.
+packages that have an extensive list of dependencies, or when reinstalling software
+using a different compiler toolchain.
 
-\subsubsection{Flexibility}
-\label{sec:eb_flexible}
+\subsubsection{Configurability}
+\label{sec:eb_configurability}
 
 Allowing users to modify \easybuild{}'s default behavior to their needs is another
 important feature. \easybuild{} can be configured in three different ways: via one or
@@ -208,24 +211,52 @@ more configuration files, via environment variables prefixed with
 \texttt{EASYBUILD\_}, and via command line options. For each command line option a
 matching environment variable can be set, and matching parameter can be defined in an
 configuration file. Command line options overrule environment variables, while they
-in turn overrule configuration files, resulting in intuitive yet powerful support for
-controlling \easybuild{}'s behavior. Configuration parameters are available for
-straightforward aspects such as the installation prefix for software and module files,
-but also for example the log level, modules tool and module naming scheme that should
-be used. A full overview of the available configuration parameters can be consulted
-via \texttt{eb --help}.
+in turn overrule configuration files, resulting in an intuitive and flexible yet
+powerful way of controlling \easybuild{}'s behavior. Configuration parameters
+are available for straightforward aspects such as the installation prefix for
+software and module files, but also for example the log level, modules tool and
+module naming scheme that should be used. A full overview of the available
+configuration parameters can be consulted via \texttt{eb --help}.
 
 \subsubsection{Dynamic extensibility}
 \label{sec:eb_extensible}
 
-easyblocks, toolchains, module naming scheme
+Another key feature is that \easybuild{} can be extended dynamically, i.e., the
+framework is designed such that additional functionality can be simply plugged in:
+additional easyblocks, support for more compilers and libraries to be part
+of a toolchain, custom module naming schemes, etc. Extending \easybuild{} is done by
+implementing a Python module in the required namespace (e.g.,
+\texttt{easybuild.easyblocks}), and modifying the \texttt{\$PYHONPATH} environment
+variable to make sure that it is available in the Python search path at runtime.
+Every time \texttt{eb} is used, the framework will `scan' the Python search path to
+determine the available options for each of the dynamically extendible aspects.
+This provides \easybuild{} users the freedom to experiment with functionality which
+is not (yet) available in the particular version they're using, or to extend
+the supported options for different aspects of \easybuild{} with site-specific
+options, e.g., easyblocks for in-house software packages or a custom module naming
+scheme.
 
+\subsection{Support for hierarchical module naming schemes}
 
-\subsection{Support for hierarchical module naming scheme}
+Since \easybuild{}~v1.14.0, sufficiently fine-grained control of the active module
+naming scheme is available, thus allowing to implement and use a custom `hierarchical`
+module naming scheme. As discussed in Section~\ref{sec:eb_features}, it suffices to
+implement the specific details of the hierarchical module naming scheme in a Python
+module, which must live in the \texttt{easybuild.tools.module\_naming\_scheme}
+namespace. In particular, the Python module must provide a Python class that derives
+from the `abstract' \texttt{ModuleNamingScheme} class provided by the \easybuild{}
+framework, and define a couple of method that cover different aspects of the
+module naming scheme. For example the \texttt{det\_modpath\_extensions} method must
+return a list of strings representing \texttt{\$MODULEPATH} extensions, given a
+parsed easyconfig file as an argument. This is a simple yet powerful approach,
+providing full control over all particular aspects of the module naming scheme.
+With this in place, \easybuild{} must be configured to use this particular module
+naming scheme, see also Section~\ref{sec:eb_configurability}.
 
-Since EasyBuild v1.14.0 ...
-
-
-\subsection{\easybuild{} as a platform for collaboration}
-
-community-driven, capture expertise,
+Letting \easybuild{} automatically generate module files under a specified
+(hierarchical) module naming scheme stands in stark contrast with the practice of
+manually creating module files and trying to apply site policies. It avoids the
+various issues involved with manually creating module files w.r.t. consistency and
+correctness which were disscussed in Section~\ref{sec:traditional}, and as such mostly
+relieves user support teams from another tedious task related to installing
+scientific software.

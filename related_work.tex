@@ -1,15 +1,68 @@
-spack (https://github.com/scalability-llnl/spack)
+We are aware of a couple of projects similar to \easybuild{}.
 
-IBS (iVEC Build System, reference (ask Chris Bording)?)
+\emph{SWTools}~\cite{swtools, jones08} is an ``infrastructure for software
+managment" which was developed at National Center for Computational Sciences (NCCS)
+and Oak Ridge National Lab (ORNL). It defines a structure for organizing a set of
+(bash) scripts per supported software package, one per major installation step
+(configuration, build, test, installation, etc.), allowing for easily reproducing 
+software installations. It also takes care of generating module files, and is
+able to update documentation listing the available software packages.
+Only one version is publicly available, SWTools v1.0, which was released Jan.~1st 2011.
 
-SWtools~\cite{swtools, jones08}
+\emph{Smithy}~\cite{smithy} is a follow-up to SWTools, and is also being developed
+at NCCS/ORNL. It is compatible with the SWTools infrastructure and hence can be
+used as a drop-in replacement, but also supports an alternative approach using
+\emph{formulas} following the well-established \emph{Homebrew} package management 
+system for Mac~OS~X\footnote{see \url{http://brew.sh/}}. As such, it does provide
+supporting functionality readily available to be used in these formulas, and enables
+code reuse across formulas. Smithy is publicly available via
+GitHub\footnote{https://github.com/AnthonyDiGirolamo/smithy} alongside detailed
+documentation. The development activity has slowed down significantly since
+Sept.~2013, with occasional changes mostly focusing on bug fixes.
+Smithy formulas are available for about 80 software
+packages\footnote{https://github.com/AnthonyDiGirolamo/smithy\_formulas}.
 
-smithy (http://anthonydigirolamo.github.io/smithy/)
+Another related project is the \emph{iVEC Build System (iBS)}, which is developed 
+by iVEC\footnote{http://www.ivec.org/} in Australia. Similarly to \easybuild{}
+it consists of a framework providing (some) commonly needed functionality, which
+picks up so-called ``iBS files" that implement the install procedure for a 
+particular software package as needed. Both the main command aptly named \texttt{ibs}
+and the iBS files are bash scripts, the latter being sources by the former as needed.
+At the time of writing iBS was not publicly available yet, but the developers are
+known to be working towards a public release.
 
-Sites like TACC use an in-house developed tool called
-LosF~\cite{lmodSC11} to leverage in-house  built RPMS.  The spec files
-that control the RPMS are parameterized so that one spec file can be
-used to the plethora of versions required.  The site build RPMS
-include the modulefile.  Therefore installing the package installs the
-modulefile and removing the package removes the modulefile.
-Similar~\cite{Fischer14}
+Finally, \emph{Spack (Supercomputing PACKage Manager)}~\cite{spack} is another
+tool, written in Python, that is similar to \easybuild{} w.r.t.\ functionality and
+goals. It provides a powerful and well-documented command line interface giving
+control over which dependencies, software versions, compiler, architecture and
+various options should be used for installing a particular software package.
+Spack also supports some particularly useful options like automatically determining
+whether an update for a particular software package is available
+(by scraping the project's website), and automatically completing
+incomplete build specifications, e.g., dependencies versions. Like
+\easybuild{}, the Python codebase is object-oriented, enabling code reuse and
+efficient maintainability; the \emph{packages} concept in is quite similar to
+easyblocks in \easybuild{}. At the time of writing, Spack included support for about
+30 different software packages.
+
+\easybuild{} differs from these tools in a number of ways. First and foremost, it
+provides more flexibility than any of these tools. Although they provide some support
+for configuring their behavior, there is no control over certain aspects like the
+module naming scheme being being used. Second, particularly useful more advanced
+features like automatic dependency resolution is missing in each of them. Third, none
+of these tools have gotten the same amount of traction as \easybuild{}, which has
+significant implications w.r.t.\ user contributions and the number of supported
+software packages. Fourth, because of a lack of build specification files (like
+easyconfigs for \easybuild{}), exactly reproducing previous installations requires
+re-using the exact command used before, thus requiring some kind of bookkeeping.
+Other issues only apply to some of them, e.g., limited code
+maintainability and reuse of code (SWTools and iBS), public availability of recent
+versions (SWTools and iBS), a lack of active development (SWTools and Smithy) and
+no support for generating module files (Spack).
+
+To the best of our knowledge, no recent module tools other than Lmod and the commonly
+used Tcl/C and Tcl-only tools discussed in Section~\ref{sec:env_modules_system} are
+avaialble. There are some alternative tools with comparable functionality, however.
+Dotkit~\cite{dotkit} ...
+Softenv~\cite{softenv} ...
+\kenneth{Robert: we need a couple of lines on dotkit and softenv here}

@@ -14,6 +14,9 @@ originally designed for, namely, it embeds and extends easily into
 other programs.  As time went on, it was clear that the Lmod modules
 system written in Lua implementation was fast enough to use directly.
 
+Since February of 2011, there have been 153 tagged version and 30+ official
+releases of Lmod. THe latest available version to date is Lmod v5.7.3.
+
 \subsection{Support for hierarchical module naming schemes}
 
 The key idea that Lmod exploits is that it watches changes to
@@ -168,7 +171,7 @@ and hooks are in-place to know when the cache file is valid or not.
 One of upshots of this is that Lmod trusts the cache files for
 everything except for loading a modulefile.  This way a module can be
 loaded even if the cache is out-of-date.  This can happen while
-installing software (e.g. for EasyBuild) but users will see an updated
+installing software (e.g. for \easybuild{}) but users will see an updated
 cache file.
 
 %\kenneth{also mention system vs user cache?}
@@ -219,9 +222,9 @@ and so on.
 %\kenneth{mention version since when Lmod support sensible version ordering, and maybe flesh out the example a bit more? you can use EasyBuild v1.9.10 vs v1.10.0 as an example ;-)}
 
 \subsection{\texttt{pushenv}: stack-based setting of environment variables}
+\label{sec:lmod_pushenv}
 
-Among the many feature that the Easybuild community have requested,
-two stand out.  The first one ``\texttt{pushenv}''.  The module system
+The module system
 has supported \texttt{setenv} function which sets an environment variable
 upon load a module and clears its value upon unload.  There are times
 when users and administrators would like the previous value recovered
@@ -251,17 +254,6 @@ whereas with \texttt{pushenv} recovers the previous value of
 
 %\kenneth{include an example of the effect of using \texttt{pushenv} rather than \texttt{setenv}, maybe using \texttt{\$CC}?}
 
-\subsection{Speed improvements triggered by EasyBuild}
-
-The second feature was an speed improvement.  Internally EasyBuild
-builds the software package and creates the module file.  Then it
-checks to see if it is available and loads and unloads it.  Lmod has
-to walk the tree and read the modules to know what properties are
-there. However EB is performing a ``module --terse avail'' is provides
-an easily parsed output.  Since this output does not provide any
-module properties the modulefiles do not need to be read.  Tests done
-show that cuts the testing time significantly.
-
 \subsection{Module collections}
 
 Sites can provide a default set of modules that includes a
@@ -272,20 +264,6 @@ want every time they log-in.  They can also have as many named
 collection of modules as they like.
 
 
-\subsection{Lmod development \& community}
-
-Lmod is actively maintained and responsive to its community.  Since
-February of 2011, there have been 153 tagged version and 30+ official
-releases of Lmod.  Many of the improvements to Lmod have come from
-requests from the user community.  It is difficult to know the actual
-size of the Lmod community.  Current there are about 50 users on the
-mailing list.
-Given the usual rule that 5 to 20 percent of the users join up, this
-the gives a minimum of about 250 sites using or testing Lmod.  The
-number of actual users using Lmod should be 10 to 100 times that.
-Note that TACC is running Lmod and has 15 to 20 thousand users over
-three systems.  The number of downloads from the of all the version of
-Lmod on sourceforge is several thousand.
 %\kenneth{try and give a rough idea of the size of the Lmod community?}
 
 %\subsection{Key features}

@@ -23,8 +23,13 @@ This paper describes the use of a single hierarchy tree: Core
 $\rightarrow$ Compiler-dependent $\rightarrow$ MPI-dependent modules.
 For many sites this works well.  For developers of a libraries, it
 would be nice if the dependency could be extended to support
-`matrix''.  That is that library A depends on libraries B and C and
-D.  This is an area for further research.
+``{\em matrix''\/}.  That is that library A depends on libraries B and C and
+D.  So for example a parallel solver package like PETSc could use
+different versions of BLAS/LAPACK/FFT libraries.  Sites can typical
+just provide a single choice of dependent packages (other than
+compilers or MPI stacks).  However, developers of PETSc or
+benchmarkers could benefit from a ``{\em matrix''\/}.
+This is an area for further research.
 
 Another improvement to \easybuild{} would be making the dependency resolution
 mechanism aware of subtoolchains. When \texttt{eb} checks the availability of

@@ -1,6 +1,49 @@
-\remark{\itemize{
-\item support for Lua module files in EasyBuild, along with family, properties, etc.
-\item work out a deeper hierarchy that better matches the concept of compiler toolchains
-\item support for EasyBuild on Cray and BlueGene systems
-\item matrix support in Lmod
-}}
+Although the latest versions of both \easybuild{} and Lmod already provide
+flexible support for hierarchical module naming schemes, further enhancements can
+be made to extend the capabilities and improve the user experience. We discuss
+a couple of these which were not resolved yet at the time of writing.
+
+The latest available version of \easybuild{} to date only supports generating
+module files in Tcl syntax, while module files in Lua syntax are required to use
+some of the advanced features that Lmod supports, e.g., defining properties and
+families. This particular feature is already being implemented by members of the
+\easybuild{} community.
+
+Although the required support is available, a deeper module hierarchy that
+better matches the toolchain concept in \easybuild{} should be worked out.
+Usually, only the \texttt{Compiler} and \texttt{MPI} hierarchy levels are used,
+while \easybuild{} toolchains can also include math libraries. Extending
+the two-level hierarchy to capture this aspect is not straightforward however,
+since BLAS/LAPACK/FFT functionality can be provided by one single library (e.g.,
+Intel MKL), or by multiple distinct libraries (e.g., OpenBLAS, LAPACK and FFTW).
+This complicates the design of a deeper hierarchy that supports swapping one
+math library for one or multiple others providing the same functionality.
+
+Related to this, a concept currently not supported yet by Lmod is a
+multi-dimensional hierarchy, often referred to as `matrix`.
+\kenneth{Robert: I need help here to explain this...}
+
+Another improvement to \easybuild{} would be making the dependency resolution
+mechanism aware of subtoolchains. When \texttt{eb} checks the availability of
+modules that match the required dependencies, it uses the toolchain selected
+for the software being installed (unless this is overridden specifically on a
+per-dependency basis). This requires that modules which are for example only
+dependent on a compiler are built and installed multiple times with different
+toolchain, even though they're providing the same software builds, which yields
+more modules than required and consumes additional disk space. Also checking for
+modules which were installed with a compatible subtoolchain, e.g. providing onl
+the compiler and MPI library, allows that these tools are installed only once.
+
+\ignore{
+Furthermore, both \easybuild{} and Lmod need to be evaluated on, and possibly
+ported to, special-purpose systems like Cray and IBM BlueGene. Preliminary
+experiments are promising since they only reveal mostly minor issues on these
+type of systems. On Cray systems for example, some care has to be taken in order
+to be able to use the provided \texttt{ProgEnv} modules that wrap around the
+different readily available compilers. One concept that is currently not well
+supported yet by \easybuild{} is cross-compilation, in which software is built
+for a particular type of system which is different than the one of which the build
+is performed. This significantly complicates the running of tests, as is often
+done by build configuration scripts.
+\remark{mostly irrelevant to the paper topic}
+}

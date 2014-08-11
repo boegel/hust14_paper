@@ -167,10 +167,10 @@ these two versions which was deemed undesirable.
 \subsection{Maintaining a module hierarchy}
 \label{sec:maintaining_a_hierarchy}
 
-Next to the peculiarities of using a hierarchical module naming scheme discussed in
+Next to the peculiarities with using a hierarchical module naming scheme discussed in
 the previous section that need to be taken into account, maintaining a module stack
-that is organized hierarchically is also more involved for user support teams,
-compared to a straightforward 'flat' module naming scheme.
+that is organized hierarchically is also more involved for user support teams
+compared to a straightforward `flat' module naming scheme.
 
 In particular, significantly more care has to taken when creating
 module files. For one, the module path extensions that are included in modules
@@ -179,20 +179,13 @@ module files. Determining the location of module files also becomes
 non-trivial, since the dependencies of the software package being dealt with need
 to be taken into account. Next to this, the \texttt{module load} statements included
 in module files for these dependencies need to be determined carefully, to ensure
-that unloading and swapping of modules doesn't yield unexpected results.
-
-Furthermore, each module can be refered to using two names in a hierarchical scheme:
-the 'full' name (e.g., \texttt{MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}
-\robert{Not with Lmod you can}), which
-starts from the root of the module hierarchy and thus matches it's install location,
-and the 'short' name (e.g., \texttt{WRF/3.5}), which is the name under which modules
-will be referred to by users and in \texttt{module load} statements included in
-module files for dependencies. This may cause confusion or mistakes for people who
-are unsufficiently familiar with the particular hierarchical module naming scheme
-being used.
-
-
-
+that unloading and swapping of modules doesn't yield unexpected results. Modules
+in a hierarchical scheme \emph{must} be referred to using the name they will be
+exposed under to users, i.e. using their `short` name (e.g. \texttt{WRF/3.5})
+relative to the \texttt{\$MODULEPATH} after loading a core module (and potentially
+other modules further extending the \texttt{\$MODULEPATH}), rather than their `full'
+name relative to the top of the hierarchy (e.g.,
+\texttt{MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}).
 
 All these aspects significantly complicate the manual creation of module files, which
 is already a tedious task because of consistency requirements and the usual problems

@@ -63,6 +63,11 @@ no support for generating module files (Spack).
 To the best of our knowledge, no recent module tools other than Lmod and the commonly
 used Tcl/C and Tcl-only tools discussed in Section~\ref{sec:env_modules_system} are
 avaialble. There are some alternative tools with comparable functionality, however.
-Dotkit~\cite{dotkit} ...
-Softenv~\cite{softenv} ...
-\kenneth{Robert: we need a couple of lines on dotkit and softenv here}
+Dotkit~\cite{dotkit} is a tool which loads and unload package description files in 
+a similar fashion to modules. It uses a flat layout for it package description files 
+and the last update to the software at sourceforge was in August 2008.
+Softenv~\cite{softenv} also changes the user's environment. It uses a
+monolithic database to provide the package description data.  It also
+uses a flat layout to describe the various versions of a package.  The
+last update to the software was March 2007.
+

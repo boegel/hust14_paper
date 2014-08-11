@@ -19,9 +19,12 @@ Intel MKL), or by multiple distinct libraries (e.g., OpenBLAS, LAPACK and FFTW).
 This complicates the design of a deeper hierarchy that supports swapping one
 math library for one or multiple others providing the same functionality.
 
-Related to this, a concept currently not supported yet by Lmod is a
-multi-dimensional hierarchy, often referred to as `matrix`.
-\kenneth{Robert: I need help here to explain this...}
+This paper describes the use of a single hierarchy tree: Core
+$\rightarrow$ Compiler-dependent $\rightarrow$ MPI-dependent modules.
+For many sites this works well.  For developers of a libraries, it
+would be nice if the dependency could be extended to support
+`matrix''.  That is that library A depends on libraries B and C and
+D.  This is an area for further research.
 
 Another improvement to \easybuild{} would be making the dependency resolution
 mechanism aware of subtoolchains. When \texttt{eb} checks the availability of

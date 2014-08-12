@@ -19,28 +19,31 @@ Intel MKL), or by multiple distinct libraries (e.g., OpenBLAS, LAPACK and FFTW).
 This complicates the design of a deeper hierarchy that supports swapping one
 math library for one or multiple others providing the same functionality.
 
-This paper describes the use of a single hierarchy tree: Core
-$\rightarrow$ Compiler-dependent $\rightarrow$ MPI-dependent modules.
-For many sites this works well.  For developers of a libraries, it
-would be nice if the dependency could be extended to support
-``{\em matrix''\/}.  That is that library A depends on libraries B and C and
-D.  So for example a parallel solver package like PETSc could use
-different versions of BLAS/LAPACK/FFT libraries.  Sites can typical
-just provide a single choice of dependent packages (other than
-compilers or MPI stacks).  However, developers of PETSc or
-benchmarkers could benefit from a ``{\em matrix''\/}.
-This is an area for further research.
+Related to this the more generic concept of a `multi-dimensional' module hierarchy,
+also referred to as a module `matrix', is currently an area of active research.
+In such a multi-dimensional module hierarchy, the notion of a module that would
+only become available when \emph{multiple} other modules are loaded together can be
+supported. This is interesting for software packages that provide support for using
+different libraries for some particular functionality, like the parallel
+solver library PETSc which supports different LAPACK/FFT libraries. For example,
+in such a module hierarchy, a module for PETSc would not be available until modules
+for both e.g. OpenBLAS \emph{and} FFTW have been loaded. On top of this, it should
+also support swapping out the loaded modules for OpenBLAS and FFTW for one single
+module providing equivalent functionality, e.g., an Intel MKL module, and trigger a
+reload of the PETSc module. Supporting this would be particularly useful for
+application developers, and for benchmarking studies.
+
 
 Another improvement to \easybuild{} would be making the dependency resolution
 mechanism aware of subtoolchains. When \texttt{eb} checks the availability of
 modules that match the required dependencies, it uses the toolchain selected
 for the software being installed (unless this is overridden specifically on a
-per-dependency basis). This requires that modules which are for example only
+per-dependency basis). This requires that modules which are, for example, only
 dependent on a compiler are built and installed multiple times with different
-toolchain, even though they're providing the same software builds, which yields
+toolchains, even though they are providing the same software builds. This yields
 more modules than required and consumes additional disk space. Also checking for
-modules which were installed with a compatible subtoolchain, e.g. providing onl
-the compiler and MPI library, allows that these tools are installed only once.
+modules that were installed with a compatible subtoolchain, providing for example
+only the compiler, enables that these tools only need to be installed once.
 
 \ignore{
 Furthermore, both \easybuild{} and Lmod need to be evaluated on, and possibly

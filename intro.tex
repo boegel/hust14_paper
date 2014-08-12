@@ -1,5 +1,5 @@
 Unlike a typical desktop environment where it is usually sufficient to have a
-single software package installed to fulfill a particular purpose, HPC
+single version of a software package installed to fulfill a particular purpose, HPC
 systems are normally used by a large user community with widely varying
 demands. In particular, there is often the need to make multiple versions of
 a software package available, and sometimes even conflicting packages
@@ -8,29 +8,29 @@ as different implementations of the MPI standard (e.g., Open\,MPI vs.
 MVAPICH) or linear algebra packages (e.g., OpenBLAS vs. Intel MKL).
 
 A simple yet powerful solution to this issue are environment
-modules~\cite{furlani91,furlani96,eadline,cmod,laytonEM1}, which allow
+modules~\cite{furlani91,furlani96,eadline,laytonEM1}, which allow
 users to easily load, unload, and switch between software packages by
 modifying the user's environment, that is, adjusting environment
-variables such as \texttt{\$PATH} and \texttt{\$MANPATH} and/or setting
-package-specific variables, for example, to specify the DNS name of a
+variables like \texttt{\$PATH} and/or setting additional package-specific
+variables, for example, to specify the DNS name of a
 license server. However, while environment modules are used by many
 HPC sites around the world, dealing with the subtleties of different
 implementations as well as organizing large numbers of modules that
 get added over time such that users can easily set up their working environment
 remains a major challenge.
 
-In addition to providing users an easy way to access the software available
-on the HPC system, installing scientific software packages is a non-trivial
-task in its own right. As these packages are often written by domain
-scientists with a strong focus on conducting their own research on platforms
+In addition to providing users an easy way to access the (scientific) software
+available on the HPC system, installing scientific software packages is a
+non-trivial task in its own right. As these packages are often written by domain
+scientists with a strong focus on conducting their research on platforms
 they have access to, less emphasis is placed on portable build
 systems~\cite{Dubois03}. That
 is, system administrators of different HPC sites may reinvent the wheel to
 get a particular software package installed on their local system, as this
-kind of knowledge typically is not shared, especially between sites. In
+kind of knowledge typically is not shared, especially between HPC sites. In
 addition, the required modifications and the exact installation steps are
 often poorly---if at all---documented, which significantly impedes
-maintainability and reproducibility.
+maintainability and reproducibility of software installations.
 
 In this paper, we introduce an automated approach to installing scientific
 software and organizing the corresponding modules in a hierarchical way to
@@ -40,7 +40,7 @@ combining the functionality provided by the two community-driven tools
 While Lmod provides a significantly enhanced but
 (mostly) backward-compatible implementation of environment modules including specific
 features targeting a hierarchical module organization, EasyBuild provides a
-software build and installation framework with a particular focus on
+framework for automating software installations with a particular focus on
 scientific software packages---with the intention to collect and share the
 knowledge that is currently distributed in the HPC community.
 
@@ -49,12 +49,14 @@ tradiotional way of installing scientific software stacks on HPC systems in
 Section~\ref{sec:traditional}, highlighting the common problems that both user
 support teams and end users run into. In Section~\ref{sec:hierarchical} we
 present the use of a hierarchical module naming scheme as an alternative, and
-explain how it can help in overcoming these problems. Subsequently, in
-Sections~\ref{sec:easybuild} and \ref{sec:lmod}, we discuss how \easybuild{} and
-Lmod are appropriate tools for effectively dealing with the highlighted issues, 
-and how they can further enhance both the user experience and efficiency of user
-support teams. We discuss future work in Section~\ref{sec:future_work} and related
-work in Section~\ref{sec:related_work}. Finally, we conclude in
+outline the consequences of using such a scheme that need to be taken into
+account. Subsequently in Sections~\ref{sec:easybuild} and \ref{sec:lmod}, we present
+how \easybuild{} and Lmod are appropriate tools for dealing with a hierarchical
+module naming scheme, and how they can further enhance both the user experience and
+efficiency of user support teams. The community-oriented aspect of both tools and the
+synergy between them is described in Section~\ref{sec:communities_synergy}. We discuss
+future work in Section~\ref{sec:future_work} and
+related work in Section~\ref{sec:related_work}. Finally, we conclude in
 Section~\ref{sec:conclusion}.
 
 %\remark{issues with installing \& providing scientific software}

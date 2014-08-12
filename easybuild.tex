@@ -4,11 +4,11 @@ ubiquitous burden of getting scientific software built and installed~\cite{Duboi
 
 The \easybuild{} project was started in 2009 by the HPC-UGent team of Ghent
 University (Belgium), out of frustration of the lack of appropriate tools for dealing
-with scientific software installations. The first public release of \easybuild{} (version 0.5) was made available in April 2012, after it has been developed in-house for 
+with scientific software installations. The first public release of \easybuild{} (version 0.5) was made available in April 2012, after it had been developed in-house for 
 about 2.5 years. In November 2012, \easybuild{} v1.0 was released, featuring
 a stable API. Since then the tool has been continuously enhanced and extended,
 following a `release early, release often' strategy with a new major release every
-4--6 weeks. To date, the latest release is \easybuild{} v1.14.0 (July 2014).
+4 to 6 weeks. To date, the latest release is \easybuild{} v1.14.0 (July 2014).
 
 Under the motto ``\emph{building software with ease}", \easybuild{} provides an easy
 yet powerful way to automatically install (scientific) software stacks, in a robust,
@@ -16,7 +16,7 @@ consistent and reproducible way. Its design is deliberately made very flexible a
 modular (see Sections~\ref{sec:eb_configurability} and \ref{sec:eb_extensible})
 making it an ideally suited platform for collaboration across HPC sites, as is
 confirmed by the steadily growing \easybuild{} community (see
-Section~\ref{sec:communities_synergy}).
+Section~\ref{sec:communities}).
 
 \subsection{Concepts and design}
 
@@ -24,31 +24,31 @@ Section~\ref{sec:communities_synergy}).
 interact with each other, dynamically picking up additional Python modules as needed
 for building and installing a (stack of) software package(s) specified via simple
 specification files. Or, in \easybuild{} terminology: the \easybuild{}
-\emph{framework} leverages \emph{easyblocks} to build and install software using
-a particular \emph{compiler toolchain}, as specified by one or multiple
-\emph{easyconfig files}.
+\emph{framework} leverages \emph{easyblocks} to automatically build and install
+software using a particular \emph{compiler toolchain}, as specified by one or
+multiple \emph{easyconfig files}.
 
 \subsubsection{\easybuild{} framework}
 \label{sec:eb_framework}
 
-The \easybuild{} \emph{framework} embodies the core of the tool,
+The \easybuild{} framework embodies the core of the tool,
 providing functionality commonly need when installing scientific software on HPC
 systems. For example, it deals with:
 \begin{itemize}
-    \item downloading, unpacking, patching software sources;
-    \item loading environment modules for dependencies;
+    \item downloading, unpacking, patching of sources;
+    \item loading module files for dependencies;
     \item setting up the build enviroment, i.e, defining environment variables
-    like \texttt{\$CC},
-    \texttt{\$CXXFLAGS}, etc.;
-    \item running shell commands (e.g., \texttt{make}), including running
+    like \texttt{\small\$CC},
+    \texttt{\small\$CXXFLAGS}, etc.;
+    \item running shell commands (e.g., \texttt{\small make}), including running
     interactive commands autonomously;
     \item creating module files that match the specification files;
 \end{itemize}
 
 Included in the framework is an `abstract' implementation of a software build and
 install procedure, which is split up into different \emph{steps}: unpacking sources,
-configuration, build, installation, module generation, etc. Most of these steps, i.e.,
-the ones that are generally more-or-less analogous across
+configuration, build, installation, module generation, etc. Most of these steps,
+i.e., the ones that are generally more-or-less analogous across
 different software packages, have appropriate (default) implementations. The only
 exceptions are the configuration, build and installation steps that are purposely
 left unimplemented (since there is no common procedure for them). Each of the steps
@@ -57,7 +57,7 @@ which values are either obtained from the provided specification files (see
 Section~\ref{sec:eb_easyconfigs}) or set to reasonable default values.
 
 In \easybuild{} v1.14.0 the framework source code consists of almost 30,000 lines
-of code, properly organized across about 110 Python modules in roughly a dozen Python
+of code, organized across about 110 Python modules in roughly a dozen Python
 package directories. This provides some notion of the size of the \easybuild{}
 framework and the amount of supporting functionality it has to offer.
 
@@ -66,29 +66,29 @@ framework and the amount of supporting functionality it has to offer.
 
 The implementation of a particular software build and install procedure is done in
 a Python module, which is aptly referred to as an `easyblock'. Each easyblock
-ties in with the framework API by filling in (or extending/replacing) one or more of
-the step functions that are defined in the abstract procedure used by the \easybuild{}
-framework. Easyblocks typically heavily rely on the supporting functionality provided
-by the framework, e.g., for running (interactive) shell commands and obtaining the output and exit code of the executed command, using the provided Python functions
-\texttt{run\_cmd} or \texttt{run\_cmd\_qa}.
+ties in with the framework API by defining (or extending/replacing) one or more of
+the step functions that are part of the abstract procedure used by the
+\easybuild{} framework. Easyblocks typically heavily rely on the supporting
+functionality provided by the framework, fro example for running (interactive) shell
+commands and obtaining the output and exit code of the executed command, using the
+provided Python functions \texttt{\small run\_cmd} or \texttt{\small run\_cmd\_qa}.
 
 A distinction is made between \emph{software-specific} and \emph{generic} easyblocks.
-Software-specific easyblocks implement a build and install procedure which is entirely
-custom to one particular software package (e.g., WRF, OpenFOAM, etc.), while the
-latter implements a procedure using standard tools (e.g., configuring with CMake and
-building/installing via Makefiles, or configuring via environment variables, building
-with \texttt{make} and installing by simply copying files to the installation
-directory, etc.). Since easyblocks are implemented in an object-oriented scheme,
-the steps implemented by various easyblocks can be reused in others via (multiple)
-inheritance, enabling code reuse across implementations of build procedures.
+Software-specific easyblocks implement a build and install procedure which is
+entirely custom to one particular software package (e.g., WRF or OpenFOAM), while
+generic easyblocks implement a procedure using standard tools (e.g., Cmake or
+\texttt{\small make}). Since easyblocks are implemented in an object-oriented scheme,
+the step methods implemented by a particular easyblock can be reused in others via
+inheritance, enabling code reuse across build procedure implementations.
 
 For each software package being built, the \easybuild{} framework will determine
 which easyblock should be used, based on the name of the software package or the
-value of the \texttt{easyblock} specification parameter. In case an easyblock
+value of the \texttt{\small easyblock} specification parameter. In case an easyblock
 specification is not provided and no (software-specific) easyblock matching the
 software name could be found, a fallback mechanism will resort to using the generic
-\texttt{ConfigureMake} easyblock, which implements the commonly used
-\texttt{configure} -- \texttt{make} -- \texttt{make install} procedure.
+\texttt{\small ConfigureMake} easyblock, which implements the common
+\texttt{\small configure} -- \texttt{\small make} -- \texttt{\small make install}
+procedure.
 
 At the time of writing, the most recent release of \easybuild{} included support for
 (exactly) 500 different software packages, ranging from fairly simple tools and
@@ -104,7 +104,7 @@ WRF.
 \easybuild{} also employs so-called `compiler toolchains' (or simply `toolchains'
 for short), which were already mentioned in Section~\ref{sec:Module_naming_scheme}.
 A toolchain consists of a (set of) compiler(s), usually together with a couple of
-libraries for specific functionality, e.g., using an MPI stack for distributed
+libraries for specific functionality, e.g., for using an MPI stack for distributed
 computing, or which provide optimized routines for commonly used math operations,
 e.g., the well-known BLAS/LAPACK APIs for linear algebra routines. For each software
 package being built, a toolchain must be specified that should be used
@@ -112,32 +112,35 @@ package being built, a toolchain must be specified that should be used
 
 The \easybuild{} framework prepares the build environment for the different
 toolchain components, by loading their respective modules and defining environment
-variables to specify compiler commands (e.g., via \texttt{\$F90}), compiler and
-linker options (e.g., via \texttt{\$CFLAGS} and \texttt{\$LDFLAGS}), the list of
-library names to supply to the linker (via \texttt{\$LIBS}), etc. This enables
+variables to specify compiler commands (e.g., via \texttt{\small \$F90}), compiler
+and linker options (e.g., via \texttt{\small \$CFLAGS} and
+\texttt{\small \$LDFLAGS}), the list of library names to supply to the linker (via
+\texttt{\small \$LIBS}), etc. This enables
 making easyblocks largely toolchain-agnostic since they can simply rely on these
 environment variables; that is, unless they need to be aware of for example the
 particular compiler being used to determine the build configuration options.
 
-Recent releases of \easybuild{} include out-of-the-box support for the GCC, Intel,
-Clang, and CUDA compilers, next to common MPI libraries such as Intel MPI, MPICH2,
-MVAPICH2, and OpenMPI, various BLAS/LAPACK libraries including ATLAS, Intel MKL,
-OpenBLAS, and ScaLAPACK, and libraries providing FFT routines like FFTW.
+Recent releases of \easybuild{} include out-of-the-box support for: various
+compilers, including GCC, Intel, Clang, and CUDA; common MPI libraries such as
+Intel~MPI, MPICH2, MVAPICH2, and OpenMPI; various BLAS/LAPACK libraries including
+ATLAS, Intel MKL, OpenBLAS, and ScaLAPACK; and libraries providing FFT routines
+like FFTW.
 
 \subsubsection{Easyconfig files}
 \label{sec:eb_easyconfigs}
 
 The specification files that are supplied to \easybuild{} are referred to as
-`easyconfig files' (or `easyconfigs' for short). These are basically plain text
-files, containing (mostly) only key-value assignments for build parameters supported
-by the framework (which are also referred to as `easyconfig parameters`). Some
-parameters are mandatory, like \texttt{name} and \texttt{version} to specify which
-(version of) software package should be installed, \texttt{toolchain} to indicate
-which compiler toolchain should be used, etc. Others are optional, and have
-appropriate defaults set for them in the \easybuild{} framework; examples include
-\texttt{buildopts} to specify options for the build command, and \texttt{dependencies}
-to list the software dependencies that should be taken into account. A complete
-list of supported easyconfig parameters can be obtained using \texttt{eb -a}.
+`easyconfig files' (or simply `easyconfigs'), which are basically plain text
+files containing (mostly) only key-value assignments for build parameters supported
+by the framework, also referred to as `easyconfig parameters'. Some
+parameters are mandatory, like \texttt{\small name} and \texttt{\small version} to
+specify which (version of) software package should be installed, \texttt{\small
+toolchain} to indicate which compiler toolchain should be used, etc. Others are
+optional, and have appropriate defaults set for them in the \easybuild{} framework;
+examples include \texttt{\small buildopts} to specify options for the build command, 
+and \texttt{\small dependencies} to list the software dependencies that should be
+taken into account. A complete list of supported easyconfig parameters can be
+obtained using \texttt{\small eb -a}.
 
 As such, each easyconfig file provides a complete specification of which particular
 software package should be installed, and which settings should be using for building
@@ -149,27 +152,24 @@ becomes trivial.
 \subsection{Basic usage}
 
 As the name suggests, \easybuild{} is particularly easy to use. A command aptly named
-\texttt{eb} is provided to interact with the \easybuild{} framework, which accepts
-the usual \texttt{--help} command line option yielding a summary of all supported
-command line options.
-
-Launching \texttt{eb} with an easyconfig file as an argument triggers a
+\texttt{\small eb} is provided to interact with the \easybuild{} framework.
+Launching \texttt{\small eb} with an easyconfig file as an argument triggers a
 series of events. First, the easyconfig file will be parsed by the \easybuild{}
 framework to determine which software package needs to be installed, and which
-easyblock and parameters should be used. Afterwards, the environment is prepared by
-loading the modules for the specified toolchain and dependencies, if those are
-available, and the toolchain support in the framework defines the additional
+easyblock and build parameters should be used. Afterwards, the environment is
+prepared by loading the modules for the specified toolchain and dependencies, if
+those are available, and the toolchain support in the framework defines additional
 environment variables as discussed in Section~\ref{sec:eb_toolchains}. If the
-required modules are not available, an appropriate error message is shown, unless
-the dependency resolution mechanism is enabled via \texttt{--robot} (see
+required modules are not available an appropriate error message is shown, unless
+the dependency resolution mechanism is enabled via \texttt{\small --robot} (see
 Section~\ref{sec:eb_dependency_resolution} for more details). Next,
 the appropriate build and install procedure is executed step by step, as defined by
-the framework and selected easyblock. Finally, a module is generated, that is if the
-installation is successful, a module file is generated that matches the used
-specifications in terms of module name and contents.
+the framework and selected easyblock. Finally, a module file is generated that
+matches the used specifications in terms of module name and contents -- that is,
+if the installation was successful.
 
 For example, the following command instructs \easybuild{} to install WRF v3.5
-with the \texttt{goolf} toolchain v1.6.10, as specified by the provided easyconfig
+with the \texttt{\small goolf} toolchain v1.6.10, as specified by the provided easyconfig
 file:
 
 {\small
@@ -178,27 +178,27 @@ file:
 \end{alltt}
 }
 
-Further details on using \texttt{eb} are beyond the scope of this paper; we refer
-to \texttt{eb --help} and the \easybuild{} wiki~\cite{ebwiki} for extensive
+Further details on using \texttt{\small eb} are beyond the scope of this paper; we refer
+to \texttt{\small eb --help} and the \easybuild{} wiki~\cite{ebwiki} for extensive
 documentation.
 
 \subsection{Feature highlights}
 \label{sec:eb_features}
 
-We now briefly highlight a couple of key features of \easybuild{}, which are relevant
+We now briefly highlight a couple of key features of \easybuild{} that are relevant
 to the topic of this paper, including automatically resolving dependencies and
 the flexibility of the \easybuild{} framework. Other noteworthy features which are
 not discussed here include, but are not limited to, thorough logging of the build
 and install process, support for tweaking provided easyconfig files directly from
-the \texttt{eb} command line, and off-loading individual \easybuild{} invocations to
-a (PBS) resource manager.
+the \texttt{\small eb} command line, and off-loading individual installations to
+a cluster resource manager like PBS.
 
 \subsubsection{Automatic dependency resolution}
 \label{sec:eb_dependency_resolution}
 
 \easybuild{} supports installing a entire software stack, including the required
-toolchain if needed, with a single \texttt{eb} invocation. By using the
-\texttt{--robot} command line option the dependency resolution mechanism will
+toolchain if needed, with a single \texttt{\small eb} invocation. By using the
+\texttt{\small --robot} command line option the dependency resolution mechanism will
 construct a full dependency graph for the software package(s) being installed, after
 which a list of dependencies is composed for which no module is available yet. Each of
 the retained dependencies will then be built and installed, in the required order as
@@ -212,15 +212,16 @@ using a different compiler toolchain.
 Allowing users to modify \easybuild{}'s default behavior to their needs is another
 important feature. \easybuild{} can be configured in three different ways: via one or
 more configuration files, via environment variables prefixed with
-\texttt{EASYBUILD\_}, and via command line options. For each command line option a
-matching environment variable can be set, and matching parameter can be defined in an
-configuration file. Command line options overrule environment variables, while they
-in turn overrule configuration files, resulting in an intuitive and flexible yet
-powerful way of controlling \easybuild{}'s behavior. Configuration parameters
-are available for straightforward aspects such as the installation prefix for
-software and module files, but also for example the log level, modules tool and
-module naming scheme that should be used. A full overview of the available
-configuration parameters can be consulted via \texttt{eb --help}.
+\texttt{\small EASYBUILD\_}, and via command line options. For each command line
+option a matching environment variable can be set, and matching parameter can be
+defined in an configuration file. Command line options overrule environment
+variables, while they in turn overrule configuration files, resulting in an
+intuitive and flexible yet powerful way of controlling \easybuild{}'s behavior.
+Configuration parameters are available for straightforward aspects such as the
+installation prefix for software and module files, but also for example for the
+log level, modules tool and module naming scheme that should be used. A full
+overview of the available configuration parameters can be consulted via
+\texttt{\small eb --help}.
 
 \subsubsection{Dynamic extensibility}
 \label{sec:eb_extensible}
@@ -230,28 +231,29 @@ framework is designed such that additional functionality can be simply plugged i
 additional easyblocks, support for more compilers and libraries to be part
 of a toolchain, custom module naming schemes, etc. Extending \easybuild{} is done by
 implementing a Python module in the required namespace (e.g.,
-\texttt{easybuild.easyblocks}), and modifying the \texttt{\$PYHONPATH} environment
-variable to make sure that it is available in the Python search path at runtime.
-Every time \texttt{eb} is used, the framework will `scan' the Python search path to
-determine the available options for each of the dynamically extendible aspects.
-This provides \easybuild{} users the freedom to experiment with functionality which
-is not (yet) available in the particular version they're using, or to extend
-the supported options for different aspects of \easybuild{} with site-specific
-options, e.g., easyblocks for in-house software packages or a custom module naming
-scheme.
+\texttt{\small easybuild.easyblocks}), and modifying the \texttt{\small \$PYHONPATH} 
+environment variable to make sure that it is available in the Python search path at
+runtime. Every time \texttt{\small eb} is used, the framework will `scan' the Python 
+search path to determine the available options for each of the dynamically 
+extendible aspects. This provides \easybuild{} users the freedom to experiment with
+functionality which is not (yet) available in the particular version they're using,
+or to extend the supported options for different aspects of \easybuild{} with
+site-specific options, e.g., easyblocks for in-house software packages or a custom
+module naming scheme.
 
 \subsection{Support for hierarchical module naming schemes}
 
 Since \easybuild{}~v1.14.0, sufficiently fine-grained control of the active module
-naming scheme is available, thus allowing to implement and use a custom `hierarchical`
-module naming scheme. As discussed in Section~\ref{sec:eb_features}, it suffices to
+naming scheme is available to support custom `hierarchical`
+module naming schemes. As discussed in Section~\ref{sec:eb_features}, it suffices to
 implement the specific details of the hierarchical module naming scheme in a Python
-module, which must live in the \texttt{easybuild.tools.module\_naming\_scheme}
+module, which must live in the \texttt{\small easybuild.tools.module\_naming\_scheme}
 namespace. In particular, the Python module must provide a Python class that derives
-from the `abstract' \texttt{ModuleNamingScheme} class provided by the \easybuild{}
-framework, and define a couple of method that cover different aspects of the
-module naming scheme. For example the \texttt{det\_modpath\_extensions} method must
-return a list of strings representing \texttt{\$MODULEPATH} extensions, given a
+from the `abstract' \texttt{\small ModuleNamingScheme} class provided by the
+\easybuild{} framework, and define a couple of methods that cover different aspects
+of the module naming scheme. For example, the
+\texttt{\small det\_modpath\_extensions} method must return a list of strings
+representing \texttt{\small \$MODULEPATH} extensions, given a
 parsed easyconfig file as an argument. This is a simple yet powerful approach,
 providing full control over all particular aspects of the module naming scheme.
 With this in place, \easybuild{} must be configured to use this particular module
@@ -260,7 +262,7 @@ naming scheme, see also Section~\ref{sec:eb_configurability}.
 Letting \easybuild{} automatically generate module files under a specified
 (hierarchical) module naming scheme stands in stark contrast with the practice of
 manually creating module files and trying to apply site policies. It avoids the
-various issues involved with manually creating module files w.r.t. consistency and
-correctness which were disscussed in Section~\ref{sec:traditional}, and as such mostly
-relieves user support teams from another tedious task related to installing
+various issues involved with manually creating module files w.r.t.\ consistency and
+correctness which were disscussed in Section~\ref{sec:traditional}, and as such
+mostly relieves user support teams from another tedious task related to installing
 scientific software.

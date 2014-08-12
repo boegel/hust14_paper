@@ -26,7 +26,7 @@ environment modules system are available which all share a similar
 user interface, typically consisting of a command named \texttt{\small module}:
 {\small
 \begin{alltt}
-    \textbf{\% module} \emph{[options]} \emph{<subcmd>} ...
+    \textbf{\% module} \emph{[options]} \emph{<subcmd>}\
 \end{alltt}
 }
 \noindent
@@ -39,7 +39,7 @@ To access a particular software package named `\emph{foo}', the user simply
 \emph{loads} the matching module:
 {\small
 \begin{alltt}
-    \textbf{\% module load \emph{foo}}
+    \textbf{\% module load \emph{foo}}\
 \end{alltt}
 }
 \noindent
@@ -48,7 +48,7 @@ loaded module, to revert changes in the environment and restore their
 environment to the one they had before they loaded that module.  This means
 that users can control their working environment by switching between
 versions of the same package or changing between different compilers and
-MPI stacks.  These power features show why the environment module
+MPI stacks.  These features explain why the environment module
 system has widely adopted on HPC systems since the late 1990s.
 
 
@@ -177,7 +177,7 @@ as follows:
 \begin{alltt}
     \textbf{\% module avail OpenMPI}
     OpenMPI/1.7.3-GCC-4.8.2
-    OpenMPI/1.7.3-Intel-14.0
+    OpenMPI/1.7.3-Intel-14.0\
 \end{alltt}
 }
 
@@ -188,7 +188,7 @@ against a particular MPI library, e.g.:
 \begin{alltt}
     \textbf{\% module avail WRF}
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
-    WRF/3.5-Intel-14.0-OpenMPI-1.7.3
+    WRF/3.5-Intel-14.0-OpenMPI-1.7.3\
 \end{alltt}
 }
 \noindent
@@ -207,8 +207,6 @@ The downside of using toolchains however is that users have
 to be aware what is hidden behind the (often rather cryptic) toolchain names,
 and that a toolchain version has no direct relationship with the versions of
 the encapsulated packages.
-
-\remark{the paragraph below needs to be integrated in this text}
 
 One common attempt to better structure the potentially overwhelming set of available
 module files is to categorize them in different subdirectories. Additionally,

@@ -33,17 +33,10 @@ multiple \emph{easyconfig files}.
 
 The \easybuild{} framework embodies the core of the tool,
 providing functionality commonly need when installing scientific software on HPC
-systems. For example, it deals with:
-\begin{itemize}
-    \item downloading, unpacking, patching of sources;
-    \item loading module files for dependencies;
-    \item setting up the build enviroment, i.e, defining environment variables
-    like \texttt{\small\$CC},
-    \texttt{\small\$CXXFLAGS}, etc.;
-    \item running shell commands (e.g., \texttt{\small make}), including running
-    interactive commands autonomously;
-    \item creating module files that match the specification files;
-\end{itemize}
+systems. For example, it deals with downloading, unpacking, and patching of sources,
+loading module files for dependencies, setting up the build enviroment, autonomously
+running (interactive) shell commands, creating module files that match the
+specification files, etc.
 
 Included in the framework is an `abstract' implementation of a software build and
 install procedure, which is split up into different \emph{steps}: unpacking sources,
@@ -90,13 +83,13 @@ software name could be found, a fallback mechanism will resort to using the gene
 \texttt{\small configure} -- \texttt{\small make} -- \texttt{\small make install}
 procedure.
 
-At the time of writing, the most recent release of \easybuild{} included support for
-(exactly) 500 different software packages, ranging from fairly simple tools and
-libraries like gzip and zlib, over commonly used tools like GCC, various MPI
-stacks (OpenMPI, MPICH2, MVAPICH, etc.) and math libraries (e.g., OpenBLAS,
-FFTW), to large scientific software packages that are notorious for their involved
-and painful install procedures, such as CP2K, NWChem, OpenFOAM, QuantumESPRESSO, and
-WRF.
+At the time of writing, the most recent release of \easybuild{} included 137
+software-specific easyblocks and 20 generic easyblocks, providing support for
+automatically installing a wide range of software packages. Examples range
+from fairly easy-to-build programs like gzip, over commonly used tools like
+compilers, various MPI stacks and commonly used libraries, to large scientific
+software packages that are notorious for their involved and painful install
+procedures, such as CP2K, NWChem, OpenFOAM, QuantumESPRESSO, and WRF.
 
 \subsubsection{Compiler toolchains}
 \label{sec:eb_toolchains}
@@ -120,7 +113,7 @@ making easyblocks largely toolchain-agnostic since they can simply rely on these
 environment variables; that is, unless they need to be aware of for example the
 particular compiler being used to determine the build configuration options.
 
-Recent releases of \easybuild{} include out-of-the-box support for: various
+Recent releases of \easybuild{} include out-of-the-box toolchain support for: various
 compilers, including GCC, Intel, Clang, and CUDA; common MPI libraries such as
 Intel~MPI, MPICH2, MVAPICH2, and OpenMPI; various BLAS/LAPACK libraries including
 ATLAS, Intel MKL, OpenBLAS, and ScaLAPACK; and libraries providing FFT routines
@@ -148,6 +141,9 @@ it. \easybuild{} copies the used easyconfig file after completing an installatio
 to the install directory, and also supports maintaining an easyconfig archive which
 is updated on every successful installation. Therefore, reproducing installations
 becomes trivial.
+
+The latest release of \easybuild{} includes over 2.500 easyconfig files, for
+(exactly) 500 different software packages.
 
 \subsection{Basic usage}
 

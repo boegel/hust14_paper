@@ -1,51 +1,49 @@
-Lmod~\cite{laytonLmod,taccSecretSauce,taccLmod} is a modern
-replacement for environment modules.  With rare exceptions it is a
-drop in replacement for Tcl/C modules. It can consume modulefiles
-written in Tcl as well as Lua\cite{LuaBook}.  It has strong focus on
-providing users easy access to their software stack, without hindering
-experts.
+Lmod~\cite{laytonLmod,taccSecretSauce,taccLmod} is a modern alternative to
+the traditional environment modules implementations, and is mostly written in
+Lua~\cite{LuaBook}. With rare exceptions, it is a drop-in replacement for the Tcl/C
+and Tcl-only implementations. It can consume modulefiles written in Tcl as well as
+Lua, and has strong focus on providing users easy access to their software stack,
+without hindering experts.
 
 The original idea for Lmod was to prototype a module system to test
-ideas about how to handle a hierarchical module system.  It was clear
-at the beginning that it was going to require a complete rewrite of
-the system, so the Lua language was choosen because of clean yet
-powerful constructs.  Lua also fills the same niche that Tcl was
+ideas about how to handle a hierarchical module system.  Early on, it was clear
+to the developers that the design of existing tools was inadequate, and that this
+was going to require a complete rewrite, so the Lua language was choosen because
+of its clean yet powerful constructs.  Lua also fills the same niche that Tcl was
 originally designed for, namely, it embeds and extends easily into
-other programs.  As time went on, it was clear that the Lmod modules
-system written in Lua implementation was fast enough to use directly.
+other programs.  As time went on, it was clear that the version of Lmod written
+in Lua was fast enough to be used directly, and hence the project stuck to Lua
+for further development.
 
-Since February of 2011, there have been 153 tagged version and 30+ official
-releases of Lmod. THe latest available version to date is Lmod v5.7.3.
+Lmod was first publicly released in Oct.~2008, and has been under active development
+ever since. Since February of 2011, there have been 153 tagged version and
+30+ official releases of Lmod. The latest available version to date is Lmod v5.7.3.
+Since Oct.~2009, it is the production modules tool on HPC systems at TACC.
 
 \subsection{Support for hierarchical module naming schemes}
 
 The key idea that Lmod exploits is that it watches changes to
-\texttt{\$MODULEPATH}. As such, it supports the advanced notion of
+\texttt{\small \$MODULEPATH}. As such, it supports the advanced notion of
 swapping modules in a hierarchical layout from the ground up, and thus
 deals with the issues described in
 Sections~\ref{sec:hierarchical_consequences_extensions} and
 \ref{sec:hierarchical_consequences_availability}.
 
-In a hierarchical layout, a compiler modulefile adds to
-MODULEPATH a new directory of compatible modules.  Similarly an MPI
-implementation's modulefile will add a directory for the compatible
-parallel libraries and parallel applications that work with that
-compiler and MPI pairing.
+Swapping one (core) compiler module for another using Lmod will trigger
+a chain of events.  The loaded compiler module will be unloaded, 
+causing the matching paths to be removed from the \texttt{\small \$MODULEPATH},
+and any loaded modules for MPI and parallel packages that depend on it
+to be unloaded as well, because the respective module files are no longer available
+in the active module search path. These modules are marked \emph{inactive}.
+Next, the new compiler module is loaded which causes a new entry
+to be added to the \texttt{\small \$MODULEPATH}, triggering a search
+for a compatible module in the new module search path for each of the
+modules that were marked inactive.
 
-For example, swapping one (core) compiler module for another will trigger
-a chain of events.  First, the old compiler module is unloaded
-which causes the MPI and parallel packages that depend on it to be
-nloaded because the respective module files can no longer be found.
-These modules are marked \emph{inactive}.
-
-Next, the new compiler module is loaded.  This means that a new entry
-is added to the \texttt{\$MODULEPATH}, which will trigger a search
-for compatible modules in the new module search path for each of the
-inactive modules.
-
-For example, swapping the loaded \emph{gcc} compiler module for the (default)
-\emph{clang} module results in reloading the loaded module for the
-\emph{fftw3} a parallel fft library and the \emph{mpich} MPI stack:
+For example, swapping a loaded \texttt{\small gcc} compiler module for the
+\texttt{\small {clang}} module results in reloading the loaded modules that
+depend on it, e.g., \texttt{\small fftw3} (a parallel FFT library) and
+\texttt{\small mpich} (an MPI library):
 {\small
   \begin{alltt}
     \textbf{\% module list}
@@ -60,79 +58,75 @@ For example, swapping the loaded \emph{gcc} compiler module for the (default)
 \end{alltt}
 }
 \noindent
-To ease testing the list of module reloaded are printed out
-alphabetically. Each ``\texttt{module list}'' command shows the
-order in which the modules are loaded.
+The reloaded modules reloaded are printed out
+alphabetically by the \texttt{\small module swap} command, while the output of
+the \texttt{\small module list} command lists the modules in the order in which
+they were loaded.
 
 % \kenneth{does the order of the reloaded modules make sense? shouldn't
 %   MPICH be reloaded first, since PETSc depends on it?}
 
 Another key issue with a hierarchical layout of modules is that not all
-existing modules are visible via \texttt{module avail} (see
+existing modules are visible via \texttt{\small module avail} (see
 Section~\ref{sec:hierarchical_consequences_visibility}). Lmod defines a
-new command, \texttt{module spider}, to search for modules across the
+new command, \texttt{\small module spider}, to search for modules across the
 entire module tree and report all \emph{existing} modules. The semantics of
-the \texttt{module avail} command, i.e., reporting all modules that can
+the \texttt{\small module avail} command, i.e., reporting all modules that can
 be \emph{loaded} in the current context (determined by
-\texttt{\$MODULEPATH}) is retained, for compatibility with other module
+\texttt{\small \$MODULEPATH}) is retained, for compatibility with other module
 tools.
 
-This ability to maintain a consistent set of modules when coupled with a
+The ability to maintain a consistent set of modules when coupled with a
 hierarchical module layout, and navigating the module tree outside of the
-current \texttt{\$MODULEPATH} is the key strength of Lmod, but there are
+current \texttt{\small \$MODULEPATH} is the key strength of Lmod, but there are
 many more features.  Many of these have been implemented in response to
 requests by the members of the Lmod community.
 
-\subsection{\texttt{ml} shorthand}
+\subsection{\texttt{\small ml} command and unload/swap shortcut}
 
-Lmod provides a short-hand to those who misspell the \texttt{moduel}, \texttt{mdoule}, \emph{err}
-\texttt{module} command.  It is common to want a list of the currently loaded
-modules or load a new module.  So Lmod provides a command named
-\texttt{ml}.  With no arguments, \texttt{ml} is the same as
-\texttt{module list}, and \texttt{ml} \emph{X} is the same as \texttt{module
-  load} \emph{X}.  When used with a leading minus a single command can
-swap compilers and mpi stacks:
+Lmod provides a short-hand command named \texttt{\small ml} for those who tend to
+misspell the \texttt{\small moduel}, \texttt{\small mdoule}, \emph{err}
+\texttt{\small module} command, which focuses on
+commonly used subcommands. Without arguments \texttt{\small ml} is a synonym for
+\texttt{\small module list}, while using it with an argument that is not
+recognized as a subcommand (e.g., \texttt{\small ml foo}) corresponds to loading
+the specified module (e.g., \texttt{\small module load foo}).
+\texttt{\small ml} accepts other subcommands just like \texttt{\small module} does,
+i.e., \texttt{\small ml avail} and \texttt{\small module avail} are equivalent.
+In the unlikely case that a module name is the same as subcommand supported by Lmod, 
+some care must taken when using \texttt{\small ml}. For example, loading a module
+named \texttt{\small spider} should be written as \texttt{\small ml load spider}.
+
+Another shortcut supported by the Lmod command line is to unload modules by
+prefixing module names with a minus sign (`\texttt{\small-}'). This allows to for
+example swap both the compiler and MPI stack with a single command, e.g.:
 {\small
   \begin{alltt}
-      \textbf{\% ml -gcc -mpich clang openmpi}
+      \textbf{\% ml -gcc -mpich clang openmpi}\
   \end{alltt}
 }
 \noindent
-Is the same as:
+is equivalent to:
 {\small
   \begin{alltt}
       \textbf{\% module swap gcc clang}
-      \textbf{\% module swap mpich openmpi}
+      \textbf{\% module swap mpich openmpi}\
   \end{alltt}
 }
 
-\texttt{ml} accepts other subcommands just like \texttt{module} does,
-i.e. \texttt{ml avail} and \texttt{module avail} are equivalent.  If a
-module name is the same as a module command does require a little
-finessing.  So trying to load the spider modulefile has to be written
-as \texttt{ml load spider}.
-
-%\remark{needs to be fleshed out}
-
 \subsection{Properties}
 
-The module system is a key interface between users and system
-administrators.
-%For sites that use Modules systems,  it is how users
-%access the software that they need to get their work done.
-As the computer systems change so too do the requirements on the module
-system.  One of these adding properties to modules.  Many
-supercomputers now have one or more accelerators currently either GPU's
-or XEON Phi's also known as MIC's.   In particular, XEON Phi's are a
-daughter card across the PCI bus and to create applications to run on
-the XEON Phi's requires cross compilation.  This means that libraries
-are needed for the Phi's.  Due to the way the environment variables
-are handled, a single modulefile can serve regular and Phi libraries.
+Lmod supports the notion of assigning so-called \emph{properties} to modules,
+indicating that the software they provide has some particular capability or
+characteristic. This is particularly useful on modern supercomputers that include
+one or more types of accelerators, e.g., GPUs or Intel Xeon Phi coprocessors.
+To indicate whether libraries and applications support execution on (one of) these
+accelerators, properties can assigned in the corresponding module files
+using the \texttt{\small add\_property} function (Lua-only). Supported module
+properties are user-definable.
 
-But user's won't know which libraries are Phi-aware.  Lmod added
-functions so that properties could be added to modulefiles.  This way
-when modules are listed via module list, and avail the properties can
-be reported.
+Module properties are reported in the output of \texttt{\small module} subcommands,
+hence users can tell which software is for example Phi-aware:
 {\small
 \begin{alltt}
   \textbf{\% module list}
@@ -141,73 +135,77 @@ be reported.
     2) mkl/mkl      \textbf{(*)}   4) boost/1.55.0 \textbf{(P)}
 
   Where:
-   \textbf{(*)}:  Supports host, native and offload
+   \textbf{(*)}:  supports host, native and offload
    \textbf{(P)}:  built for host and native Phi
 \end{alltt}
 }
-\noindent
-This shows the the intel mkl library and the C++ boost libraries are Phi-aware.
-This is just one use of properties.  It is under site
-control what properties are reported.  For example, some sites use it
-to mark alpha and beta releases of software packages.
-%\kenneth{include an example output, use bold face rather than a color for Phi-aware modules?}
+\noindent Another possible application of properties is to mark modules as `alpha'
+or `beta', depending on the amount of testing the provided software builds have
+recieved.
 
 \subsection{Caching}
 
-Added support for properties added a complication to the module
-system.  Without properties, the avail command just needed the name of
-the module not the contents.  With properties, the contents of every
-module needed to be read and evaluated, whether the modulefile had
-properties or not. On parallel filesystems such as lustre this can be
-slow.  To mitigate this, Lmod added the ability to have cache files.
-It turns out that reading one large file is much faster than walking a
-directory tree and reading several small files.  There is support for
-both user and system cache files.  Keeping the cache files current can
-be a challenge when installed software is being updated.  One approach
-is to have the installing software system recomputes the cache after
-completing the system update or the cache file is updated frequently
-and hooks are in-place to know when the cache file is valid or not.
+Support for module properties adds a complication to the module
+system.  Without properties, the \texttt{\small avail} subcommand only requires the
+names of available module files, not their contents.  However, with support for
+properties the contents of every module file need to be read and evaluated,
+regardless of whether the module file includes any properties or not. On parallel
+file systems this can be terribly slow.  To mitigate this Lmod enables
+\emph{caching} of module files, since reading one single (large) file is
+significantly faster than walking a directory tree and reading several small files.
+Hence, caching also makes other subcommands, e.g., \texttt{\small module spider},
+significantly faster. An Lmod module file cache is also referred to as
+`spider cache', and both system-level and user-level caches are supported.
 
-One of upshots of this is that Lmod trusts the cache files for
-everything except for loading a modulefile.  This way a module can be
-loaded even if the cache is out-of-date.  This can happen while
-installing software (e.g. for \easybuild{}) but users will see an updated
-cache file.
+Lmod contains hooks to check whether a cache is up-to-date and will automatically
+update a user-level cache when deemed necessary, i.e., when executing a particular
+subcommand takes too long. System cache files can be recomputed after (re)installing software and/or periodically via a dedicated cron job. Usually, the presence of a
+system-level cache eliminates the need for a user-level cache.
+Lmod trusts existing cache files for everything except loading a module
+file, so modules can still be loaded even if the cache is out-of-date, e.g., when
+installing a stack of software using \easybuild{}.
 
 %\kenneth{also mention system vs user cache?}
 %\robert{I don't know}
 
 \subsection{Module families}
 
-One of the improvements to Lmod is that there is the family function.
-The way this works is that a compiler or mpi stack can be marked to be
-part of a family and you only get one member of the family loaded at
-one time.  It is possible to override this for the few expert user who
-wish to have two compilers loaded at the same time.
+Another enhancement provided by Lmod is the support for defining module
+\emph{families}, using the \texttt{\small family} function in (Lua) module files.
+Families are an alternative to module conflicts, in the sense that only one module of
+a particular family can be loaded at any given time. Other than conflicts, which
+are based on module names, module family `labels' can be chosen freely and are easy
+to maintain since they do not require to update existing module files when adding a
+family member.
 
-{\small\begin{alltt}  \textbf{\% module load gcc}
+For example, a module family named \texttt{\small compiler} can be defined, by
+simply including \texttt{\small family("compiler")} in each compiler module file.
+This would result in the following meaningful error message when a user tries to
+load two compiler modules at the same time:
+
+{\small
+\begin{alltt}
+  \textbf{\% module load intel}
+  \textbf{\% module load gcc}
   Lmod has detected the following error:
   You can only have one compiler module loaded.
   To correct this, please do the following:
-
-  \textbf{\% module swap intel gcc/4.8.1}\end{alltt}}
+      module swap intel gcc/4.8.1\
+\end{alltt}}
 \noindent
-Users wanting to load two compilers can set the environment variable
-\texttt{LMOD\_EXPERT}. to bypass this check.
+The constraint of only allowing to load one module per family can be
+disabled by using Lmod in `expert mode', by defining the
+\texttt{\small \$LMOD\_EXPERT} environment variable.
 
+\subsection{Customizing Lmod behavior and hooks}
 
-
-%\kenneth{example of error message when loading two modules of the same family? mention how experts can override this exactly}
-
-\subsection{Hooks}
-
-Another key feature is the ability for sites to create a
-\texttt{SitePackage.lua} file to modify the behavior of Lmod to suit
-their needs.  Lmod provides ``hook'' functions that site can add
-functionality.  There is a load hook.  This means that
-every time a module is loaded a call to syslog can be
-made to record a modules use.  Data from syslog can be collected to
-know what modules are being used or not.
+Another key feature is the ability for sites to customize the behavior of Lmod
+by creating a file named \texttt{\small SitePackage.lua}. Lmod provides several
+so-called \emph{hook} functions, allowing sites to plug in additional functionality. 
+For example, using the available hook for the \texttt{\small load} subcommand, an
+accompanying action can be assigned. That way, a message can be logged for every
+module being loaded for example, allowing to figure out which modules are being
+used or not. 
 
 \ignore{
 \subsection{Sensible version ordering}
@@ -223,48 +221,62 @@ and so on.
 %\kenneth{mention version since when Lmod support sensible version ordering, and maybe flesh out the example a bit more? you can use EasyBuild v1.9.10 vs v1.10.0 as an example ;-)}
 }
 
-\subsection{\texttt{pushenv}: stack-based setting of environment variables}
+\subsection{\texttt{\small pushenv}: stack-based setting of environment variables}
 \label{sec:lmod_pushenv}
 
-The module system
-has supported \texttt{setenv} function which sets an environment variable
-upon load a module and clears its value upon unload.  There are times
-when users and administrators would like the previous value recovered
-rather than cleared.  This is what \texttt{pushenv} does.  It
-maintains a hidden stack in the environment so it can recover old
-values.
+Environment module systems support the \texttt{\small setenv} function for 
+defining environment variables via module files. When a module file is unloaded,
+any environment variables that were defined by that module are cleared regardless
+of whether or not they were defined prior to the module being loaded (since the
+previous value is no longer available). For common environment variables that may
+be defined in multiple module files that can be loaded at the same time, simply
+clearing variables when modules are unloaded is not desirable.
 
-Suppose the gcc module defines \texttt{\$CC} to be \texttt{gcc} and the mpich module
-defines \texttt{\$CC} to \texttt{mpicc}.  The following table shows the value of
-\texttt{\$CC} depending on whether \texttt{pushenv} or \texttt{setenv} is used:
+Therefore, Lmod supports an alternative function for setting environment variables
+stack-based, using the \texttt{\small pushenv} function (Lua-only). For environment
+variables being defined that way, a hidden stack is maintained in the environment
+so that previous values can be recovered.
+For example, consider a module for the GCC compiler named \texttt{\small gcc} which
+defines \texttt{\small \$CC} to be \texttt{\small gcc}, while a module for the
+OpenMPI library named \texttt{\small openmpi} sets \texttt{\small \$CC} to
+\texttt{\small mpicc}. The following table shows the value of \texttt{\small \$CC}
+depending on whether \texttt{\small setenv} or \texttt{\small pushenv} is used:
 \begin{center}
- \begin{tabular}{c|l|l|l}
- nr & command                                 & \texttt{setenv} & \texttt{pushenv}\\
+ \begin{tabular}{l|l|l}
+ command                                 & \texttt{\small setenv} & \texttt{\small pushenv}\\
  \hline
- 1 & \textbf{\texttt{module load   gcc}}   & \texttt{gcc}    & \texttt{gcc}  \\
- 2 & \textbf{\texttt{module load   mpich}} & \texttt{mpicc}  & \texttt{mpicc} \\
- 3 & \textbf{\texttt{module unload mpich}} & \emph{(none)}   & \texttt{gcc}  \\
- 4 & \textbf{\texttt{module unload gcc}}   & \emph{(none)}   & \emph{(none)} \\
+ \textbf{\texttt{\small export CC=icc}}  & \texttt{\small icc}  & \texttt{\small icc} \\
+ \textbf{\texttt{\small module load   gcc}}   & \texttt{\small gcc}    & \texttt{\small gcc}  \\
+ \textbf{\texttt{\small module load   openmpi}} & \texttt{\small mpicc}  & \texttt{\small mpicc} \\
+ \textbf{\texttt{\small module unload openmpi}} & \emph{(none)}   & \texttt{\small gcc}  \\
+ \textbf{\texttt{\small module unload gcc}}   & \emph{(none)}   & \texttt{\small icc} \\
   \hline
     \end{tabular}
 \end{center}
 \noindent
-After command 1 and 2 the value of \texttt{CC} is the same.  It is the unload
-with command 3 where the behavior changes.  With \texttt{setenv} \texttt{\$CC} is unset
-whereas with \texttt{pushenv} recovers the previous value of
-\texttt{gcc} in the third command.
+While \texttt{\small\$CC} is unset after unloading the \texttt{\small openmpi} module
+using \texttt{\small setenv}, the modules using \texttt{\small pushenv} result
+in properly restoring the previous value for \texttt{\small\$CC} on unload.
 
 %\kenneth{include an example of the effect of using \texttt{pushenv} rather than \texttt{setenv}, maybe using \texttt{\$CC}?}
 
 \subsection{Module collections}
 
-Sites can provide a default set of modules that includes a
-compiler/MPI stack so that novice users will have something initially
-to work with.  With Lmod, user can build a collection of modules
-appropriate for them which they can mark as the set of modules they
-want every time they log-in.  They can also have as many named
-collection of modules as they like.
-
+One final feature of Lmod we would like to mention is the support for user-defined
+\emph{collections} of modules. Collections allow users to define and name their
+own sets of module files that can be loaded with a single command. Once the desired
+set of modules is loaded, the \texttt{\small save} subcommand can be used
+to define a module collection with the name specified as an argument; omitting an
+argument defines the default collection. The list of available collections
+can obtained via \texttt{\small module savelist} or the shorthand
+\texttt{\small ml sl}. A collection can be restored by specifying its name to the
+\texttt{\small restore} subcommand. Reloading the default module collection can be
+done by simply using \texttt{\small module restore} without argument.
+This powerful feature provides users with a way to efficiently manage their
+different working environments, and allows user support teams to define a default
+set of loaded modules. That way, they can avoid that (novice) users
+are forced to pick a particular compiler and MPI module under a hierarchical module
+naming scheme before they can get started.
 
 %\kenneth{try and give a rough idea of the size of the Lmod community?}
 

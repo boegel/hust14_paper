@@ -9,21 +9,19 @@ module files are organized in a more structured way.  The key idea behind
 this is to make module files only available in a step-by-step fashion.  That
 is, initially only a small number of so-called \emph{core} modules are
 available to the user.
-
 Core modules are modules which are independent of a particular compiler
 toolchain, that is, they are either completely self-contained or only
 dependent on basic system software. Examples include module files for
-compilers and statically linked software (e.g., debuggers).
+compilers and statically linked software like debuggers.
 
-These core modules (implicitly) extend the module search path
-(\texttt{\$MODULEPATH}) to make additional modules visible, for example
-the ones which are built with---and therefore depend on---the corresponding
+These core modules extend the module search path
+(\texttt{\small \$MODULEPATH}) when loaded to make additional modules visible, for
+example the ones which are built with---and therefore depend on---the corresponding
 compiler. As such, separate software installation and module files
 subdirectories are maintained for each version of each compiler. For the
-Open\,MPI example presented in Section~\ref{sec:Module_files}, this means
-that the user then only sees a single module file for Open\,MPI 1.7.3 instead
-of three: the one providing the installation built using the compiler module
-that is currently loaded:
+Open\,MPI example presented in Section~\ref{sec:Module_naming_scheme}, this means
+that the user then only sees a single module file for OpenMPI 1.7.3: the one
+providing the installation built using the compiler module that is currently loaded:
 
 {\small
 \begin{alltt}
@@ -41,9 +39,9 @@ that is currently loaded:
 }
 
 
-Obviously, such a hierarchy is not limited to a single level. For example,
+Such a hierarchy is not limited to a single level; for example,
 the module files for different MPI implementations can further extend
-\texttt{\$MODULEPATH} to enable all modules which depend on both the loaded
+\texttt{\small \$MODULEPATH} to enable all modules which depend on both the loaded
 compiler and the respective MPI library, etc.
 
 
@@ -58,21 +56,21 @@ Using a hierarchical module naming scheme has multiple important
 advantages. First, at any point in time, users are only presented with the
 modules which are meaningful in the current context. That is, the list of
 available modules is much shorter and grouped by level of the hierarchy,
-and therefore a lot less overwhelming when tens to hundreds of modules are
+and therefore a lot less overwhelming when hundreds of modules are
 available (which is often the case on HPC systems that have been in
 production for a while).
 
 Second, encoding the dependency chain in the module name is no longer
 necessary, since this can be encoded in the subdirectory that serves as a
 extension to
-\texttt{\$MODULEPATH}. This leads to significantly shorter and more intuitive
+\texttt{\small \$MODULEPATH}. This leads to significantly shorter and more intuitive
 module names, usually consisting of the software name and version, e.g.,
-\texttt{WRF/3.5} rather than the long and cryptic module names shown in
-Section~\ref{sec:Module_files}.
+\texttt{\small WRF/3.5} rather than the long and cryptic module names shown in
+Section~\ref{sec:Module_naming_scheme}.
 
 Third, loading of incompatible
-modules is automatically avoided, preventing users from making simple
-mistakes which may lead to subtle errors that are non-obvious and hard to
+modules is automatically avoided, preventing users from making common
+mistakes that may lead to subtle errors that are non-obvious and hard to
 debug. Not only does this enable a better user experience, it also avoids
 that user support teams have to spend time on resolving tickets related
 to issues caused by incompatible modules being loaded together.
@@ -81,9 +79,10 @@ Finally, the more structural organization of module files can be exploited
 to provide new possibilities, a major one being supporting \emph{swapping}
 out a loaded module on a particular level of the hierarchy with another
 (e.g., a compiler module), while automatically reloading any module depending
-on the previously loaded module. This notion needs to be supported be the
-modules tool used to consume the module files however (see also
-Section~\ref{sec:using_a_hierarchy}).
+on the previously loaded module. The latter must be supported by the modules tool
+in order for a \texttt{\small module swap} to work correctly in the context of
+a hierarchical module naming scheme however, see also
+Section~\ref{sec:using_a_hierarchy}.
 
 %\remark{basic users make less mistakes, expert users retain full freedom}
 
@@ -91,22 +90,24 @@ Section~\ref{sec:using_a_hierarchy}).
 \label{sec:using_a_hierarchy}
 
 Although the commonly used Tcl/C and Tcl-only environment modules tools
-both support the concept of hierarchical modules (since they're mostly
+both support the concept of hierarchical modules (since they are mostly
 oblivious to how the module files are structured), a couple of consequences
 to using a hierarchical module naming scheme need to be taken into account.
 
 \subsubsection{Visibility of modules}
 \label{sec:hierarchical_consequences_visibility}
 
-First of all, not all existing module files are visible by default, since
+First of all, not all existing module files are visible all the time, since
 a particular core module and potentially additional lower-level modules
 that further extend the module search path may need to be loaded first.
-Although users can rely on standard Unix tools as for example `find`, this
+Although users could resort to standard Unix tools as for example
+using \texttt{\small find} (which would be terribly slow in the case of lots of
+module files being installed on a shared filesystem), this
 is an important aspect that needs to be dealt with. Since the modules that
-users may be interested in, i.e., the ones for the scientific software
-packages they care about, are not listed in the output of \texttt{module
-avail}, another way of quering the set of existing module files (outside
-of the currently active \texttt{\$MODULEPATH}) needs to be
+users are usually interested in, i.e., the ones for the scientific software
+packages they care about, may not be listed in the output of \texttt{\small module
+avail}, another (efficient) way of quering the set of existing module files outside
+of the currently active \texttt{\small \$MODULEPATH} needs to be
 provided.
 
 \subsubsection{Awareness of module path extensions}
@@ -115,34 +116,34 @@ provided.
 Second, the modules tool needs to be aware of the module path extensions that
 may occur when loading modules in a hierarchical scheme. This is of
 particular importance for supporting the notion of automatically reloading
-dependent modules after swapping modules on one of the hierarchy level.
+dependent modules after swapping modules on one of the hierarchy levels.
 Basically, the modules tool needs to be able to i) detect that a particular
 module depends on the module being swapped out, or in other words on which
 level of the hierarchy each module lives, and ii) to unload the dependent
-modules whenever a \texttt{module swap} is being executed, and afterwards
-automatically (try to) reload the unloaded modules, meanwhile taking into
+modules whenever a \texttt{\small module swap} is being executed, and afterwards
+automatically (try to) reload them, meanwhile taking into
 account the order in which the modules were loaded.
 
 \subsubsection{Module availability on different paths in the hierarchy}
 \label{sec:hierarchical_consequences_availability}
 
 On top of this, the modules tool needs to take into account that it is
-possible that not all dependent modules are available after swapping e.g.
+possible that not all dependent modules are available after swapping for example
 one compiler module for another. This is required to avoid that the user
-ends up with a hopelessly broken environment that got stuck somewhere in
+ends up with a hopelessly broken environment by getting stuck somewhere in
 between the original state before initiating the swap and the goal state
-in which the alternative module and all its dependent module are loaded.
+in which the alternative module and all its dependent modules are (re)loaded.
 When such a situation occurs, the module tool should simply notify the user
 that certain dependent modules could not be reloaded. If the modules tool
 can somehow keep track of which modules failed to reload during a
-\texttt{module swap}, the user-friendly possibility to revert the swap
-operation could be supported as well, e.g. by making sure that the reverse
-swap operation (\texttt{module swap B A} after a \texttt{module swap A B}
-restores the original state of the environment.
+\texttt{\small module swap}, the user-friendly option to revert the swap
+operation could be supported as well, e.g., by making sure that the reverse
+swap operation (i.e., \texttt{\small module swap B A} after a
+\texttt{\small module swap A B}) restores the original state of the environment.
 
 None of these issues are taken into account in the latest versions of the
 Tcl/C and Tcl-only implementations of the environment modules tools. At some point,
-the notion of reloading depedent modules after a \texttt{module swap}
+the notion of reloading depedent modules after a \texttt{\small module swap}
 \emph{was} supported by the Tcl-only implementation, but this change was
 reverted later on because it led to incompatible behavior between
 these two versions which was deemed undesirable.
@@ -170,28 +171,28 @@ these two versions which was deemed undesirable.
 Next to the peculiarities with using a hierarchical module naming scheme discussed in
 the previous section that need to be taken into account, maintaining a module stack
 that is organized hierarchically is also more involved for user support teams
-compared to a straightforward `flat' module naming scheme.
+compared to a simple `flat' module naming scheme.
 
 In particular, significantly more care has to taken when creating
 module files. For one, the module path extensions that are included in modules
 on the different levels of the hierarchy make it less straightforward to compose
 module files. Determining the location of module files also becomes
 non-trivial, since the dependencies of the software package being dealt with need
-to be taken into account. Next to this, the \texttt{module load} statements included
-in module files for these dependencies need to be determined carefully, to ensure
-that unloading and swapping of modules doesn't yield unexpected results. Modules
-in a hierarchical scheme \emph{must} be referred to using the name they will be
-exposed under to users, i.e. using their `short` name (e.g. \texttt{WRF/3.5})
-relative to the \texttt{\$MODULEPATH} after loading a core module (and potentially
-other modules further extending the \texttt{\$MODULEPATH}), rather than their `full'
-name relative to the top of the hierarchy (e.g.,
-\texttt{MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}).
+to be taken into account. Next to this, the \texttt{\small module load} statements
+included in module files for these dependencies need to be determined carefully, to
+ensure that unloading and swapping of modules doesn't yield unexpected results.
+Modules in a hierarchical scheme \emph{must} be referred to using the name they will 
+be exposed under to users, i.e. using their `short` name (e.g.,
+\texttt{\small WRF/3.5}) relative to the \texttt{\small \$MODULEPATH} after loading
+a core module and (potentially) other modules further extending the \texttt{\small
+\$MODULEPATH}, rather than their `full' name relative to the top of the hierarchy
+(e.g., \texttt{\small MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}).
 
 All these aspects significantly complicate the manual creation of module files, which
 is already a tedious task because of consistency requirements and the usual problems
 like dependency tracking, etc. Combining these concerns with the time-consuming
-nature of the prerequisite of getting scientific software to build only further
-highlights the indispensable need of an appropriate and flexible tool to
+nature of the prerequisite of `just' getting the scientific software installed
+further highlights the indispensable need of an appropriate and flexible tool to
 \emph{automate} installing scientific software on HPC systems.
 
 \subsection{Tools}
@@ -201,6 +202,6 @@ The issues discussed in Sections~\ref{sec:using_a_hierarchy} and
 \ref{sec:maintaining_a_hierarchy} clearly motivate the need for more advanced tools.
 In the remainder of this paper, we present how the community-driven tools
 \easybuild{}, a software build and installation framework, and Lmod, a modern
-alternative to the environment modules tools, have the required features (and more)
-and flexibility for efficiently dealing with a hierarchical module naming scheme,
+alternative to the environment modules tools, have the flexibility and required
+features (and more) for efficiently dealing with a hierarchical module naming scheme,
 see Sections~\ref{sec:easybuild} and \ref{sec:lmod} respectively.

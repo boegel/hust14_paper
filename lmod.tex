@@ -8,12 +8,12 @@ without hindering experts.
 The original idea for Lmod was to prototype a module system to test
 ideas about how to handle a hierarchical module system.  Early on, it was clear
 to the developers that the design of existing tools was inadequate, and that this
-was going to require a complete rewrite, so the Lua language was choosen because
+was going to require a complete rewrite, so the Lua language was chosen because
 of its clean yet powerful constructs.  Lua also fills the same niche that Tcl was
 originally designed for, namely, it embeds and extends easily into
 other programs.  As time went on, it was clear that the version of Lmod written
-in Lua was fast enough to be used directly, and hence the project stuck to Lua
-for further development.
+in Lua was fast enough to be used directly, and hence the project
+continues use to Lua for further development.
 
 Lmod was first publicly released in Oct.~2008, and has been under active development
 ever since. Since February of 2011, there have been 153 tagged version and
@@ -116,13 +116,13 @@ is equivalent to:
 
 \subsection{Properties}
 
-Lmod supports the notion of assigning so-called \emph{properties} to modules,
+Lmod supports the notion of assigning \emph{properties} to modules,
 indicating that the software they provide has some particular capability or
 characteristic. This is particularly useful on modern supercomputers that include
 one or more types of accelerators, e.g., GPUs or Intel Xeon Phi coprocessors.
 To indicate whether libraries and applications support execution on (one of) these
 accelerators, properties can assigned in the corresponding module files
-using the \texttt{\small add\_property} function (Lua-only). Supported module
+using the \texttt{\small add\_property} function. Supported module
 properties are user-definable.
 
 Module properties are reported in the output of \texttt{\small module} subcommands,
@@ -141,7 +141,7 @@ hence users can tell which software is for example Phi-aware:
 }
 \noindent Another possible application of properties is to mark modules as `alpha'
 or `beta', depending on the amount of testing the provided software builds have
-recieved.
+received.
 
 \subsection{Caching}
 
@@ -201,7 +201,7 @@ disabled by using Lmod in `expert mode', by defining the
 
 Another key feature is the ability for sites to customize the behavior of Lmod
 by creating a file named \texttt{\small SitePackage.lua}. Lmod provides several
-so-called \emph{hook} functions, allowing sites to plug in additional functionality. 
+\emph{hook} functions, allowing sites to plug in additional functionality. 
 For example, using the available hook for the \texttt{\small load} subcommand, an
 accompanying action can be assigned. That way, a message can be logged for every
 module being loaded for example, allowing to figure out which modules are being
@@ -212,7 +212,7 @@ used or not.
 
 There have been many improvement to improve usability for both users
 and staff.  One of these is sensible version ordering.  Originally all
-module systems use lexicological ordering.  This means that version
+module systems use lexicographical ordering.  This means that version
 9.0 is considered newer than 10.0.  Now Lmod knows that version 10.0 $>$
 9.7.1 $>$ 9.7 $>$ 9.7rc1 $>$ 9.7a2 and so on.  It knows about
 numerical order in any of the digits so 1.10.12 $>$ 1.10.9 $>$ 1.9.10 $>$ 1.9.2
@@ -233,7 +233,7 @@ be defined in multiple module files that can be loaded at the same time, simply
 clearing variables when modules are unloaded is not desirable.
 
 Therefore, Lmod supports an alternative function for setting environment variables
-stack-based, using the \texttt{\small pushenv} function (Lua-only). For environment
+stack-based, using the \texttt{\small pushenv} function. For environment
 variables being defined that way, a hidden stack is maintained in the environment
 so that previous values can be recovered.
 For example, consider a module for the GCC compiler named \texttt{\small gcc} which
@@ -273,10 +273,12 @@ can obtained via \texttt{\small module savelist} or the shorthand
 \texttt{\small restore} subcommand. Reloading the default module collection can be
 done by simply using \texttt{\small module restore} without argument.
 This powerful feature provides users with a way to efficiently manage their
-different working environments, and allows user support teams to define a default
-set of loaded modules. That way, they can avoid that (novice) users
-are forced to pick a particular compiler and MPI module under a hierarchical module
-naming scheme before they can get started.
+different working environments.
+
+%, and allows user support teams to define a default
+%set of loaded modules. That way, they can avoid that (novice) users
+%are forced to pick a particular compiler and MPI module under a hierarchical module
+%naming scheme before they can get started.
 
 %\kenneth{try and give a rough idea of the size of the Lmod community?}
 

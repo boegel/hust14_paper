@@ -1,12 +1,12 @@
-In this section, we describe common approaches that are traditionally
-used at HPC sites to install and manage scientific software over the lifetime of an HPC system. We start
-by describing traditional module tools used by many sites, then introduce the concept of module files and various module naming
-schemes in common use today.  Next, we review typical
-workflows for installing scientific software. Finally,
+In this section, we describe common approaches that are traditionally used at HPC
+sites to install and manage scientific software over the lifetime of an HPC system.
+We start by describing traditional module tools used by many sites, then introduce
+the concept of module files and various module naming schemes in common use today.
+Next, we review typical workflows for installing scientific software. Finally,
 we highlight the lack of collaboration among HPC sites and the absence
 of tools for dealing with the problems mentioned along the way.
 
-\subsection{Environment modules in Common Practice}
+\subsection{Providing access to software using environment modules}
 \label{sec:env_modules_system}
 
 For software not installed in standard system locations, a user's
@@ -41,8 +41,8 @@ To access a particular software package named `\emph{foo}', the user simply
 The second major advantage is that users can \emph{unload} a previously
 loaded module, to undo changes in the environment and restore their
 environment to the one they had before they loaded a particular module.  This means
-that users maintain control their working environment as they switch  among
-versions of the same application, library, compiler, or MPI stack.  These features explain why the environment module
+that users maintain control of their working environment as they switch between
+different versions of the applications, libraries, compilers, or MPI stacks.  These features explain why the environment module
 system has become ubiquitous on HPC systems since the late 1990s.
 
 
@@ -78,16 +78,16 @@ Supercomputing Applications) project~\cite{wikiDEISA}.  In
 %\remark{briefly explain Tcl/C and Tcl-only environment module tools}
 
 While these implementations provide the desired basic functionality, support has been uneven at best. In all cases, development
-progresses slowly. For example, there has been no activity in the
-(publicly accessible) version controlled Tcl-only
-implementation for about two years. It is reasonable to assume, therefore, that new features (e.g. improved support for hierarchical schemes; see below) are
+progresses slowly. For example, there has been no activity in
+(the publicly accessible version of) the Tcl-only
+implementation for about two years. It is reasonable to assume, therefore, that new features (e.g., improved support for hierarchical schemes, see below) are
 unlikely to happen any time soon. In the case of the Tcl/C modules
 there are active discussions on the modules-interest mailing list, but
 changes or improvements are infrequent as well. At the time of writing, the
 latest available version (3.2.10) was released Dec.~2012, which was over one year
 after the previous release.
 
-In 2009, a radically new implementation of the module system called
+In 2009, a radically new implementation of the module system emerged called
 Lmod~\cite{taccLmod}. Implemented from the ground up in
 Lua, it is largely compatible with the Tcl-based
 implementations.  Lmod is actively developed and maintained, and has
@@ -146,16 +146,16 @@ name \texttt{\small GCC/4.8.2}, with \texttt{\small\emph{<prefix>}} being one of
 \label{sec:Module_naming_scheme}
 When the environment module system was invented, HPC sites typically provided
 a single version of a single compiler on each of their systems.
-Today, HPC systems have multiple compilers (GCC, Intel,
-Clang, PGI, \ldots) available, each available in multiple versions.
+Today, HPC systems provide multiple compilers (GCC, Intel,
+Clang, PGI, \ldots), each available in multiple versions.
 
 In most cases (there are some exceptions for programs written in pure C), programs compiled with one version of a compiler cannot safely link to libraries compiled with another. This means that
-multiple builds of system libraries (e.g., Boost) need to be provided,
+multiple builds of libraries (e.g., Boost) need to be provided,
 one for each compiler and version.
 Moreover, since packages such as MPI implementations are inherently tied to a
 particular compiler and most often to a particular version, disambiguating
 module names can be a daunting task. For example, modules corresponding to
-version~1.7.3 of the OpenMPI library built with different compilers might be named
+version~1.7.3 of the Open\,MPI library built with different compilers might be named
 as follows:
 {\small
 \begin{alltt}
@@ -183,10 +183,10 @@ A common solution to this issue is to define so-called \emph{toolchain}
 modules, packaging together a compiler, an MPI library, and one or more packages
 providing linear algebra and FFT functionality. For example, a \texttt{\small goolf}
 toolchain module may combine (i.e., implicitly load modules for) a compatible combination of specific versions of GCC,
-OpenMPI, OpenBLAS, (Sca)LAPACK and FFTW. In this approach, the
-first WRF module as shown above would bundle an entire toolchain instead of a version of WRF alone, and might take the name \texttt{\small WRF/3.5-goolf-1.6.10}.
-One downside of using toolchains with terse naming conventions, however, is clear: the toolchain name generally has no direct relationship to the versions of
-the encapsulated packages, so users lack top-level insight into 
+Open\,MPI, OpenBLAS, (Sca)LAPACK and FFTW. In this approach, the
+first WRF module shown above could instead be installed on top of such a toolchain,
+and might take the, slightly shorter, name \texttt{\small WRF/3.5-goolf-1.6.10}.
+One downside of using toolchains with terse naming conventions, however, is clear: toolchain names can be cryptic, and the toolchain version generally has no direct relationship to the versions of the encapsulated packages, so users lack top-level insight into 
 this information.
 
 One common attempt to manage the potentially overwhelming set of available
@@ -221,10 +221,10 @@ avail} output, which is not desirable.
 Although all these approaches aim to improve the overall
 organization of the available modules, a typical module listing on an HPC
 system can still be overwhelming, as the total number of modules can easily
-be in the order of several hundreds. Moreover, none of these approaches prevent (especially novice) shooting themselves in the
+be in the order of several hundreds. Moreover, none of these approaches prevent (especially novice) users shooting themselves in the
 foot by loading modules which are incompatible to each other. While
 there are ways to prevent this, they require identifying and explicitly listing
-all conflicting modules. For example, the OpenMPI module may
+all conflicting modules. For example, the Open\,MPI module may
 specify that it is incompatible with modules that load MPI libraries like
 Intel MPI or MVAPICH. However, this means that these conflict specifications have
 to be adjusted every time an additional MPI library is installed on the
@@ -275,15 +275,15 @@ sufficiently detailed).
 Frequently, sites cobble together a collection of scripts to automate the often repetitive and error-prone tasks of
 configuring, building and installing the software packages, using any of a variety of scripting languages. Typically, this quickly results in a pile of
 loosely coupled, hard-to-maintain scripts, often
-understood by just a small fraction or even a single member of the support
-teams~\cite{Jim}. On top of this, these
+understood by just a small fraction or even a single member of the user support
+team~\cite{Jim}. On top of this, these
 scripts tend to encode site-specific software installation policies, making reuse by other sites difficult (assuming the scripts
 are made available to others).
 
 \subsubsection{Package managers}
 
 Yet another approach is to rely on the package managing tools used
-by the operating system, e.g. RPMs and \texttt{\small yum} for RedHat-based systems,
+by the operating system, e.g., RPMs and \texttt{\small yum} for RedHat-based systems,
 \texttt{\small apt-get} and Debian packages for Debian-like systems, Portage for
 Gentoo, etc.
 Package managers provide adequate support for some aspects of
@@ -294,8 +294,8 @@ HPC systems. These include supporting multiple builds/versions of the same softw
 to be installed at the same time, and heavily customized install procedures involving
 non-standard techniques beyond the basic \texttt{\small configure} --
 \texttt{\small make} -- \texttt{\small make install} paradigm. In addition, the package specification formats (e.g.,
-\texttt{\small .spec files for RPMs}) tend to provide little support for factoring out
-common patterns in install procedures, leading to copy-paste, hard-to-maintain packages.
+\texttt{\small .spec} files for RPMs) tend to provide little support for factoring out
+common patterns in install procedures, leading to copy-pasted, hard-to-maintain package specifications.
 
 Several of the larger HPC sites in the world take this approach, since they are able to dedicate large amounts of manpower to
 the task of installing scientific software, but this is typically infeasible for
@@ -348,10 +348,10 @@ on production systems, where continuity of support is a high priority.
 \label{sec:traditional_lack}
 
 Even though these problems are well recognized, there is an abundant lack
-of available tools and practices available for addressing them.
+of available tools and practices for addressing them.
 Moreover, there has been very little collaboration between HPC sites on these
 issues, despite the significant burden they present for support staff. This is especially true at smaller sites. Even though HPC sites around the world all face these problems, the duplication of effort and associated labor cost is alarming. There is a tremendous opportunity
-here: we all stand to benefit from a collaborative initiatives that
+here: we all stand to benefit from collaborative initiatives that
 leverage the
 immensely valuable expertise available across HPC sites worldwide.
 

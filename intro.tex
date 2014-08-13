@@ -2,7 +2,7 @@ In a typical desktop environment, it is usually sufficient to have a
 single version of a software package installed to fulfill a particular purpose. HPC
 systems, on the other hand, are normally used by a large user community with widely varying
 demands. In particular, there is often the need to make multiple versions of
-a software package available; these sometimes include competing packages
+software packages available. These sometimes include competing packages
 that provide either identical or significantly overlapping functionality. Examples include
  different implementations of the MPI standard (e.g. Open\,MPI vs.
 MVAPICH) and linear algebra packages (e.g. OpenBLAS vs. Intel MKL).
@@ -14,38 +14,48 @@ modifying the user's environment. This approach achieves this by adjusting envir
 variables like \texttt{\small\$PATH} and/or setting additional package-specific
 variables like the DNS name of a
 license server. However, while environment modules are used by many
-HPC sites around the world, this approach is not without its challenges. Among the issues: managing large numbers of modules in a way that allows individual users to easily control their own environments.
+HPC sites around the world this approach is not without its challenges,
+a common one being managing large numbers of modules in a way that allows individual
+users to easily control their own environments.
 
 Providing users an easy way to access the (scientific) software
-available on an HPC system is certainly a challenge, but installing large collections of scientific software packages is a
+available on an HPC system is certainly a challenge, but installing large collections
+of scientific software packages is a
 non-trivial task in its own right. These packages are often written by domain
-scientists who are comfortable only with their their own hardware and software environment; the developers are often not prepared to deliver to the community robust installation packages based on portable build
-systems~\cite{Dubois03}. As a result, system administrators of different HPC sites may find they have to reinvent the wheel to
+scientists who are comfortable only with their their own hardware and software
+environment; the developers are often not interested in providing a robust
+build and installation procedure based on portable build
+tools~\cite{Dubois03}. As a result, system administrators of different HPC sites may
+find they have to reinvent the wheel to
 get a particular software package installed on their local system. Moreover, this
 kind of hard-won experience typically is not shared, especially between HPC sites. In
 addition, the required modifications and the exact installation steps are
 often poorly---if at all---documented, which significantly impedes
 maintainability and reproducibility of software installations.
 
-In this paper, we address these issues by introducing an automated approach to installing scientific
-software and organizing the corresponding modules in a hierarchical way. This is achieved by leveraging the functionality provided by the two community-driven tools
-\emph{\easybuild{}}~\cite{EasyBuildSC12} and \emph{Lmod}~\cite{taccLmod}.
-Lmod provides a significantly enhanced but
+In this paper, we address these issues by introducing an automated approach to
+installing scientific software and organizing the corresponding modules in a
+hierarchical way. This is achieved by leveraging the functionality provided by the
+two community-driven tools \emph{\easybuild{}}~\cite{EasyBuildSC12} and
+\emph{Lmod}~\cite{taccLmod}. Lmod provides a significantly enhanced but
 (largely) backward-compatible implementation of environment modules including specific
 features targeting a hierarchical module organization. EasyBuild provides a
 framework for automating software installations with a particular focus on
 scientific software packages---with the intention to collect and share the
 knowledge that is currently distributed in the HPC community.
 
-The remainder of this paper is structured as follows. In Section~\ref{sec:traditional}, we describe the
-traditional approach to installing scientific software stacks on HPC systems, highlighting the common problems experienced by user
-support staff and end users. Section~\ref{sec:hierarchical} proposes hierarchical module naming schemes as a promising alternative, and
-outlines the associated implications and issues. In Sections~\ref{sec:easybuild} and \ref{sec:lmod}, we argue that \easybuild{} and Lmod are well suited  for dealing with hierarchical
-module naming schemes, and describe how these tools enhance both the user experience and
-the efficiency of support teams. The community-oriented aspect of both tools, and the
-synergy between them, is the subject of Section~\ref{sec:communities_synergy}. We discuss
-future and related work in Sections~\ref{sec:future_work} and
-\ref{sec:related_work} respectively, and offer concluding remarks in  Section~\ref{sec:conclusion}.
+The remainder of this paper is structured as follows. In Section~\ref{sec:traditional},
+we describe the traditional approach to installing scientific software stacks on HPC
+systems, highlighting the common problems experienced by user support staff and end
+users. Section~\ref{sec:hierarchical} proposes hierarchical module naming schemes as a 
+promising alternative, and outlines the associated implications and issues. In
+Sections~\ref{sec:easybuild} and \ref{sec:lmod}, we argue that \easybuild{} and Lmod
+are well suited  for dealing with hierarchical module naming schemes, and describe how 
+these tools enhance both the user experience and the efficiency of user support teams.
+The community-oriented aspect of both tools, and the synergy between them, is the
+subject of Section~\ref{sec:communities_synergy}. We discuss future and related work in
+Sections~\ref{sec:future_work} and \ref{sec:related_work} respectively, and offer
+concluding remarks in  Section~\ref{sec:conclusion}.
 
 %\remark{issues with installing \& providing scientific software}
 %\remark{importance of appropriate tools \& community}

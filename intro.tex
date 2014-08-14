@@ -4,16 +4,16 @@ systems, on the other hand, are normally used by a large user community with wid
 demands. In particular, there is often the need to make multiple versions of
 software packages available. These sometimes include competing packages
 that provide either identical or significantly overlapping functionality. Examples include
- different implementations of the MPI standard (e.g. Open\,MPI vs.
-MVAPICH) and linear algebra packages (e.g. OpenBLAS vs. Intel MKL).
+ different implementations of the MPI standard (e.g., Open\,MPI vs.
+MVAPICH) and linear algebra packages (e.g., OpenBLAS vs. Intel MKL).
 
 A simple yet powerful solution to this issue are environment
 modules~\cite{furlani91,furlani96,eadline,laytonEM1}, which allow
 users to easily load, unload, and switch between software packages by
 modifying the user's environment. This approach achieves this by adjusting environment
 variables like \texttt{\small\$PATH} and/or setting additional package-specific
-variables like the DNS name of a
-license server. However, while environment modules are used by many
+variables to specify a license server.
+However, while environment modules are used by many
 HPC sites around the world this approach is not without its challenges,
 a common one being managing large numbers of modules in a way that allows individual
 users to easily control their own environments.
@@ -28,7 +28,7 @@ build and installation procedure based on portable build
 tools~\cite{Dubois03}. As a result, system administrators of different HPC sites may
 find they have to reinvent the wheel to
 get a particular software package installed on their local system. Moreover, this
-kind of hard-won experience typically is not shared, especially between HPC sites. In
+kind of hard-won experience typically is not shared between HPC sites. In
 addition, the required modifications and the exact installation steps are
 often poorly---if at all---documented, which significantly impedes
 maintainability and reproducibility of software installations.

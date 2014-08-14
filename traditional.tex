@@ -3,19 +3,23 @@ sites to install and manage scientific software over the lifetime of an HPC syst
 We start by describing traditional module tools used by many sites, then introduce
 the concept of module files and various module naming schemes in common use today.
 Next, we review typical workflows for installing scientific software. Finally,
-we highlight the lack of collaboration among HPC sites and the absence
-of tools for dealing with the problems mentioned along the way.
+we highlight the lack of collaboration among HPC sites with regard to these topics,
+and of tools for dealing with the problems mentioned along the way.
 
 \subsection{Providing access to software using environment modules}
 \label{sec:env_modules_system}
 
 For software not installed in standard system locations, a user's
-\texttt{\small\$PATH} must be modified to include the installed location of a
-software package.  Other environment variables may also be required:  \texttt{\small\$LD\_LIBRARY\_PATH}, paths to include directories, etc.
-One approach is to provide a shell script for each software package which
-users can source to modify their working environment.
+\texttt{\small\$PATH} environment variable is often modified to include the install
+location of the binaries it provides, in order to make them easily accessible.
+Other environment variables may also need to be changes: 
+\texttt{\small\$LD\_LIBRARY\_PATH} for libraries required at runtime,
+\texttt{\small\$CPATH} for paths to include directories, etc.
+One approach is to provide a shell script for each software package that
+users can source to modify their working environment, for each of the supported
+shells.
 
-The  environment modules system extends this technique by managing this sourcing step ``under the hood.'' This approach has several major
+The environment modules system extends this technique by managing this sourcing step ``under the hood.'' This approach has several major
 advantages. The first is that all users configure their environment in the same way; there is no need for a
 separate approach for each type of shell. There are several popular implementations
 all sharing a similar
@@ -26,17 +30,18 @@ user interface based on a command named \texttt{\small module}:
 \end{alltt}
 }
 \noindent
-Typical values of \emph{\texttt{\small<subcmd>}} (among many) include \texttt{\small load},
+Typical subcommands (among many) include \texttt{\small load},
 \texttt{\small unload}, \texttt{\small list} (to list all loaded
 modules), and \texttt{\small avail} (to print the modules that are currently available for loading).
 
 To access a particular software package named `\emph{foo}', the user simply
-\emph{loads} the matching module:
+loads the matching module:
 {\small
 \begin{alltt}
     \textbf{\% module load \emph{foo}}\
 \end{alltt}
 }
+
 \noindent
 The second major advantage is that users can \emph{unload} a previously
 loaded module, to undo changes in the environment and restore their
@@ -149,9 +154,10 @@ a single version of a single compiler on each of their systems.
 Today, HPC systems provide multiple compilers (GCC, Intel,
 Clang, PGI, \ldots), each available in multiple versions.
 
-In most cases (there are some exceptions for programs written in pure C), programs compiled with one version of a compiler cannot safely link to libraries compiled with another. This means that
-multiple builds of libraries (e.g., Boost) need to be provided,
-one for each compiler and version.
+In most cases (there are some exceptions for programs written in pure C), programs
+compiled with one version of a compiler cannot safely link to libraries compiled
+with another. This means that multiple builds of libraries (e.g., Boost) need to be
+provided, one for each compiler and version.
 Moreover, since packages such as MPI implementations are inherently tied to a
 particular compiler and most often to a particular version, disambiguating
 module names can be a daunting task. For example, modules corresponding to
@@ -172,7 +178,7 @@ against a particular MPI library, e.g.:
 \begin{alltt}
     \textbf{\% module avail WRF}
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
-    WRF/3.5-Intel-14.0-OpenMPI-1.7.3\
+    WRF/3.5-Intel-14.0-MVAPICH-1.9\
 \end{alltt}
 }
 \noindent
@@ -204,9 +210,11 @@ nicely separated in the output of
     -------- \emph{<prefix>}/mpi --------
     OpenMPI/1.7.3-GCC-4.8.2
     OpenMPI/1.7.3-Intel-14.0
+\ignore{
     -------- \emph{<prefix>}/apps --------
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
     WRF/3.5-Intel-14.0-OpenMPI-1.7.3
+}
 \end{alltt}
 }
 \noindent
@@ -238,7 +246,7 @@ build a parallel application, he or she must pick modules for a
 compiler, MPI stack and other required libraries that are compatible with each other.
 After loading a mismatched set of modules the researcher might get lucky: the application might fail to run or die immediately.  However, the
 application may also fail in subtle and mysterious ways, and can thus consume a
-great deal of system staff time in trying to resolve the failure.
+great deal of time from both users and system staff in trying to resolve the failure.
 Section~\ref{sec:hierarchical} outlines another approach to remove this burden
 from users and staff.
 
@@ -301,14 +309,19 @@ Several of the larger HPC sites in the world take this approach, since they are 
 the task of installing scientific software, but this is typically infeasible for
 smaller HPC sites. Besides these concerns, the effort spent on
 shoe-horning the install procedures of scientific software into package
-specifications are unlikely to
-benefit other HPC sites: 
-site-specific installation policies require labor-intensive modifications. Examples include
-LosF~\cite{lmodSC11} developed by the Texas Advanced Computing Center (TACC) to
-leverage RPMs developed in-house (encapsulating both the software itself
-and the accompanying module file), and the XSEDE Compatible Basic Cluster
-(XCBC)~\cite{Fischer14}, which provides a collection of RPMs that
-allow for making an HPC system `XSEDE-compatible'.
+specifications are unlikely to benefit other HPC sites: 
+site-specific installation policies require labor-intensive modifications, and
+redistribution of packaged builds is sometimes prohibited for
+licensed software.
+
+Examples include LosF~\cite{lmodSC11} developed by the Texas
+Advanced Computing Center (TACC) to leverage RPMs developed in-house
+(encapsulating both the software itself and the
+accompanying module file), the XSEDE Compatible Basic Cluster (XCBC)~\cite{Fischer14}
+which provides a collection of RPMs that allow for making an HPC system
+`XSEDE-compatible', and CernVM-FS~\cite{cernvm-fs}, a read-only distributed file
+system based on HTTP which is optimized to distribute readily built software
+applications.
 
 \subsubsection{Custom tools}
 
@@ -344,7 +357,7 @@ on production systems, where continuity of support is a high priority.
 %%very little flexibility for site-specific modifications, little collaboration between sites thus
 %%lots of duplicate effort}
 
-\subsection{Lack of collaboration, tools and policies}
+\subsection{Lack of collaboration}
 \label{sec:traditional_lack}
 
 Even though these problems are well recognized, there is an abundant lack

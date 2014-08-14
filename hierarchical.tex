@@ -4,13 +4,13 @@
 
 The use of \emph{hierarchical naming schemes} is an excellent way to
 help users avoid the pitfalls described above. This approach
-makes it possible to organize module files in a more structured
-way. The key idea is to make module files available in a step-by-step fashion as
+makes it possible to organize environment modules in a more structured
+way. The key idea is to make modules available in a step-by-step fashion as
 their dependencies become part of the user environment.  Initially only a small
-number of so-called \emph{core} modules are available to the user.
-Core modules are those that do not depend on software choices available
-to the user; they are either completely self-contained or depend only on basic system software. Examples include module files for
-compilers, and statically linked software like debuggers.
+number of so-called \emph{core} modules are available to the user. Core modules are
+those that do not depend on software choices available to the user; they are either
+completely self-contained or depend only on basic system software. Examples include
+modules for compilers, and statically linked software like debuggers.
 
 These core modules extend the module search path
 (\texttt{\small \$MODULEPATH}) when loaded to make additional modules visible, for
@@ -185,6 +185,6 @@ The issues discussed in Sections~\ref{sec:using_a_hierarchy} and
 \ref{sec:maintaining_a_hierarchy} clearly motivate the need for more advanced tools.
 In the remainder of this paper, we present how the community-driven tools
 \easybuild{}, a software build and installation framework, and Lmod, a modern
-alternative to the environment modules tools, have the flexibility and required
-features (and more) for efficiently dealing with a hierarchical module naming scheme,
-see Sections~\ref{sec:easybuild} and \ref{sec:lmod} respectively.
+alternative to the Tcl-based environment modules tools, have the flexibility and
+required features (and more) for efficiently dealing with a hierarchical module
+naming scheme, see Sections~\ref{sec:easybuild} and \ref{sec:lmod} respectively.

@@ -15,9 +15,9 @@ several others using it. The \easybuild{} mailing list has about 70 subscribers
 to date, so a careful informed guess yields an estimate of over one hundred
 users. The \easybuild{} IRC channel, one of the other main community hubs, has
 about a dozen of daily active users. HPC sites all over the world are
-actively using \easybuild{}, including ones in Europe like the
-J\"ulich Supercomputing Centre (JSC), the United Stated and
-New Zealand, as well as some commercial companies, e.g., Bayer (Germany).
+actively using \easybuild{}, including various sites in Europe (e.g., J\"ulich
+Supercomputing Centre (Germany)), Idaho National Laboratory (US), University of
+Auckland (New Zealand), \ldots, as well as some commercial companies (e.g., Bayer).
 
 The Lmod mailing list has about 50 people that are subscribed, but this
 is known to represent no more than $20\%$ of the Lmod community at best. With a
@@ -27,7 +27,7 @@ providing Lmod as the only modules tool, already covering 15.000--20.000 users
 over 3 different systems. Lmod has been downloaded several thousands of times
 from the SourceForce code repository, across all versions, and is known to be
 used by various HPC sites world-wide, including ones in North America (TACC,
-Stanford, Harvard, Idaho National Labs) and Europe (HPC-UGent (Belgium), Arctic
+Stanford, Harvard, Idaho National Labs) and Europe (Arctic
 University of Norway, University of Warwick (UK)), and by commercial companies
 like Total, among may others.
 
@@ -50,8 +50,8 @@ Section~\ref{sec:lmod_pushenv}) was included based on discussions on the Lmod
 mailing list by members of the \easybuild{} community. Recent versions of Lmod
 have also included significant speed improvements which were triggered by issues
 that were uncovered via \easybuild{}, e.g., the \texttt{module --terse avail}
-command which is used by \texttt{eb} and provides easily parseable output, now no
-longer reads the module files to obtain properties, since that information is not
+command which provides machine-readable output and is used by \texttt{\small eb}, now
+no longer reads the module files to obtain properties, since that information is not
 required to compose the terse output text, resulting in significant speedups.
 
 This synergy results in significantly better tools on both sides, further

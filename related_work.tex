@@ -15,8 +15,8 @@ used as a drop-in replacement, but also supports an alternative approach using
 \emph{formulas} following the well-established \emph{Homebrew} package management 
 system for Mac~OS~X\footnote{\url{http://brew.sh/}}. As such, it provides
 supporting functionality readily available to be used in these formulas, and enables
-code reuse across formulas. Smithy is publicly available via
-GitHub\footnote{https://github.com/AnthonyDiGirolamo/smithy} alongside detailed
+code reuse across formulas. Smithy is publicly
+available\footnote{https://github.com/AnthonyDiGirolamo/smithy} alongside detailed
 documentation. The development activity has slowed down significantly since
 Sept.~2013, with occasional changes mostly focusing on bug fixes.
 Smithy formulas are available for about 80 software
@@ -27,7 +27,7 @@ by iVEC\footnote{http://www.ivec.org/} in Australia. Similarly to \easybuild{}
 it consists of a framework providing (some) commonly needed functionality, which
 picks up so-called ``iBS files" that implement the install procedure for a 
 particular software package as needed. Both the main command aptly named
-\texttt{\small ibs} and the iBS files are bash scripts, the latter being sources by
+\texttt{\small ibs} and the iBS files are bash scripts, the latter being sourced by
 the former as needed. At the time of writing iBS was not publicly available yet, but
 the developers are known to be working towards a public release.
 
@@ -41,24 +41,24 @@ whether an update for a particular software package is available
 (by scraping the project's website), and automatically completing
 incomplete build specifications, e.g., dependency versions. Like
 \easybuild{}, the Python codebase is object-oriented, enabling code reuse and
-efficient maintainability; the \emph{packages} concept in is quite similar to
+efficient maintainability; the \emph{packages} concept in it is quite similar to
 easyblocks in \easybuild{}. At the time of writing, Spack included support for about
 30 different software packages.
 
 \easybuild{} differs from these tools in a number of ways. First and foremost, it
 provides more flexibility than any of these tools. Although they provide some support
 for configuring their behavior, there is no control over certain aspects like the
-module naming scheme being used. Second, particularly useful more advanced
-features like automatic dependency resolution are missing in each of them. Third, 
-none of these tools has been able to get a real community going, which
+module naming scheme being used. Second, several useful more advanced
+features are missing in most of them, like automatic dependency resolution (Spack
+being the exception here). Third, exactly reproducing previous installations is more
+difficult since these tools don not employ separate specification files; through
+easyconfig files this is particularly easy with \easybuild{} however.
+Fourth, none of these tools has been able to get a sizeable community going, which
 has significant implications w.r.t.\ user contributions and the number of supported
-software packages. Fourth, because of a lack of build specification files (like
-easyconfigs files), exactly reproducing previous installations requires
-re-using the exact command used before, thus requiring some kind of bookkeeping.
+software packages.
 Other issues only apply to some of them, e.g., limited code
 maintainability and reuse of code (SWTools and iBS), public availability of recent
-versions (SWTools and iBS), a lack of active development (SWTools and Smithy) and
-no support for generating module files (Spack).
+versions (SWTools and iBS), and a lack of active development (SWTools and Smithy).
 
 To the best of our knowledge, no recent module tools other than Lmod and the commonly
 used Tcl-based tools discussed in Section~\ref{sec:env_modules_system} are
@@ -73,7 +73,7 @@ actively developed, with latest versions being made available in Aug.~2008 and
 Mar.~2007, respectively.
 
 Several HPC sites have been using a hierarchical module naming scheme for years
-including, TACC~\cite{lmodSC11}, iVEC, the Arctic University of Norway, the University
+including TACC~\cite{lmodSC11}, iVEC, the Arctic University of Norway, the University
 of Michigan, Calcul Qu\'ebec, and the University of Florida. Most of these also provide
 Lmod to their users, but we are unaware of any sites using both \easybuild{} and Lmod
 for efficiently handling software installations on production systems. However, some

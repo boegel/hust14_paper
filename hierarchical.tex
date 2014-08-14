@@ -5,11 +5,12 @@
 The use of \emph{hierarchical naming schemes} is an excellent way to
 help users avoid the pitfalls described above. This approach
 makes it possible to organize module files in a more structured
-way. The key idea is to make module files available in a step-by-step fashion as their dependencies become part of the user environment.  Initially only a small number of so-called \emph{core} modules are
-available to the user.
+way. The key idea is to make module files available in a step-by-step fashion as
+their dependencies become part of the user environment.  Initially only a small
+number of so-called \emph{core} modules are available to the user.
 Core modules are those that do not depend on software choices available
 to the user; they are either completely self-contained or depend only on basic system software. Examples include module files for
-compilers themselves, and statically linked software like debuggers.
+compilers, and statically linked software like debuggers.
 
 These core modules extend the module search path
 (\texttt{\small \$MODULEPATH}) when loaded to make additional modules visible, for
@@ -37,7 +38,7 @@ the current compiler of choice.
 \noindent
 Such a hierarchy is not limited to a single level. The
 module files for each MPI implementation, for example, can further extend
-\texttt{\small \$MODULEPATH} to make visible the modules that depend on the currently loaded compiler and MPI stack.
+\texttt{\small \$MODULEPATH} to make the module visible that depend on the currently loaded compiler and MPI stack.
 
 
 \subsection{Advantages over traditional module naming schemes}
@@ -51,7 +52,7 @@ Using a hierarchical module naming scheme has a number of important
 advantages. First, at any point in time, users see only the
 modules which are meaningful in the current context. That is, the list of
 available modules is much shorter and grouped by level of the hierarchy. This is easier for users to process when hundreds of modules are
-available (which is generally the case on large HPC systems).
+provided (which is generally the case on large HPC systems).
 
 Second, encoding the dependency chain in the module name is no longer
 necessary. This leads to significantly shorter and more intuitive
@@ -60,32 +61,43 @@ module names, usually consisting of the software name and version, e.g.,
 Section~\ref{sec:Module_naming_scheme}.
 
 Third, loading incompatible
-modules is no longer possible, which eliminates a broad class of subtle errors that are difficult to
-debug. This not only dramatically improves the user experience; it
-also significantly reduces ticket loads.
+modules is no longer possible, which eliminates a broad class of subtle errors that
+are difficult to debug. This not only dramatically improves the user experience; it
+also significantly reduces the time a user support team needs to spend on related
+problems.
 
-Finally, this structured organization of module files makes possible
-a number of new opportunities to enhance the user experience. One significant example is module \emph{swapping}: when the user chooses a new compiler or MPI stack by executing a command like \texttt{\small module swap gcc intel}, the module system could (and should!) automatically replace lower-level modules with new versions compatible with the user's new higher level selections. We believe strongly that this capability should be part of any robust module system; see Section~\ref{sec:using_a_hierarchy}.
+Finally, this structured organization of module files provides
+a number of new opportunities to enhance the user experience. One significant
+example is module \emph{swapping}: when the user chooses a new compiler or MPI
+stack by executing a command like \texttt{\small module swap gcc intel}, the module
+system could (and should!) automatically replace lower-level modules with new
+versions compatible with the user's new higher level selections. We strongly believe
+that this capability should be part of any robust module system; see
+Section~\ref{sec:using_a_hierarchy}.
 
 %\remark{basic users make less mistakes, expert users retain full freedom}
 
 \subsection{Using a hierarchical module naming scheme}
 \label{sec:using_a_hierarchy}
 
-In theory, the commonly used Tcl/C and Tcl-only environment modules tools
-both support the concept of hierarchical modules; this is because these tools function in a way that is essentially independent of any particular choice in organizing the module files. In practice, this presents some difficulties when using these tools with a software hierarchy.
+In theory, the commonly used Tcl/C and Tcl-only environment modules tools both
+support the concept of hierarchical modules; this is because these tools function
+in a way that is essentially independent of any particular choice in organizing the
+module files. In practice, this presents some difficulties when using these tool
+with a software hierarchy.
 
 \subsubsection{Visibility of modules}
 \label{sec:hierarchical_consequences_visibility}
 
-In the hierarchical scheme we describe above, a module is not available (visible) to the user until that
-module's dependencies are part of the user environment.  This
+In the hierarchical scheme we describe above, a module is not available (visible)
+to the user until that module's dependencies are part of the user environment.  This
 is by design, and has great advantages. But a module system should not leave to the
-user the burden of locating needed modules within a complicated directory structure.  Instead, the module system should provide a built-in, natural mechanism for exposing hierarchies and
-dependencies, and make it possible for users to load needed modules
-without resorting to raw searches of the system's directory structure. In particular, the module system must provide a means for
-displaying relevant information about modules that are outside the 
-currently loaded \texttt{\small \$MODULEPATH}.
+user the burden of locating needed modules within a complicated directory structure. 
+Instead, the module system should provide a built-in, natural mechanism for exposing 
+hierarchies and dependencies, and make it possible for users to load needed modules
+without resorting to raw searches of the system's directory structure. In particular,
+the module system must provide a means for displaying relevant information about
+modules that are outside the currently defined \texttt{\small \$MODULEPATH}.
 
 
 \subsubsection{Awareness of module path extensions}

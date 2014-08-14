@@ -18,7 +18,7 @@ continues to use Lua for further development.
 Lmod was first publicly released in Oct.~2008, and has been under active development
 ever since. Since February of 2011, there have been 153 tagged version and
 30+ official releases of Lmod. The latest available version to date is Lmod v5.7.3.
-Since Oct.~2009, it is the production modules tool on HPC systems at TACC.
+Since Oct.~2009, it is the production modules tool at TACC.
 
 \subsection{Support for hierarchical module naming schemes}
 
@@ -26,8 +26,7 @@ The key idea that Lmod exploits is that it watches changes to
 \texttt{\small \$MODULEPATH}. As such, it supports the advanced notion of
 swapping modules in a hierarchical layout from the ground up, and thus
 deals with the issues described in
-Sections~\ref{sec:hierarchical_consequences_extensions} and
-\ref{sec:hierarchical_consequences_availability}.
+Sections~\ref{sec:using_a_hierarchy}.
 
 Swapping one (core) compiler module for another using Lmod will trigger
 a chain of events.  The loaded compiler module will be unloaded, 
@@ -52,6 +51,8 @@ depend on it, e.g., \texttt{\small FFTW} (a parallel FFT library) and
     \textbf{\% module swap gcc clang}
     The following have been reloaded:
     1) FFTW/3.3.2  2) MPICH/3.1.1
+\end{alltt}}
+{\small\begin{alltt}
     \textbf{\% module list}
     Currently loaded modules:
     1) Clang/3.4  2) MPICH/3.1.1  3) FFTW/3.3.2
@@ -59,7 +60,7 @@ depend on it, e.g., \texttt{\small FFTW} (a parallel FFT library) and
 }
 \noindent
 Reloaded modules are printed out
-alphabetically by the \texttt{\small module swap} command, while the output of
+alphabetically by \texttt{\small module swap}, while the output of
 the \texttt{\small module list} command lists the modules in the order in which
 they were loaded.
 
@@ -102,17 +103,14 @@ prefixing module names with a minus sign (`\texttt{\small-}'). This also allows 
 for example swap both the compiler and MPI stack with a single command, e.g.:
 {\small
   \begin{alltt}
-      \textbf{\% ml -gcc -mpich clang openmpi}\
+      \textbf{\% ml -GCC -MPICH Clang OpenMPI}\
   \end{alltt}
 }
 \noindent
-is equivalent to:
-{\small
+which is equivalent to:{\small
   \begin{alltt}
-      \textbf{\% module swap gcc clang}
-      \textbf{\% module swap mpich openmpi}\
-  \end{alltt}
-}
+      \textbf{\% module swap GCC Clang}
+      \textbf{\% module swap MPICH OpenMPI}\end{alltt}}
 
 \subsection{Properties}
 
@@ -131,9 +129,8 @@ hence users can tell which software is for example Phi-aware:
 \begin{alltt}
   \textbf{\% module list}
   Currently Loaded Modules:
-    1) intel/14.0.2       3) mpich/3.1.2
-    2) mkl/mkl      \textbf{(*)}   4) boost/1.55.0 \textbf{(P)}
-
+    1) Intel/14.0.2        3) MPICH/3.1.2
+    2) imkl/11.1.3.174 \textbf{(*)} 4) Boost/1.55.0 \textbf{(P)}
   Where:
    \textbf{(*)}:  supports host, native and offload
    \textbf{(P)}:  built for host and native Phi

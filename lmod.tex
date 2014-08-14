@@ -40,25 +40,25 @@ to be added to the \texttt{\small \$MODULEPATH}, triggering a search
 for a compatible module in the new module search path for each of the
 modules that were marked inactive.
 
-For example, swapping a loaded \texttt{\small gcc} compiler module for the
-\texttt{\small {clang}} module results in reloading the loaded modules that
-depend on it, e.g., \texttt{\small fftw3} (a parallel FFT library) and
-\texttt{\small mpich} (an MPI library):
+For example, swapping a loaded \texttt{\small GCC} compiler module for the
+\texttt{\small {Clang}} module results in reloading the loaded modules that
+depend on it, e.g., \texttt{\small FFTW} (a parallel FFT library) and
+\texttt{\small MPICH} (an MPI library):
 {\small
   \begin{alltt}
     \textbf{\% module list}
     Currently loaded modules:
-    1) gcc/4.8.2  2) mpich/3.1.1  3) fftw3/3.3.2
+    1) GCC/4.8.2  2) MPICH/3.1.1  3) FFTW/3.3.2
     \textbf{\% module swap gcc clang}
     The following have been reloaded:
-    1) fftw3/3.3.2  2) mpich/3.1.1
+    1) FFTW/3.3.2  2) MPICH/3.1.1
     \textbf{\% module list}
     Currently loaded modules:
-    1) clang/3.4  2) mpich/3.1.1  3) fftw3/3.3.2
+    1) Clang/3.4  2) MPICH/3.1.1  3) FFTW/3.3.2
 \end{alltt}
 }
 \noindent
-The reloaded modules reloaded are printed out
+Reloaded modules are printed out
 alphabetically by the \texttt{\small module swap} command, while the output of
 the \texttt{\small module list} command lists the modules in the order in which
 they were loaded.
@@ -79,8 +79,8 @@ tools.
 The ability to maintain a consistent set of modules when coupled with a
 hierarchical module layout, and navigating the module tree outside of the
 current \texttt{\small \$MODULEPATH} is the key strength of Lmod, but there are
-many more features.  Many of these have been implemented in response to
-requests by the members of the Lmod community.
+various other interesting features.  Many of these have been implemented in
+response to requests by the members of the Lmod community.
 
 \subsection{\texttt{\small ml} command and unload/swap shortcut}
 
@@ -93,13 +93,13 @@ recognized as a subcommand (e.g., \texttt{\small ml foo}) corresponds to loading
 the specified module (e.g., \texttt{\small module load foo}).
 \texttt{\small ml} accepts other subcommands just like \texttt{\small module} does,
 i.e., \texttt{\small ml avail} and \texttt{\small module avail} are equivalent.
-In the unlikely case that a module name is the same as subcommand supported by Lmod, 
+In the unlikely case that a module name is the same as a subcommand supported by Lmod, 
 some care must taken when using \texttt{\small ml}. For example, loading a module
 named \texttt{\small spider} should be written as \texttt{\small ml load spider}.
 
 Another shortcut supported by the Lmod command line is to unload modules by
-prefixing module names with a minus sign (`\texttt{\small-}'). This allows to for
-example swap both the compiler and MPI stack with a single command, e.g.:
+prefixing module names with a minus sign (`\texttt{\small-}'). This also allows to
+for example swap both the compiler and MPI stack with a single command, e.g.:
 {\small
   \begin{alltt}
       \textbf{\% ml -gcc -mpich clang openmpi}\
@@ -149,8 +149,8 @@ Support for module properties adds a complication to the module
 system.  Without properties, the \texttt{\small avail} subcommand only requires the
 names of available module files, not their contents.  However, with support for
 properties the contents of every module file need to be read and evaluated,
-regardless of whether the module file includes any properties or not. On parallel
-file systems this can be terribly slow.  To mitigate this Lmod enables
+regardless of whether the module file includes any properties or not, which can
+be terribly slow depending on the filesystem used.  To mitigate this Lmod enables
 \emph{caching} of module files, since reading one single (large) file is
 significantly faster than walking a directory tree and reading several small files.
 Hence, caching also makes other subcommands, e.g., \texttt{\small module spider},
@@ -162,8 +162,8 @@ update a user-level cache when deemed necessary, i.e., when executing a particul
 subcommand takes too long. System cache files can be recomputed after (re)installing software and/or periodically via a dedicated cron job. Usually, the presence of a
 system-level cache eliminates the need for a user-level cache.
 Lmod trusts existing cache files for everything except loading a module
-file, so modules can still be loaded even if the cache is out-of-date, e.g., when
-installing a stack of software using \easybuild{}.
+file, so modules can still be loaded even if the cache is slightly out-of-date,
+e.g., when installing a stack of software.
 
 %\kenneth{also mention system vs user cache?}
 %\robert{I don't know}
@@ -185,12 +185,12 @@ load two compiler modules at the same time:
 
 {\small
 \begin{alltt}
-  \textbf{\% module load intel}
-  \textbf{\% module load gcc}
+  \textbf{\% module load Clang}
+  \textbf{\% module load GCC/4.8.1}
   Lmod has detected the following error:
   You can only have one compiler module loaded.
   To correct this, please do the following:
-      module swap intel gcc/4.8.1\
+      module swap intel GCC/4.8.1\
 \end{alltt}}
 \noindent
 The constraint of only allowing to load one module per family can be
@@ -236,9 +236,9 @@ Therefore, Lmod supports an alternative function for setting environment variabl
 stack-based, using the \texttt{\small pushenv} function. For environment
 variables being defined that way, a hidden stack is maintained in the environment
 so that previous values can be recovered.
-For example, consider a module for the GCC compiler named \texttt{\small gcc} which
+For example, consider a module for the GCC compiler which
 defines \texttt{\small \$CC} to be \texttt{\small gcc}, while a module for the
-Open\,MPI library named \texttt{\small openmpi} sets \texttt{\small \$CC} to
+Open\,MPI library sets \texttt{\small \$CC} to
 \texttt{\small mpicc}. The following table shows the value of \texttt{\small \$CC}
 depending on whether \texttt{\small setenv} or \texttt{\small pushenv} is used:
 \begin{center}
@@ -246,15 +246,15 @@ depending on whether \texttt{\small setenv} or \texttt{\small pushenv} is used:
  command                                 & \texttt{\small setenv} & \texttt{\small pushenv}\\
  \hline
  \textbf{\texttt{\small export CC=icc}}  & \texttt{\small icc}  & \texttt{\small icc} \\
- \textbf{\texttt{\small module load   gcc}}   & \texttt{\small gcc}    & \texttt{\small gcc}  \\
- \textbf{\texttt{\small module load   openmpi}} & \texttt{\small mpicc}  & \texttt{\small mpicc} \\
- \textbf{\texttt{\small module unload openmpi}} & \emph{(none)}   & \texttt{\small gcc}  \\
- \textbf{\texttt{\small module unload gcc}}   & \emph{(none)}   & \texttt{\small icc} \\
+ \textbf{\texttt{\small module load   GCC}}   & \texttt{\small gcc}    & \texttt{\small gcc}  \\
+ \textbf{\texttt{\small module load   OpenMPI}} & \texttt{\small mpicc}  & \texttt{\small mpicc} \\
+ \textbf{\texttt{\small module unload OpenMPI}} & \emph{(none)}   & \texttt{\small gcc}  \\
+ \textbf{\texttt{\small module unload GCC}}   & \emph{(none)}   & \texttt{\small icc} \\
   \hline
     \end{tabular}
 \end{center}
 \noindent
-While \texttt{\small\$CC} is unset after unloading the \texttt{\small openmpi} module
+While \texttt{\small\$CC} is unset after unloading the Open\,MPI module
 using \texttt{\small setenv}, the modules using \texttt{\small pushenv} result
 in properly restoring the previous value for \texttt{\small\$CC} on unload.
 
@@ -264,9 +264,9 @@ in properly restoring the previous value for \texttt{\small\$CC} on unload.
 
 One final feature of Lmod we would like to mention is the support for user-defined
 \emph{collections} of modules. Collections allow users to define and name their
-own sets of module files that can be loaded with a single command. Once the desired
-set of modules is loaded, the \texttt{\small save} subcommand can be used
-to define a module collection with the name specified as an argument; omitting an
+own sets of module files that can be loaded with a single command. Once a desired
+set of modules is loaded it can be defined as a module collection using the
+\texttt{\small save} subcommand, with a name specified as an argument; omitting an
 argument defines the default collection. The list of available collections
 can obtained via \texttt{\small module savelist} or the shorthand
 \texttt{\small ml sl}. A collection can be restored by specifying its name to the

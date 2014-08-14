@@ -46,12 +46,14 @@ only the compiler, enables that these tools only need to be installed once.
 
 Mixing environment modules installed with different naming schemes leads to problems,
 especially when both flat and hierarchical module naming schemes are being used.
-Therefore, migrating to a hierarchically organized set of module may be painful.
-To resolve this \easybuild{} should support generating multiple module files for a
-single software installation under different naming schemes to enable a smoother
-transition. Only (re)generating a module file for an existing software installation
-should also be made possible, so an alternative module stack can be populated without
-having to reinstall all available software.
+Therefore, migrating to a hierarchically organized set of modules may be painful.
+To enable a smooth transition, a separate module tree with a different layout
+can be set up where users can gradually opt-in to.
+This requires that \easybuild{} supports generating multiple module files for a
+single software installation under different naming schemes. Only (re)generating a
+module file for an existing software installation should also be made possible, so an
+alternative module stack can be populated without having to reinstall all available
+software.
 
 \ignore{
 Furthermore, both \easybuild{} and Lmod need to be evaluated on, and possibly

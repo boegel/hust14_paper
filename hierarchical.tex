@@ -38,7 +38,7 @@ the current compiler of choice.
 \noindent
 Such a hierarchy is not limited to a single level. The
 module files for each MPI implementation, for example, can further extend
-\texttt{\small \$MODULEPATH} to make the module visible that depend on the currently loaded compiler and MPI stack.
+\texttt{\small \$MODULEPATH} to make visible the modules that depend on the currently loaded compiler and MPI stack.
 
 
 \subsection{Advantages over traditional module naming schemes}
@@ -80,11 +80,8 @@ Section~\ref{sec:using_a_hierarchy}.
 \subsection{Using a hierarchical module naming scheme}
 \label{sec:using_a_hierarchy}
 
-In theory, the commonly used Tcl/C and Tcl-only environment modules tools both
-support the concept of hierarchical modules; this is because these tools function
-in a way that is essentially independent of any particular choice in organizing the
-module files. In practice, this presents some difficulties when using these tool
-with a software hierarchy.
+In theory, the commonly used Tcl/C and Tcl-only environment modules tools
+both support the concept of hierarchical modules; this is because these tools function in a way that is essentially independent of any particular choice in organizing the module files. In practice, this presents some difficulties when using these tools with a software hierarchy.
 
 \subsubsection{Visibility of modules}
 \label{sec:hierarchical_consequences_visibility}
@@ -92,27 +89,23 @@ with a software hierarchy.
 In the hierarchical scheme we describe above, a module is not available (visible)
 to the user until that module's dependencies are part of the user environment.  This
 is by design, and has great advantages. But a module system should not leave to the
-user the burden of locating needed modules within a complicated directory structure. 
-Instead, the module system should provide a built-in, natural mechanism for exposing 
-hierarchies and dependencies, and make it possible for users to load needed modules
-without resorting to raw searches of the system's directory structure. In particular,
-the module system must provide a means for displaying relevant information about
-modules that are outside the currently defined \texttt{\small \$MODULEPATH}.
-
+user the burden of locating needed modules within a complicated directory structure.  Instead, the module system should provide a built-in, natural mechanism for exposing hierarchies and
+dependencies, and make it possible for users to load needed modules
+without resorting to raw searches of the system's directory structure. In particular, the module system must provide a means for
+displaying relevant information about modules that are outside the 
+currently loaded \texttt{\small \$MODULEPATH}.
 
 \subsubsection{Awareness of module path extensions}
 \label{sec:hierarchical_consequences_extensions}
 
-Second, the modules tool needs to be aware of the module path extensions that
-may occur when loading modules in a hierarchical scheme. This is of
-particular importance for supporting the notion of automatically reloading
-dependent modules after swapping modules on one of the hierarchy levels.
-Basically, the modules tool needs to be able to i) detect that a particular
-module depends on the module being swapped out, or in other words on which
-level of the hierarchy each module lives, and ii) to unload the dependent
-modules whenever a \texttt{\small module swap} is being executed, and afterwards
-automatically (try to) reload them, meanwhile taking into
-account the order in which the modules were loaded.
+The modules tool should be aware of the changes  to the module path that
+occur when loading modules in a hierarchical scheme. This is what makes
+automatic module swapping possible. When the user executes \texttt{\small module swap} to replace one module with another, the tool needs to i) detect that a particular
+module depends on the module being swapped out (this requires an awareness of
+the hierarchical structure); ii) unload the dependent
+modules and iii) then afterwards
+automatically (try to) replace them with equivalent compatible modules, taking into
+account the correct order in which to reload modules.
 
 \subsubsection{Module availability on different paths in the hierarchy}
 \label{sec:hierarchical_consequences_availability}

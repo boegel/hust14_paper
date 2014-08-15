@@ -3,7 +3,7 @@
 %be made to the EasyBuild \& Lmod sections when the consequences of using a module naming scheme like this are discussed}
 
 The use of \emph{hierarchical naming schemes} is an excellent way to
-help users avoid the pitfalls described above. This approach
+help users avoid the pitfalls described earlier. This approach
 makes it possible to organize environment modules in a more structured
 way. The key idea is to make modules available in a step-by-step fashion as
 their dependencies become part of the user environment.  Initially only a small
@@ -14,12 +14,12 @@ modules for compilers, and statically linked software like debuggers.
 
 These core modules extend the module search path
 (\texttt{\small \$MODULEPATH}) when loaded to make additional modules visible, for
-example the ones which are built with---and therefore depend on---the currently loaded
-compiler. Separate sub-directories for each version of each 
+example the ones which are built with---and therefore depend on---the compiler
+being loaded. Separate sub-directories for each version of each 
 compiler store the software and module files that depend on
 that compiler. For the
 Open\,MPI example presented in Section~\ref{sec:Module_naming_scheme}, this means
-that the user sees only the module for OpenMPI 1.7.3 that depends
+that the user only sees the module for OpenMPI 1.7.3 that depends on
 the current compiler of choice.
 
 {\small
@@ -60,8 +60,8 @@ module names, usually consisting of the software name and version, e.g.,
 \texttt{\small WRF/3.5} instead of the long and cryptic module names shown in
 Section~\ref{sec:Module_naming_scheme}.
 
-Third, loading incompatible
-modules is no longer possible, which eliminates a broad class of subtle errors that
+Third, loading incompatible modules is much more difficult,
+which eliminates a broad class of subtle errors that
 are difficult to debug. This not only dramatically improves the user experience; it
 also significantly reduces the time a user support team needs to spend on related
 problems.
@@ -70,7 +70,7 @@ Finally, this structured organization of module files provides
 a number of new opportunities to enhance the user experience. One significant
 example is module \emph{swapping}: when the user chooses a new compiler or MPI
 stack by executing a command like \texttt{\small module swap GCC Intel}, the module
-system could (and should!) automatically replace lower-level modules with new
+system could (and should) automatically replace lower-level modules with new
 versions compatible with the user's new higher level selections. We strongly believe
 that this capability should be part of any robust module system; see
 Section~\ref{sec:using_a_hierarchy}.
@@ -81,13 +81,16 @@ Section~\ref{sec:using_a_hierarchy}.
 \label{sec:using_a_hierarchy}
 
 In theory, the commonly used Tcl/C and Tcl-only environment modules tools
-both support the concept of hierarchical modules; this is because these tools function in a way that is essentially independent of any particular choice in organizing the module files. In practice, this presents some difficulties when using these tools with a software hierarchy.
+both support the concept of hierarchical modules; this is because these tools
+function in a way that is essentially independent of any particular choice in
+organizing the module files. In practice, some difficulties when using these tools
+with a module hierarchy come forward.
 
 \subsubsection{Visibility of modules}
 \label{sec:hierarchical_consequences_visibility}
 
 In the hierarchical scheme we describe above, a module is not available (visible)
-to the user until that module's dependencies are part of the user environment.  This
+to the user until its higher-level modules are loaded.  This
 is by design, and has great advantages. But a module system should not leave to the
 user the burden of locating needed modules within a complicated directory structure.  Instead, the module system should provide a built-in, natural mechanism for exposing hierarchies and
 dependencies, and make it possible for users to load needed modules
@@ -103,9 +106,9 @@ occur when loading modules in a hierarchical scheme. This is what makes
 automatic module swapping possible. When the user executes \texttt{\small module swap} to replace one module with another, the tool needs to i) detect that a particular
 module depends on the module being swapped out (this requires an awareness of
 the hierarchical structure); ii) unload the dependent
-modules and iii) then afterwards
+modules and iii) afterwards
 automatically (try to) replace them with equivalent compatible modules, taking into
-account the correct order in which to reload modules.
+account the correct order in which to (re)load those.
 
 \subsubsection{Module availability on different paths in the hierarchy}
 \label{sec:hierarchical_consequences_availability}
@@ -113,10 +116,10 @@ account the correct order in which to reload modules.
 The modules tool also needs to take into account the fact it may not always be
 possible to reload all dependent modules after swapping modules. When swapping
 one compiler for another for example, it is possible that no compatible version of a
-lower-level module is available. Unless the module system can manage this issue
-seamlessly, the user could end up stuck with a broken environment somewhere between
+lower-level module is available. Unless the modules tool deals with this issue
+appropriately, the user could end up stuck with a broken environment somewhere between
 the original state (before the swap) and the intended end state (in which all
-dependent modules are reloaded). Ideally, the module tool should notify the user
+dependent modules are reloaded). Ideally, the modules tool should notify the user
 when dependent modules cannot be reloaded. Moreover, if the modules tool can keep
 track of which modules failed to reload it can also support the ability to revert
 the swap, and restore the original set of loaded modules.
@@ -171,5 +174,5 @@ together to achieve this task: \easybuild{}, a software build and installation
 framework, and Lmod, a modern alternative to the Tcl-based environment modules
 tools. Because our experience confirms the substantial benefits of a hierarchical
 module naming scheme, and because we strongly believe that the HPC community is
-ready to (and also should) move in this direction, we focus primarily on the aspects
+ready to (and should) move in this direction, we focus primarily on the aspects
 of these tools that support this approach.

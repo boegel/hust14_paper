@@ -26,8 +26,8 @@ Another related project is the \emph{iVEC Build System (iBS)}, which is develope
 by iVEC\footnote{http://www.ivec.org/} in Australia. Similarly to \easybuild{}
 it consists of a framework providing (some) commonly needed functionality, which
 picks up so-called ``iBS files" that implement the install procedure for a 
-particular software package as needed. Both the main command aptly named
-\texttt{\small ibs} and the iBS files are bash scripts, the latter being sourced by
+particular software package. Both the main command (aptly named
+\texttt{\small ibs}) and the iBS files are bash scripts, the latter being sourced by
 the former as needed. At the time of writing iBS was not publicly available yet, but
 the developers are known to be working towards a public release.
 
@@ -46,12 +46,12 @@ easyblocks in \easybuild{}. At the time of writing, Spack included support for a
 30 different software packages.
 
 \easybuild{} differs from these tools in a number of ways. First and foremost, it
-provides more flexibility than any of these tools. Although they provide some support
+provides more flexibility than any of them. Although they provide some support
 for configuring their behavior, there is no control over certain aspects like the
 module naming scheme being used. Second, several useful more advanced
 features are missing in most of them, like automatic dependency resolution (Spack
 being the exception here). Third, exactly reproducing previous installations is more
-difficult since these tools don not employ separate specification files; through
+difficult since these tools do not employ separate specification files; through
 easyconfig files this is particularly easy with \easybuild{} however.
 Fourth, none of these tools has been able to get a sizeable community going, which
 has significant implications w.r.t.\ user contributions and the number of supported
@@ -73,9 +73,11 @@ actively developed, with latest versions being made available in Aug.~2008 and
 Mar.~2007, respectively.
 
 Several HPC sites have been using a hierarchical module naming scheme for years
-including TACC~\cite{lmodSC11}, iVEC, the Arctic University of Norway, the University
+including TACC~\cite{lmodSC11}, the Arctic University of Norway, the University
 of Michigan, Calcul Qu\'ebec, and the University of Florida. Most of these also provide
 Lmod to their users, but we are unaware of any sites using both \easybuild{} and Lmod
-for efficiently handling software installations on production systems. However, some
+for efficiently handling software installations in a hierarchical context on
+production systems. However, some
 sites are actively looking into potentially applying such a methodology in the
-foreseeable future, including HPC-UGent and the J\"ulich Supercomputing Centre.
+foreseeable future, including HPC-UGent, the J\"ulich Supercomputing Centre and
+Stanford University.

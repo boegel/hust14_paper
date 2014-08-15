@@ -3,8 +3,7 @@ sites to install and manage scientific software over the lifetime of an HPC syst
 We start by describing traditional module tools used by many sites, then introduce
 the concept of module files and various module naming schemes in common use today.
 Next, we review typical workflows for installing scientific software. Finally,
-we highlight the lack of collaboration among HPC sites with regard to these topics,
-and of tools for dealing with the problems mentioned along the way.
+we highlight the lack of collaboration among HPC sites with regard to these topics.
 
 \subsection{Providing access to software using environment modules}
 \label{sec:env_modules_system}
@@ -12,7 +11,7 @@ and of tools for dealing with the problems mentioned along the way.
 For software not installed in standard system locations, a user's
 \texttt{\small\$PATH} environment variable is often modified to include the install
 location of the binaries it provides, in order to make them easily accessible.
-Other environment variables may also need to be changes: 
+Other environment variables may also need to be changed:
 \texttt{\small\$LD\_LIBRARY\_PATH} for libraries required at runtime,
 \texttt{\small\$CPATH} for paths to include directories, etc.
 One approach is to provide a shell script for each software package that
@@ -35,7 +34,7 @@ Typical subcommands (among many) include \texttt{\small load},
 modules), and \texttt{\small avail} (to print the modules that are currently available for loading).
 
 To access a particular software package named `\emph{foo}', the user simply
-loads the matching module:
+`loads' the corresponding module file:
 {\small
 \begin{alltt}
     \textbf{\% module load \emph{foo}}\
@@ -57,7 +56,7 @@ system has become ubiquitous on HPC systems since the late 1990s.
 %which accepts various subcommands}
 %
 
-In the traditional implementations, the \texttt{\small module} command
+In all implementations, the \texttt{\small module} command
 is implemented as a simple shell function (for Bourne-compatible shells) or
 alias (for csh-compatible shells) which evaluates the commands printed to standard output by a
 helper tool (e.g., \texttt{\small modulecmd}). This helper tool
@@ -86,7 +85,7 @@ While these implementations provide the desired basic functionality, support has
 progresses slowly. For example, there has been no activity in
 (the publicly accessible version of) the Tcl-only
 implementation for about two years. It is reasonable to assume, therefore, that new features (e.g., improved support for hierarchical schemes, see below) are
-unlikely to happen any time soon. In the case of the Tcl/C modules
+unlikely to happen any time soon. In the case of the Tcl/C implementation
 there are active discussions on the modules-interest mailing list, but
 changes or improvements are infrequent as well. At the time of writing, the
 latest available version (3.2.10) was released Dec.~2012, which was over one year
@@ -185,7 +184,7 @@ against a particular MPI library, e.g.:
 Note that such packages in many cases also depend on a set of mathematical
 libraries, such as OpenBLAS+(Sca)LAPACK+FFTW vs. ACML vs. Intel MKL, which complicates matters even further.
 
-A common solution to this issue is to define so-called \emph{toolchain}
+A possible solution to this issue is to define so-called \emph{toolchain}
 modules, packaging together a compiler, an MPI library, and one or more packages
 providing linear algebra and FFT functionality. For example, a \texttt{\small goolf}
 toolchain module may combine (i.e., implicitly load modules for) a compatible combination of specific versions of GCC,
@@ -233,7 +232,7 @@ be in the order of several hundreds. Moreover, none of these approaches prevent 
 foot by loading modules which are incompatible to each other. While
 there are ways to prevent this, they require identifying and explicitly listing
 all conflicting modules. For example, the Open\,MPI module may
-specify that it is incompatible with modules that load MPI libraries like
+specify that it is incompatible with modules that load other MPI libraries like
 Intel MPI or MVAPICH. However, this means that these conflict specifications have
 to be adjusted every time an additional MPI library is installed on the
 system, which is clearly a maintenance nightmare for system administrators.
@@ -244,7 +243,7 @@ module is fairly straightforward. But when multiple software packages are requir
 at the same time, e.g., when an application developer is using multiple libraries to
 build a parallel application, he or she must pick modules for a
 compiler, MPI stack and other required libraries that are compatible with each other.
-After loading a mismatched set of modules the researcher might get lucky: the application might fail to run or die immediately.  However, the
+After loading a mismatched set of modules the user might get lucky: the application might fail to run or die immediately.  However, the
 application may also fail in subtle and mysterious ways, and can thus consume a
 great deal of time from both users and system staff in trying to resolve the failure.
 Section~\ref{sec:hierarchical} outlines another approach to remove this burden
@@ -300,7 +299,7 @@ updates, uninstalling software, etc. However, they are ill-suited for dealing wi
 certain peculiarities that come into play when installing scientific software on
 HPC systems. These include supporting multiple builds/versions of the same software package
 to be installed at the same time, and heavily customized install procedures involving
-non-standard techniques beyond the basic \texttt{\small configure} --
+non-standard techniques beyond the common \texttt{\small configure} --
 \texttt{\small make} -- \texttt{\small make install} paradigm. In addition, the package specification formats (e.g.,
 \texttt{\small .spec} files for RPMs) tend to provide little support for factoring out
 common patterns in install procedures, leading to copy-pasted, hard-to-maintain package specifications.

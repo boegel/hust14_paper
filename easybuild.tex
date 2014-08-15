@@ -8,8 +8,8 @@ dealing with the installation of scientific software. The first public release o
 \easybuild{} (version 0.5) occurred in April 2012, after 2.5 years of in-house
 development. In November 2012, \easybuild{} v1.0 was released featuring
 a stable API. Under a `release early, release often' strategy with a new major
-release every 4 to 6 weeks, the development team enjoys a well-earned reputation
-for continuous, high quality maintenance, support, and improvement. At the time of
+release every 4 to 6 weeks, the development team has a strong focus on continuous,
+high quality maintenance, support, and improvement. At the time of
 writing, the latest release is \easybuild{} v1.14.0 (July 2014).
 
 Under the motto ``\emph{building software with ease}", \easybuild{} provides an easy
@@ -36,7 +36,7 @@ multiple \emph{easyconfig files}.
 The \easybuild{} framework embodies the core of the tool,
 providing functionality commonly needed when installing scientific software on HPC
 systems. For example, it deals with downloading, unpacking, and patching of sources,
-loading module files for dependencies, setting up the build environment, autonomously
+loading module files for dependencies, setting up the build enviroment, autonomously
 running (interactive) shell commands, creating module files that match the
 specification files, etc.
 
@@ -137,7 +137,7 @@ examples include \texttt{\small buildopts} to specify options for the build comm
 and \texttt{\small dependencies} to list the software dependencies that should be
 taken into account. Note that easyconfig files only provide the information required
 to determine the corresponding module name; the module name itself is computed
-by \easybuild{} framework by querying the module naming scheme being used, see also
+by \easybuild{} framework by quering the module naming scheme being used, see also
 Section~\ref{sec:eb_hmns}. The complete list of supported easyconfig parameters can
 be obtained via the \easybuild{} command line.
 
@@ -207,7 +207,7 @@ construct a full dependency graph for the software package(s) being installed, a
 which a list of dependencies is composed for which no module is available yet. Each of
 the retained dependencies will then be built and installed, in the required order as
 indicated by the dependency graph(s). This is particularly useful for software
-packages that have an extensive list of dependencies, or when re-installing software
+packages that have an extensive list of dependencies, or when reinstalling software
 using a different compiler toolchain.
 
 \subsubsection{Configurability}
@@ -235,9 +235,9 @@ of a toolchain, custom module naming schemes, etc. Extending \easybuild{} is don
 implementing a Python module in the required namespace (e.g.,
 \texttt{\small easybuild.easyblocks}), and modifying the \texttt{\small \$PYTHONPATH}
 environment variable to make sure that it is available in the Python search path at
-run time. Every time \texttt{\small eb} is used, the framework will `scan' the Python 
+runtime. Every time \texttt{\small eb} is used, the framework will `scan' the Python 
 search path to determine the available options for each of the dynamically 
-extendable aspects. This provides \easybuild{} users the freedom to experiment with
+extendible aspects. This provides \easybuild{} users the freedom to experiment with
 functionality which is not (yet) available in the particular version they're using,
 or to extend the supported options for different aspects of \easybuild{} with
 site-specific options, e.g., easyblocks for in-house software packages or a custom
@@ -266,6 +266,6 @@ Letting \easybuild{} automatically generate module files under a specified
 (hierarchical) module naming scheme stands in stark contrast with the practice of
 manually creating module files and trying to apply site policies. It avoids the
 various issues involved with manually creating module files w.r.t.\ consistency and
-correctness which were discussed in Section~\ref{sec:traditional}, and as such
+correctness which were disscussed in Section~\ref{sec:traditional}, and as such
 mostly relieves user support teams from another tedious task related to installing
 scientific software.

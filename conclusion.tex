@@ -1,25 +1,26 @@
-Despite the well-established environment modules system, users of HPC systems run into problems managing their working environments. The reasons are numerous; key issues
-include an overwhelming
-number of modules on modern systems, avoiding incompatibilities between some modules; and
-module tools that cannot meet users' needs and expectations. Additionally, HPC
-user support teams struggle to maintain a consistent set of module files, to say nothing about the basic problem of installing software correctly and repeatably.
-Although these issues are widely recognized, suitable practices and tools
-have been lacking.
+Despite the well-established environment modules system, users of HPC systems still
+run into problems managing their working environments. The reasons are numerous; key
+issues include an overwhelming number of modules on modern systems, avoiding
+incompatibilities between some modules, and module tools that cannot meet users' needs 
+and expectations. Additionally, HPC user support teams struggle to maintain a
+consistent set of module files, to say nothing about the ubiquitous problem of
+installing (scientific) software correctly and repeatably. Although these issues are
+widely recognized, suitable practices and tools have been lacking.
 
-In this paper, we have presented a modern approach to installing scientific software that
-deals with these formidable problems. We have explained the 
-advantages of hierarchical software schemes, and highlighted the need
-for more advanced tools to efficiently support these schemes in a
-user-friendly way. We discussed in detail two actively developed and community-driven open-source projects
-that provide the necessary features to address this need, \easybuild{} and Lmod. \easybuild{} not only automates the tedious and time-consuming
-process of installing scientific software and the accompanying module files, it also
-provides full control over important challenges such as  module naming schemes. \easybuild{} acts as a platform for collaboration between HPC sites worldwide. Lmod on the
-other hand allows end-users to easily navigate a hierarchically organized module
-stack, and delivers a variety of other useful features missing in the
-commonly used Tcl-based module tools.
+In this paper, we have presented a modern approach to installing scientific software
+that deals with these formidable problems. We have explained the advantages of
+hierarchical software schemes, and highlighted the need for more advanced tools to
+efficiently support these schemes in a user-friendly way. We discussed in detail two
+actively developed and community-driven open-source projects that provide the
+necessary features to address this need, \easybuild{} and Lmod. \easybuild{} not only
+automates the tedious and time-consuming process of installing scientific software
+and the accompanying module files, it also provides full control over important
+aspects such as the module naming schemes being used. \easybuild{} acts as a platform
+for collaboration between HPC sites worldwide. Lmod on the other hand allows end-users
+to easily navigate a hierarchically organized module stack, and delivers a variety of
+other useful features missing in the commonly used Tcl-based module tools.
 
-Together, \easybuild{} and Lmod allow HPC user support teams to efficiently implement and tailor a
-hierarchical module naming scheme that truly meets their 
-requirements, and offers
-end users the simple and robust interface they deserve for managing their working
-environments.
+Together, \easybuild{} and Lmod allow HPC user support teams to efficiently implement
+and tailor a hierarchical module naming scheme that truly meets their requirements,
+and offers end users the simple and robust interface they deserve for managing their
+working environments.

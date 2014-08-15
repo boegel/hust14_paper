@@ -1,40 +1,41 @@
 \subsection{Communities}
 \label{sec:communities}
 
-Active development and vibrant communities characterize both \easybuild{} and Lmod. Requests and suggestions from the communities lead to new features implemented by the core
-development teams; the
-users themselves also significantly contribute by reporting bugs, sharing patches, and even implementing new features
-that make their way into the public baselines.
+Active development and vibrant communities characterize both \easybuild{} and Lmod.
+Requests and suggestions from their respective community lead to new features
+implemented by the core development teams. The users themselves also significantly
+contribute by reporting bugs, sharing patches, and even implementing new features that
+make their way into the public baselines.
 
-Estimating the size of these communities is difficult.
-Roughly a dozen different HPC sites actively contribute to the \easybuild{}, with
-several others deploying the system. The \easybuild{} mailing list has about 70 subscribers
-to date, so an estimate of over one hundred
-users is plausible. The \easybuild{} IRC channel, one of the other main community hubs, has
-about a dozen of daily active users. HPC sites all over the world are
-actively using \easybuild{}, including various sites in Europe (e.g., J\"ulich
-Supercomputing Centre (Germany)), Idaho National Laboratory (US), University of
-Auckland (New Zealand), \ldots, as well as some commercial companies (e.g., Bayer).
+Estimating the size of these communities is difficult. Roughly a dozen different HPC
+sites actively contribute to the \easybuild{}, with several others using it.
+The \easybuild{} mailing list has about 70 subscribers to date, so an
+estimate of over one hundred users is plausible. The \easybuild{} IRC channel, one of
+the other main community hubs, has about a dozen of daily active users. HPC sites all
+over the world are using \easybuild{}, including various sites in Europe
+(e.g., J\"ulich Supercomputing Centre (Germany)), Idaho National Laboratory (US),
+University of Auckland (New Zealand), \ldots, as well as some commercial companies
+(e.g., Bayer).
 
-The Lmod mailing list has about 50 subscribers, but this
-is no more than $20\%$ of the Lmod community. Since a
-couple of hundred HPC sites already deploy Lmod, the actual
-numbers of Lmod users is certainly many thousands. TACC alone, with 15.000--20.000 users
-on three major systems, uses Lmod exclusively. Lmod downloads
-from the SourceForce code repository number several thousand across all versions, and Lmod is deployed at numerous HPC sites world-wide, including North America (TACC,
-Stanford, Harvard, Idaho National Labs) and Europe (Arctic
-University of Norway, University of Warwick (UK)). Commercial users include Total U.S.A.
+The Lmod mailing list has about 50 subscribers, but this is no more than $20\%$ of the
+Lmod community. Since a couple of hundred HPC sites already deploy Lmod, the actual
+numbers of Lmod users is certainly many thousands. TACC, with 15.000--20.000
+users on three major systems, only provides Lmod as a modules tool. Lmod downloads
+from the SourceForge code repository number several thousand, across all versions.
+Lmod is deployed at numerous HPC sites world-wide, including North America (TACC,
+Stanford, Harvard, Idaho National Labs) and Europe (Arctic University of Norway,
+University of Warwick (UK)), and also has commercial users, including Total.
 
 \subsection{Synergy}
 
-Recently, the \easybuild{} and Lmod teams have developed 
+Recently, the \easybuild{} and Lmod teams have developed
 a strong and mutually beneficial synergy. Both projects have a
 community-oriented vision and highly value flexibility, which appeals to users
 from both communities. Since \easybuild{} makes installing scientific software
-significantly easier, user support teams can quickly generate many module
-files, which could become overwhelming for users. This strengthens the need for a
-modern modules tool that can efficiently deal with large collections of modules,
-which led to the \easybuild{} community to reach out to the Lmod community.
+significantly easier, user support teams can quickly generate many environment
+modules, which could become overwhelming for users. This strengthens the need for a
+modern modules tool that can efficiently deal with large collections of available
+modules, which led to the \easybuild{} community reaching out to the Lmod community.
 Since then, support for using Lmod as a modules tool and  hierarchical
 module naming schemes has been integrated into \easybuild{}, and further
 enhancements are planned (see also Section~\ref{sec:future_work}).
@@ -44,9 +45,11 @@ For example, support for \texttt{pushenv} (see
 Section~\ref{sec:lmod_pushenv}) grew out of discussions on the Lmod
 mailing list by \easybuild{} stakeholders. Recent versions of Lmod
 have also included significant speed improvements triggered by issues
-uncovered by the needs of the \easybuild{} community. An important example is the fact that
-the \texttt{module --terse avail}
-command, which provides machine-readable output and is used by \texttt{\small eb},
-no longer parses module files, since this is not necessary to compose the terse output text.
+uncovered through \easybuild{}. An important example is the fact that
+the \texttt{module --terse avail} command, which provides machine-readable output and
+is used by \easybuild{}, no longer parses module files to obtain module properties,
+since this is not necessary to compose the terse output text.
 
-The Lmod/\easybuild{} synergy results in significantly better tools on both sides, and is driving the state of the practice in directions that we hope will prove truly revolutionary.
+The Lmod/\easybuild{} synergy results in significantly better tools on both sides,
+and is driving the state of the practice in directions that we hope will prove truly
+revolutionary.

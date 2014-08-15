@@ -10,23 +10,23 @@ Lmod began as a prototype designed to test ideas on how to manage a hierarchical
 module system.  Early on, it became clear that existing tools were inadequate; 
 the developers began a complete rewrite based on the clean
 and powerful constructs of the Lua programming language.
-Lua also fills the same niche that for which Tcl was
+Lua also fills the same niche for which Tcl was
 originally designed: both languages embed and extend easily into
 other programs.  Lmod's pre-release versions proved to be
 fast, flexible, and robust; the system quickly moved from
-a prototype to a worthy replacement for the older, established modules tools.
+a prototype to a worthy replacement for the other, established modules tools.
 
 October~2008 marked the first public release of Lmod; it has been under active
 development ever since. TACC adopted Lmod for its production systems in October~2009.
 Since February~2011, there have been 153 tagged versions and 30+ official releases.
-At the time of writing, the latest available version is v5.7.2.
+At the time of writing, the latest available version is 5.7.2.
 
 \subsection{Support for hierarchical module naming schemes}
 
 The key to Lmod's support for a module hierarchy is the fact that it monitors
 changes to \texttt{\small \$MODULEPATH}. Doing so enables it to support the
 advanced notion of swapping hierarchical modules from the ground up, resolving all
-the issues described in Sections~\ref{sec:using_a_hierarchy}.
+the issues described in Section~\ref{sec:using_a_hierarchy}.
 
 Swapping one (core) compiler module for another using Lmod triggers
 a chain of events.  The loaded compiler module is unloaded, 
@@ -62,7 +62,7 @@ the \texttt{\small module list} command lists them in the order in which
 they were loaded.
 
 Another key issue with a hierarchical layout of modules is that not all
-existing modules are visible when a user executes \texttt{\small module avail} (see
+existing modules are visible through \texttt{\small module avail} (see
 Section~\ref{sec:hierarchical_consequences_visibility}). Lmod includes a
 new command, \texttt{\small module spider}, to search for modules across the
 entire module tree and report all \emph{existing} modules. The semantics of
@@ -164,7 +164,7 @@ Another Lmod enhancement is support for module
 Families are an alternative approach to managing module conflicts; only one module of
 a particular family can be loaded at any given time. While conflicts can only be
 defined based on module names, module family `labels` can be chosen freely and
-are easy to maintain. A new family member does not require changes to existing
+are easy to maintain: a new family member does not require changes to existing
 module files.
 
 For example, one might define a \texttt{\small compiler} family, by
@@ -228,7 +228,8 @@ For example, consider a module for the GCC compiler that
 defines \texttt{\small \$CC} to be \texttt{\small gcc}, while a module for the
 Open\,MPI library sets \texttt{\small \$CC} to
 \texttt{\small mpicc}. The following table shows the value of \texttt{\small \$CC}
-depending on whether \texttt{\small setenv} or \texttt{\small pushenv} is used:
+for a series of module commands, depending on whether \texttt{\small setenv} or
+\texttt{\small pushenv} is used:
 \begin{center}
  \begin{tabular}{l|l|l}
  command                                 & \texttt{\small setenv} & \texttt{\small pushenv}\\

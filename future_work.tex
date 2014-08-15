@@ -1,59 +1,52 @@
 Although the latest versions of both \easybuild{} and Lmod already provide
-flexible support for hierarchical module naming schemes, further enhancements can
-be made to extend the capabilities and improve the user experience. We discuss
-a couple of these which were not resolved yet at the time of writing.
+flexible support for hierarchical module naming schemes, we plan further enhancements to extend the capabilities and improve the user experience. Here we outline several promising possibilities.
 
-The latest available version of \easybuild{} to date only supports generating
-module files in Tcl syntax, while module files in Lua syntax are required to use
-some of the advanced features that Lmod supports, e.g., defining properties and
-families. This particular feature is already being implemented by members of the
-\easybuild{} community.
+The latest public version of \easybuild{} only generates
+module files in Tcl syntax. Module files in Lua make possible a number of features built into Lmod, e.g. properties and
+families. Integrating these capabilities into \easybuild{} will greatly enhance the value of both products; Lmod users
+in the \easybuild{} community already make extensive use of families and properties.
 
 Although the required support is available, a deeper module hierarchy that
-better matches the toolchain concept in \easybuild{} should be worked out.
-Usually, only the \texttt{Compiler} and \texttt{MPI} hierarchy levels are used,
+better matches the toolchain concept in \easybuild{} is worth working out.
+Usually only the \texttt{Compiler} and \texttt{MPI} hierarchy levels are used,
 while \easybuild{} toolchains can also include math libraries. Extending
-the two-level hierarchy to capture this aspect is not straightforward however,
-since BLAS/LAPACK/FFT functionality can be provided by one single library (e.g.,
+the two-level hierarchy to capture this level of flexibility is not straightforward however;
+BLAS/LAPACK/FFT functionality can be provided by one single library (e.g.,
 Intel MKL), or by multiple distinct libraries (e.g., OpenBLAS, LAPACK and FFTW).
 This complicates the design of a deeper hierarchy that supports swapping one
-math library for one or multiple others providing the same functionality.
+math library for one or more alternatives.
 
 Related to this the more generic concept of a `multi-dimensional' module hierarchy,
 also referred to as a module `matrix', is currently an area of active research.
-In such a multi-dimensional module hierarchy, the notion of a module that would
-only become available when \emph{multiple} other modules are loaded together can be
-supported. This is interesting for software packages that provide support for using
-different libraries for some particular functionality, like the parallel
-solver library PETSc which supports different LAPACK/FFT libraries. For example,
-in such a module hierarchy, a module for PETSc would not be available until modules
-for both e.g. OpenBLAS \emph{and} FFTW have been loaded. On top of this, it should
+In such a multi-dimensional module hierarchy, the goal is a module that would
+only become available when \emph{multiple} other modules are loaded together. This is useful for software packages that provide support for multiple libraries that incorporate some particular functionality, like the parallel
+solver library PETSc which supports different LAPACK/FFT libraries. In such a module hierarchy, a module for PETSc, for example, would not be available until modules
+for both e.g. OpenBLAS \emph{and} FFTW have been loaded. On top of this, the system should
 also support swapping out the loaded modules for OpenBLAS and FFTW for one single
-module providing equivalent functionality, e.g., an Intel MKL module, and trigger a
+module providing equivalent functionality (e.g., an Intel MKL module), and trigger a
 reload of the PETSc module. Supporting this would be particularly useful for
-application developers, and for benchmarking studies.
+application developers and benchmarking studies.
 
-Another improvement to \easybuild{} would be making the dependency resolution
-mechanism aware of subtoolchains. When \texttt{eb} checks the availability of
+Another improvement to \easybuild{} would be a dependency resolution
+mechanism that is aware of subtoolchains. When \texttt{eb} checks the availability of
 modules that match the required dependencies, it uses the toolchain selected
 for the software being installed (unless this is overridden specifically on a
 per-dependency basis). This requires that modules which are, for example, only
 dependent on a compiler are built and installed multiple times with different
 toolchains, even though they are providing the same software builds. This yields
-more modules than required and consumes additional disk space. Also checking for
-modules that were installed with a compatible subtoolchain, providing for example
-only the compiler, enables that these tools only need to be installed once.
+more modules than required and consumes additional disk space. Checking for
+modules that were installed with a compatible subtoolchain  (providing, for example,
+only the compiler) would ensure that these tools only need to be installed once.
 
 Mixing environment modules installed with different naming schemes leads to problems,
-especially when both flat and hierarchical module naming schemes are being used.
-Therefore, migrating to a hierarchically organized set of modules may be painful.
+especially when both flat and hierarchical module naming schemes are in place.
+As a result, migrating to a hierarchically organized set of modules can be painful.
 To enable a smooth transition, a separate module tree with a different layout
-can be set up where users can gradually opt into.
+would allow users to opt out of the old layout gradually.
 This requires that \easybuild{} supports generating multiple module files for a
-single software installation under different naming schemes. Only (re)generating a
-module file for an existing software installation should also be made possible, so an
-alternative module stack can be populated without having to reinstall all available
-software.
+single software installation under different naming schemes. It should also be possible to (re)generate only a
+module file for an existing software installation, so an
+alternative module stack can be populated without having to reinstall the software itself.
 
 \ignore{
 Furthermore, both \easybuild{} and Lmod need to be evaluated on, and possibly

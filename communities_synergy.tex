@@ -1,58 +1,52 @@
 \subsection{Communities}
 \label{sec:communities}
 
-Both \easybuild{} and Lmod are active developed, with development being
-highly community-driven. Not only are new features implemented by the core
-development teams following requests by their respective user communities, the
-users themselves also significantly contribute by reporting bugs, sharing patches
-for bugs they fixed themselves, and even by implementing new features
-and subsequently sharing these enhancements so they can be included in later
-releases.
+Active development and vibrant communities characterize both \easybuild{} and Lmod. Requests and suggestions from the communities lead to new features implemented by the core
+development teams; the
+users themselves also significantly contribute by reporting bugs, sharing patches, and even implementing new features
+that make their way into the public baselines.
 
-Estimating the size of the \easybuild{} and Lmod communities is difficult.
+Estimating the size of these communities is difficult.
 Roughly a dozen different HPC sites actively contribute to the \easybuild{}, with
-several others using it. The \easybuild{} mailing list has about 70 subscribers
-to date, so a careful informed guess yields an estimate of over one hundred
-users. The \easybuild{} IRC channel, one of the other main community hubs, has
+several others deploying the system. The \easybuild{} mailing list has about 70 subscribers
+to date, so an estimate of over one hundred
+users is plausible. The \easybuild{} IRC channel, one of the other main community hubs, has
 about a dozen of daily active users. HPC sites all over the world are
 actively using \easybuild{}, including various sites in Europe (e.g., J\"ulich
 Supercomputing Centre (Germany)), Idaho National Laboratory (US), University of
 Auckland (New Zealand), \ldots, as well as some commercial companies (e.g., Bayer).
 
-The Lmod mailing list has about 50 people that are subscribed, but this
-is known to represent no more than $20\%$ of the Lmod community at best. With a
-couple of hundred HPC sites already providing Lmod to their users, the actual
-numbers of Lmod users will be multiple thousands. Note that for example TACC is
-providing Lmod as the only modules tool, already covering 15.000--20.000 users
-over 3 different systems. Lmod has been downloaded several thousands of times
-from the SourceForce code repository, across all versions, and is known to be
-used by various HPC sites world-wide, including ones in North America (TACC,
+The Lmod mailing list has about 50 subscribers, but this
+is no more than $20\%$ of the Lmod community. Since a
+couple of hundred HPC sites already deploy Lmod, the actual
+numbers of Lmod users is certainly many thousands. TACC alone, with 15.000--20.000 users
+on three major systems, uses Lmod exclusively. Lmod downloads
+from the SourceForce code repository number several thousand across all versions, and Lmod is deployed at numerous HPC sites world-wide, including North America (TACC,
 Stanford, Harvard, Idaho National Labs) and Europe (Arctic
-University of Norway, University of Warwick (UK)), and by commercial companies
-like Total, among may others.
+University of Norway, University of Warwick (UK)). Commercial users include Total U.S.A.
 
 \subsection{Synergy}
 
-Recently, a synergy has grown between \easybuild{} and Lmod. Both projects have a
+Recently, the \easybuild{} and Lmod teams have developed 
+a strong and mutually beneficial synergy. Both projects have a
 community-oriented vision and highly value flexibility, which appeals to users
 from both communities. Since \easybuild{} makes installing scientific software
-significantly easier, user support teams can quickly generate lots of module
-files, which can become overwhelming for users. This strengthens the need for a
+significantly easier, user support teams can quickly generate many module
+files, which could become overwhelming for users. This strengthens the need for a
 modern modules tool that can efficiently deal with large collections of modules,
-which led to the \easybuild{} community reaching out to the Lmod community.
-Since then, support for using Lmod as a modules tool and support for hierarchical
+which led to the \easybuild{} community to reach out to the Lmod community.
+Since then, support for using Lmod as a modules tool and  hierarchical
 module naming schemes has been integrated into \easybuild{}, and further
 enhancements are planned (see also Section~\ref{sec:future_work}).
 
-Likewise, Lmod has also been enhanced based on feedback by \easybuild{} users.
-For example, the support for \texttt{pushenv} (see
-Section~\ref{sec:lmod_pushenv}) was included based on discussions on the Lmod
-mailing list by members of the \easybuild{} community. Recent versions of Lmod
-have also included significant speed improvements which were triggered by issues
-that were uncovered via \easybuild{}, e.g., the \texttt{module --terse avail}
-command which provides machine-readable output and is used by \texttt{\small eb}, now
-no longer reads the module files to obtain properties, since that information is not
-required to compose the terse output text, resulting in significant speedups.
+Similarly, Lmod has benefited greatly from feedback by \easybuild{} users.
+For example, support for \texttt{pushenv} (see
+Section~\ref{sec:lmod_pushenv}) grew out of discussions on the Lmod
+mailing list by \easybuild{} stakeholders. Recent versions of Lmod
+have also included significant speed improvements triggered by issues
+uncovered by the needs of the \easybuild{} community. An important example is the fact that
+the \texttt{module --terse avail}
+command, which provides machine-readable output and is used by \texttt{\small eb},
+no longer parses module files, since this is not necessary to compose the terse output text.
 
-This synergy results in significantly better tools on both sides, further
-pushing the potentially revolutionary nature of these tools.
+The Lmod/\easybuild{} synergy results in significantly better tools on both sides, and is driving the state of the practice in directions that we hope will prove truly revolutionary.

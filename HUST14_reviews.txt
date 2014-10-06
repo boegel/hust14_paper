@@ -1,0 +1,225 @@
+
+
+Dear Kenneth,
+
+
+We are delighted to inform you that your paper, Modern Scientific Software Management Using EasyBuild and Lmod, has been accepted to the HUST-14 workshop. 
+
+We would like to encourage you to take the reviewers' remarks to heart and to use them to further improve 
+your paper. 
+
+Note that we expect the final version of your paper to be submitted by Monday 13 October 2014 at 23:59 
+CET at the latest as we need to submit these to SIGHPC for publication in the proceedings. This means that 
+the version that is in our system at that point, will be the version that is published. Please take care to 
+check for spelling errors, make sure you do not forget to add the authors and their affiliations, etc.
+
+We look forward to seeing you at SC-14! Further information regarding the program and presentation 
+instructions will follow later.
+
+
+Kind regards,
+Andy Georges
+HUST-14 PC chair
+
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 1
+TITLE: Modern Scientific Software Management Using EasyBuild and Lmod
+AUTHORS: Markus Geimer, Kenneth Hoste and Robert Mclay
+
+OVERALL EVALUATION: 2 (accept)
+REVIEWER'S CONFIDENCE: 5 (expert)
+
+----------- REVIEW -----------
+The paper describes a software environment management system for HPC installations based on Lmod and EasyBuild.  Lmod is a feature-rich environment module system that provides advanced support for hierarchical module systems.  EasyBuild is a software tool that assists in building and installing HPC software on a variety of systems.  In tandem, these tools have the potential to save many man hours in user support and to provide a consistent and familiar software environment across different HPC platforms.
+
+My main criticism is that the drawbacks of Lmod and EasyBuild are glossed over.  What happens when an easyblock fails?  What happens if an easyblock appears to succeed but has in fact installed software incorrectly?  Python applications frequently have very deep dependency trees, so what happens when Lmod+EasyBuild is used on an older HPC system with Python version < 2.6?  A case needs to be made that easyblocks are not just glorified ad hoc scripts as described in Section I-D2.  A better argument for maintainable needs to be made.  For example, the Numpy and Scipy projects are infamously hard to install when easy_install or pip fail to "do the right thing".  How are easyblocks better than the installation scripts shipped with those packages?  What are the system maintainer's options when EasyBuild fails to "do the right thing"?
+
+The paper would be stronger if concrete examples were given.  Metrics such as man hours saved or user support tickets per month should be given to demonstrate that indeed this software system improves the user experience and reduces support overhead.
+
+Overall the paper is well written, descriptive, and nicely formatted.  Suggested textual changes:
+ - Please cite WRF, OpenFOAM, etc. when first mentioned in the text.
+ - For international consistency, please don't separate thousands from hundreds in number literals, e.g. the last sentence of Section IV-A should list "2500" instead of "2.500" or "2,500".
+ - Please say "with respect to" instead of "w.r.t." in Section IV-D
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 1
+TITLE: Modern Scientific Software Management Using EasyBuild and Lmod
+AUTHORS: Markus Geimer, Kenneth Hoste and Robert Mclay
+
+OVERALL EVALUATION: 3 (strong accept)
+REVIEWER'S CONFIDENCE: 5 (expert)
+
+----------- REVIEW -----------
+Summary
+Introduction of the Easybuild and Lmod management systems and how they remedy the deficiencies of the existing status quo way of deploying software in HPC systems.
+
+Paper Strengths
+Accurately identifies the issues that the administrators face in installing and deploying software packages today.
+Comprehensive but readable overview of Lmod and EB with good cross referencing. 
+Presenting a clear roadmap for future development.
+
+Paper Weaknesses
+It goes into quite a bit of detail in describing the status quo, but it is excusable as there is not much other material out there where these issues have been presented. 
+
+Fits the Scope
+Very well
+
+Impact
+Clearly outlines the benefits for both end users and administrative staff.
+
+Major Remarks
+It might warrant to address Docker at least as an emerging application deployment solution and its prospects in the HPC world with relation to EasyBuild. 
+
+Minor Remarks
+"This approach achieves this” => “The module system achieves this"
+"a couple of” => “some"
+“various BLAS/LAPACK libraries” => “Various numerical libraries"
+
+Suggestions for improvement
+
+It could be mentioned what architectures are currently prevalent and/or supported in the Lmod/EB community. For example, is it possible to use this to an extent on a BG/Q or a Cray system? 
+
+In the introduction and/or conclusions this approach could be linked to the general trend of implementing configuration management and automation in the Devops movement. 
+
+One thing that could be stressed even more is how this approach really brings a level of standardisation to the modules naming conventions, which makes cross-site collaboration with users transitioning between systems much easier.
+
+One could mention numerical reproducibility issues in addition to stability problems caused by mismatched libraries for example at the end of II.C
+
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 1
+TITLE: Modern Scientific Software Management Using EasyBuild and Lmod
+AUTHORS: Markus Geimer, Kenneth Hoste and Robert Mclay
+
+OVERALL EVALUATION: 3 (strong accept)
+REVIEWER'S CONFIDENCE: 5 (expert)
+
+----------- REVIEW -----------
+This paper describes integration between the EasyBuild build/package
+management system and the Lmod environment modules system that enable 
+EasyBuild (EB) to generate hierarchical module naming schemes (HMNS).
+A HMNS reduces the environment management burden on users by limiting
+the deluge of package listings most module systems offer on first use, 
+and by making the user choose several “core” modules such as compiler and
+MPI version and restricting the set of displayed modules to those that 
+depend on the selected core.  The paper also details some pretty sophisticated
+features for swapping  core packages and reloading dependent modules that
+depend on the swapped-in modules. 
+This paper has a lot of strengths:
+
+1. The paper has an excellent discussion of the trials and tribulations of HPC
+users w.r.t. building and environment management systems.  The HMNS
+implemented here is also pretty impressive, although the paper does not 
+make clear what part of the HMNS is new with this implementation in EB
+and what part was previously possible by hand, just not automated (I say “just”
+but that isn’t meant to diminish the value of automation).  More clearly
+delineating where the different HMNS concepts discussed here came from
+would be a useful improvement.  Either way, I think this paper has a better
+discussion of environment management than the Lmod docs do, so it’s
+very useful to get this information out to the world.
+
+2. The discussion of the need to collaborate on system support software and
+the current state of user support in HPC systems is also very comprehensive.
+
+3. The HMNS generation implemented here is obviously extremely useful, if
+not entirely new. I liked the future work discussion on “multi-dimensional” 
+naming schemes, but it would’ve been nice to see more of that implemented
+and described here.
+
+4. The related work section is quite comprehensive, and gives some useful 
+descriptions.
+
+5. The paper is very well written and organized; each point builds on the last one.
+
+
+There are a few weaknesses that could be improved:
+
+1. The details of the actual code generation and the challenges therein
+aren’t discussed (IMHO) in enough detail to replicate the effort without a 
+decent amount of thinking.  I think the paper does a good job of highlighting
+the key issues, but the actual details of the generated files (layout, which files
+go where, what does the algorithm look like, how many EB files need to be 
+traversed to generate each module file?) are not really covered.  
+
+2. The statement that EB “provides more flexibility than any of [these other tools]”
+isn’t completely correct.  EB is probably the most comprehensive port system out
+there for HPC, but there are things about Spack in particular that are more flexible
+than certain aspects of EB.  Dependency management, tweaking packages from 
+the command line, and ability for a package to have virtual/optional dependencies
+are a few.  Spack currently gives the user far more control over the dependence
+graph with far less effort — the user can do more without creating new python files.
+I suppose you could argue that since EB supports 500 packages and Spack
+supports ~30-40, it’s still more flexible in this regard, but that’s ignoring the 
+fundamental dependency management capabilities and how they’re implemented.
+Spack doesn’t require 2500 package files for 500 packages and mitigates the
+package explosion problem to a large extent.  Spack also uses RPATH universally,
+which partially obviates the need for a lot of the complicated load/unload logic 
+discussed here.  Anyway, the point is that the statement is probably too strong.
+
+3. To belabor the above point some more, the related work section doesn’t
+cover existing not-necessarily-for-hpc package managers like HomeBrew, 
+MacPorts, Nix, pkgsrc, nom, hashdist, etc.  There are a lot features in those
+that are NOT in EB or any of the packages mentioned here.  Nix and hashdist
+in particular provide much stronger notions or reproducibility than any of the
+build systems mentioned here.  RPM (and spack) have a notion of
+“provides <feature>” for abstract features, which might help with some of 
+the multi-dimensional issues here. Smithy also provides similar features by
+way of extending homebrew.
+
+4. I question the accuracy of a lot of the statements about active maintenance
+in the related work section.  While many of these module systems and tools do
+not have *public* updates, they may be actively maintained at their respective
+sites.  That is probably not great either, as it would be nice if they were open
+sourced.  But the problem, at least for some of them, is that they’re not open
+source, not that they’re unmaintained.
+
+
+----------------------- REVIEW 4 ---------------------
+PAPER: 1
+TITLE: Modern Scientific Software Management Using EasyBuild and Lmod
+AUTHORS: Markus Geimer, Kenneth Hoste and Robert Mclay
+
+OVERALL EVALUATION: 3 (strong accept)
+REVIEWER'S CONFIDENCE: 3 (medium)
+
+----------- REVIEW -----------
+Submission 1: Modern Scientific Software Management Using EasyBuild and Lmod
+
+Paper Summary
+This paper presents two support tools, EasyBuild and Lmod, which aid to streamline both the
+software build process and user module environments for scientific software at HPC centres.
+EasyBuild, which manages the complex software build and installation process and also builds the
+environment modules, is a tool aimed mainly for support staff. Lmod provides for a more
+hierarchical module naming scheme so that users can access software in a more structured way.
+Developers of both tools are working together to provide better integration between the two tools.
+
+Review
+A very detailed and well written paper, giving in depth perspectives of the two tools presented. The perspective of traditional approaches to software management was both insightful and succinct, and is aimed more at the layman than the experienced HPC administrator. Saying that, however, it
+provides a good lead in to the description of both tools, giving ready contrasts to the usability oftraditional methods to the presented methods.
+
+Both pieces of software have been well established as there are strong community groups
+encompassing both their use and development. It is encouraging that they are under active
+development and supported at that level.
+
+At times, there appeared a sense of over enthusiasm, which, although laudable, is not really a
+necessary touch.
+
+Recommendations
+The paper is relevant to this workshop and it should be accepted. Two minor corrections need to be
+applied. It would be appropriate to tone done some of the comments in places, though I will leave
+that to the authors' discretion.
+
+Minor Corrections
+• Section IV. Part A, second last paragraph, first sentence: (change ‘using’ to ‘used’)
+As such, each easyconfig file provides a complete specification of which particular software
+package should be installed, and which settings should be used for building it.
+• Section VII., fifth paragraph, third sentence: (insert ‘,’ (after compiler))
+This may require that modules which are, for example, only dependent on a compiler, are built and
+installed multiple times ...<This review contains an attachment, see the file
+review_4.pdf attached to this letter.>
+
+
+
+

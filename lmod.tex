@@ -3,8 +3,10 @@ modern alternative to the traditional environment modules implementations.
 It is a drop-in replacement for the Tcl/C
 and Tcl-only implementations, except for a few corner cases.
 It can consume module files written in both Tcl and
-Lua, and has as its primary design goal empowering users
+Lua, and has as its primary design goal empowering users \markus{to do what?}
 and improving the user experience without hindering experts.
+\markus{I would split this sentence: ``...both Tcl and Lua. Its primary design
+goal is to improve user experience without hindering experts.''}
 
 Lmod began as a prototype designed to test ideas on how to manage a hierarchical
 module system.  Early on, it became clear that existing tools were inadequate; 
@@ -19,17 +21,17 @@ a prototype to a worthy replacement for the other, established modules tools.
 October~2008 marked the first public release of Lmod; it has been under active
 development ever since. TACC adopted Lmod for its production systems in October~2009.
 Since February~2011, there have been 153 tagged versions and 30+ official releases.
-At the time of writing, the latest available version is 5.7.2.
+At the time of writing, the latest available version is 5.7.2. \markus{Update?}
 
 \subsection{Support for hierarchical module naming schemes}
 
 The key to Lmod's support for a module hierarchy is the fact that it monitors
 changes to \texttt{\small \$MODULEPATH}. Doing so enables it to support the
-advanced notion of swapping hierarchical modules from the ground up, resolving all
+advanced notion of swapping hierarchical modules from the ground up, resolving
 the issues described in Section~\ref{sec:using_a_hierarchy}.
 
 Swapping one (core) compiler module for another using Lmod triggers
-a chain of events.  The loaded compiler module is unloaded, 
+a chain of events:  The loaded compiler module is unloaded, 
 causing the matching paths to be removed from \texttt{\small \$MODULEPATH}; 
  any loaded modules for MPI and other packages that depend on it
 are unloaded as well, because the respective module files are no longer available
@@ -74,9 +76,14 @@ The ability to maintain a consistent set of hierarchical modules and navigate th
 module tree outside of the current \texttt{\small \$MODULEPATH} are among the key
 strengths of Lmod. There are, however, a number of other interesting features, many
 of which have been implemented in response to requests by the members of an
-energetic, enthusiastic, and demanding Lmod community.
+energetic, enthusiastic, and demanding Lmod community. \markus{tone down $\rightarrow$ remove the ``enthusiastic''?}
 
 \subsection{The \texttt{\small ml} command and unload/swap shortcut}
+
+\markus{While the \texttt{ml} command is nice, it is not really necessary to
+support hierarchical modules and IMHO a bit out of scope for the paper.
+Therefore, this subsection would be my first choice for removal if we need to
+save space. Sorry Robert...}
 
 Lmod provides a additional command named \texttt{\small ml} for those who tend to
 misspell the \texttt{\small moduel}, \texttt{\small mdoule}, \emph{err}
@@ -136,7 +143,7 @@ associated software. Sites can easily add properties of their own.
 
 Support for module properties does add a complication to the module
 system.  Without properties, the \texttt{\small avail} subcommand only requires the
-names of available module files, not their contents.  To support properties, Lmod
+names of available module files, not their contents.  To support properties, however, Lmod
 must parse the contents of all module files, whether or not these files include
 properties. On some file systems this can be slow.  To mitigate this, Lmod supports
 \emph{caching} of module files, as reading one single (possibly large)
@@ -150,9 +157,9 @@ update a user-level cache when deemed necessary, i.e., when executing a particul
 subcommand takes too long. System cache files can be recomputed after (re)installing 
 software and/or periodically via a dedicated cron job. Usually, the presence of a
 system-level cache eliminates the need for a user-level cache. Lmod trusts existing
-cache files in all cases except for the \texttt{\small load} subcommand, so
-modules can be loaded even if the cache is slightly out-of-date,
-e.g., when installing a stack of software.
+cache files in all cases except for the \texttt{\small load} subcommand, that is,
+modules can be loaded even if the cache is slightly out-of-date
+(e.g., immediately after installing a new software package).
 
 %\kenneth{also mention system vs user cache?}
 %\robert{I don't know}
@@ -163,7 +170,7 @@ Another Lmod enhancement is support for module
 \emph{families} via calls to the \texttt{\small family} function in module files.
 Families are an alternative approach to managing module conflicts; only one module of
 a particular family can be loaded at any given time. While conflicts can only be
-defined based on module names, module family `labels` can be chosen freely and
+defined based on module names, module family `labels' can be chosen freely and
 are easy to maintain: a new family member does not require changes to existing
 module files.
 
@@ -253,11 +260,11 @@ for \texttt{\small\$CC} when they are unloaded.
 One final feature of Lmod worth mentioning is the support for user-defined
 \emph{collections} of modules. Collections allow users to define and name sets of
 module files that can be loaded with a single command, or automatically on startup.
-Users need only load the desired modules and then execute
+Users only need to load the desired modules and then execute
 \texttt{\small module save} with an optional name specified as an argument;
 omitting the name defines the default collection. Users can list the available
 collections via \texttt{\small module savelist} or the shorthand
-\texttt{\small ml sl}. A collection can be restored by specifying its name to the
+\texttt{\small ml sl}. \markus{If we skip the section on \texttt{ml}, I propose to remove it here as well} A collection can be restored by specifying its name to the
 \texttt{\small restore} subcommand. The \texttt{\small module restore} command
 without an argument (or starting a  new login session) reloads the default module
 collection. This is a powerful, popular way to efficiently manage working

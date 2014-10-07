@@ -71,7 +71,7 @@ the Tcl scripting language to parse and evaluate module files~\cite{em}. A secon
 implementation, never packaged as a release and still marked as
 experimental by the authors, is implemented using only Tcl~\cite{em}. For the most
 part, these two implementations
-offer identical functionality, but subtle differences sometimes leads to surprises when switching between them. A third product,
+offer identical functionality, but subtle differences sometimes lead to surprises when switching between them. A third product,
 a
 fork of the Tcl-only implementation, has been heavily adjusted to meet
 the requirements of the DEISA (Distributed European Infrastructure for
@@ -84,15 +84,15 @@ Supercomputing Applications) project~\cite{wikiDEISA}.  In
 While these implementations provide the desired basic functionality, support has been uneven at best. In all cases, development
 progresses slowly. For example, there has been no activity in
 (the publicly accessible version of) the Tcl-only
-implementation for about two years. It is reasonable to assume, therefore, that new features (e.g., improved support for hierarchical schemes, see below) are
+implementation for about two years. It is therefore reasonable to assume that new features (e.g., improved support for hierarchical schemes, see below) are
 unlikely to happen any time soon. In the case of the Tcl/C implementation
 there are active discussions on the modules-interest mailing list, but
 changes or improvements are infrequent as well. At the time of writing, the
 latest available version (3.2.10) was released Dec.~2012, which was over one year
 after the previous release.
 
-In 2009, a radically new implementation of the module system emerged called
-Lmod~\cite{taccLmod}. Implemented from the ground up in
+In 2009, a radically new implementation of the module system called
+Lmod~\cite{taccLmod} emerged. Implemented from the ground up in
 Lua, it is largely compatible with the Tcl-based
 implementations.  Lmod is actively developed and maintained, and has
 an active and thriving community. We discuss Lmod in detail in
@@ -171,7 +171,7 @@ as follows:
 }
 
 The situation becomes even more complicated for scientific software
-packages like WRF compiled with a particular compiler and linked
+packages like WRF~\cite{wrf} compiled with a particular compiler and linked
 against a particular MPI library, e.g.:
 {\small
 \begin{alltt}
@@ -182,7 +182,7 @@ against a particular MPI library, e.g.:
 }
 \noindent
 Note that such packages in many cases also depend on a set of mathematical
-libraries, such as OpenBLAS+(Sca)LAPACK+FFTW vs. ACML vs. Intel MKL, which complicates matters even further.
+libraries, such as Intel MKL vs. ACML vs. OpenBLAS+(Sca)LAPACK+FFTW, which complicates matters even further.
 
 A possible solution to this issue is to define so-called \emph{toolchain}
 modules, packaging together a compiler, an MPI library, and one or more packages
@@ -204,7 +204,7 @@ nicely separated in the output of
 {\small
 \begin{alltt}
     \textbf{\% module avail}
-    ----- <\emph{<prefix>}/compiler -----
+    ----- \emph{<prefix>}/compiler -----
     GCC/4.8.2   Intel/14.0  Clang/3.4
     -------- \emph{<prefix>}/mpi --------
     OpenMPI/1.7.3-GCC-4.8.2

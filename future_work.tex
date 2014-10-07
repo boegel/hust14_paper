@@ -30,7 +30,7 @@ useful for software packages that provide support for multiple libraries that
 incorporate some particular functionality, like the parallel
 solver library PETSc which supports different LAPACK/FFT libraries. In such a module
 hierarchy a module for PETSc, for example, would not be available until modules
-for both e.g., OpenBLAS \emph{and} FFTW have been loaded. On top of this, the system
+for both, e.g., OpenBLAS \emph{and} FFTW have been loaded. On top of this, the system
 should also support swapping out the loaded modules for OpenBLAS and FFTW for one
 single module providing equivalent functionality (e.g., an Intel MKL module), and
 trigger a reload of the PETSc module. Supporting this would be particularly useful for
@@ -54,7 +54,7 @@ To enable a smooth transition, a separate module tree with a different layout
 would allow users to opt out of the old layout gradually.
 This requires that \easybuild{} supports generating multiple module files for a
 single software installation under different naming schemes. It should also be
-possible to (re)generate only a module file for an existing software installation,
+possible to (re-)generate only a module file for an existing software installation,
 so that an alternative module stack can be populated without having to re-install the
 software itself.
 

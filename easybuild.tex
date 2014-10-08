@@ -14,18 +14,12 @@ high quality maintenance, support, and improvement. At the time of
 writing, the latest release is \easybuild{} v1.15.2 (Oct'14). This version
 only supports x86-based Linux systems, however support for other platforms
 (Linux/POWER, Cray, \ldots) is being developed.
-\markus{Update?}\kenneth{updated}
-\markus{Add ``Currently, \easybuild{} only supports x86/Power-based Linux clusters,
-however, support for Cray X-series systems is under development.''?}\kenneth{done}
 
-Under the motto ``\emph{building software with ease}", \easybuild{} aims to provide
-\markus{tone down $\rightarrow$ aims to provide}\kenneth{ok}
-an easy
+Under the motto ``\emph{building software with ease}", \easybuild{} aims to provide an easy
 yet powerful way to automatically install (scientific) software stacks, in a robust,
 consistent and reproducible way. Its design is deliberately made very flexible and
 modular (see Sections~\ref{sec:eb_configurability} and \ref{sec:eb_extensible})
-making it a well suited \markus{tone down $\rightarrow$ a well suited}\kenneth{ok}
-platform for collaboration across HPC sites, as is
+making it a well suited platform for collaboration across HPC sites, as is
 confirmed by the steadily growing \easybuild{} community (see
 Section~\ref{sec:communities}).
 
@@ -66,6 +60,7 @@ package directories, next to almost 7,000 lines of code for tests. This provides
 notion of the size of the \easybuild{} framework and the amount of supporting
 functionality it has to offer.
 \markus{Update?}\kenneth{done, I would leave the ',' for seperating thousands?}
+\markus{To be honest, I don't care. I only changed it to make reviewer \#1 happy.}
 
 \subsubsection{Easyblocks}
 \label{sec:eb_easyblocks}
@@ -100,9 +95,9 @@ software name could be found, a fallback mechanism will resort to using the gene
 procedure.
 
 At the time of writing, the most recent release of \easybuild{} included 139
-software-specific easyblocks and 20 generic easyblocks \markus{Update?}\kenneth{ok}, providing support for
+software-specific easyblocks and 20 generic easyblocks, providing support for
 automatically installing a wide range of software packages. Examples range
-from fairly easy-to-build programs like gzip, over basic \markus{commonly used $\rightarrow$ basic/essential?}\kenneth{basic sounds good} tools like
+from fairly easy-to-build programs like gzip, over basic tools like
 compilers, various MPI stacks and commonly used libraries, to large scientific
 software packages that are notorious for their involved and painful install
 procedures, such as CP2K, NWChem, OpenFOAM, QuantumESPRESSO, and WRF.

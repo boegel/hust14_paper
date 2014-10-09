@@ -177,7 +177,7 @@ against a particular MPI library, e.g.:
 \begin{alltt}
     \textbf{\% module avail WRF}
     WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
-    WRF/3.5-Intel-14.0-MVAPICH-1.9\
+    WRF/3.5-Intel-14.0-MVAPICH2-1.9\
 \end{alltt}
 }
 \noindent
@@ -233,7 +233,7 @@ foot by loading modules which are incompatible to each other. While
 there are ways to prevent this, they require identifying and explicitly listing
 all conflicting modules. For example, the Open\,MPI module may
 specify that it is incompatible with modules that load other MPI libraries like
-Intel MPI or MVAPICH. However, this means that these conflict specifications have
+Intel MPI or MVAPICH2. However, this means that these conflict specifications have
 to be adjusted every time an additional MPI library is installed on the
 system, which is clearly a maintenance nightmare for system administrators.
 

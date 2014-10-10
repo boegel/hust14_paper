@@ -39,7 +39,7 @@ multiple \emph{easyconfig files}.
 The \easybuild{} framework embodies the core of the tool,
 providing functionality commonly needed when installing scientific software on HPC
 systems. For example, it deals with downloading, unpacking, and patching of sources,
-loading module files for dependencies, setting up the build enviroment, autonomously
+loading module files for dependencies, setting up the build environment, autonomously
 running (interactive) shell commands, creating module files that match the
 specification files, etc.
 
@@ -59,7 +59,7 @@ of code, organized across about 125 Python modules in roughly a dozen Python
 package directories, next to almost 7\,000 lines of code for tests. This provides some
 notion of the size of the \easybuild{} framework and the amount of supporting
 functionality it has to offer.
-\markus{Update?}\kenneth{done, I would leave the ',' for seperating thousands?}
+\markus{Update?}\kenneth{done, I would leave the ',' for separating thousands?}
 \markus{To be honest, I don't care. I only changed it to make reviewer \#1 happy.}
 
 \subsubsection{Easyblocks}
@@ -148,7 +148,7 @@ examples include \texttt{\small buildopts} to specify options for the build comm
 and \texttt{\small dependencies} to list the software dependencies that should be
 taken into account. Note that easyconfig files only provide the bits of information required
 to determine the corresponding module name; the module name itself is computed
-by \easybuild{} framework by quering the module naming scheme being used, see also
+by \easybuild{} framework by querying the module naming scheme being used, see also
 Section~\ref{sec:eb_hmns}. The complete list of supported easyconfig parameters can
 be easily obtained via the \easybuild{} command line.
 
@@ -247,7 +247,7 @@ implementing a Python module in the required namespace (e.g.,
 environment variable to make sure that it is available in the Python search path at
 runtime. Every time \texttt{\small eb} is used, the framework will `scan' the Python 
 search path to determine the available options for each of the dynamically 
-extendible aspects. This provides \easybuild{} users the freedom to experiment with
+extendable aspects. This provides \easybuild{} users the freedom to experiment with
 functionality which is not (yet) available in the particular version they are using,
 or to extend the supported options for different aspects of \easybuild{} with
 additional site-specific options, e.g., easyblocks for in-house software packages or 
@@ -276,6 +276,6 @@ Letting \easybuild{} automatically generate module files under a specified
 (hierarchical) module naming scheme stands in stark contrast with the practice of
 manually creating module files while trying to consistently apply site policies. It avoids the
 various issues involved with manually creating module files with respect to consistency and
-correctness which were disscussed in Section~\ref{sec:traditional}, and as such
+correctness which were discussed in Section~\ref{sec:traditional}, and as such
 mostly relieves user support teams from another tedious task related to installing
 scientific software.

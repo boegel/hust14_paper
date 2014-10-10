@@ -94,12 +94,12 @@ software name could be found, a fallback mechanism will resort to using the gene
 \texttt{\small configure} -- \texttt{\small make} -- \texttt{\small make install}
 procedure.
 
-At the time of writing, the most recent release of \easybuild{} included 139
+At the time of writing, the most recent release of \easybuild{} (v1.15.2) includes 139
 software-specific easyblocks and 20 generic easyblocks, providing support for
 automatically installing a wide range of software packages. Examples range
 from fairly easy-to-build programs like gzip, over basic tools like
 compilers, various MPI stacks and commonly used libraries, to large scientific
-software packages that are notorious for their involved and painful install
+software packages that are notorious for their involved and tedious install
 procedures, such as CP2K, NWChem, OpenFOAM, QuantumESPRESSO, and WRF.
 \markus{One reviewer suggested to add a reference for OpenFOAM
 when it's first use (I removed this usage above ;-)). Do you see a need to add
@@ -159,7 +159,7 @@ to the install directory, and also supports maintaining an easyconfig archive wh
 is updated on every successful installation. Therefore, reproducing installations
 becomes trivial.
 
-The latest release of \easybuild{} includes over 2\,800 easyconfig files, for
+\easybuild{} v1.15.2 includes over 2\,800 easyconfig files, for
 511 different software packages. \markus{Update?}
 
 \subsection{Basic usage}
@@ -193,7 +193,7 @@ specified by the provided easyconfig file:
 }
 \noindent
 Further details on using \texttt{\small eb} are beyond the scope of this paper; we
-refer to \texttt{\small eb --help} and the \easybuild{} wiki~\cite{ebwiki} for
+refer to \texttt{\small eb --help} and the \easybuild{} wiki pages~\cite{ebwiki} for
 extensive documentation.
 
 \subsection{Feature highlights}
@@ -210,7 +210,7 @@ a cluster resource manager like PBS.
 \subsubsection{Automatic dependency resolution}
 \label{sec:eb_dependency_resolution}
 
-\easybuild{} supports installing a entire software stack, including the required
+\easybuild{} supports installing an entire software stack, including the required
 toolchain if needed, with a single \texttt{\small eb} invocation. By enabling the
 \texttt{\small --robot} command line option, the dependency resolution mechanism will
 construct a full dependency graph for the software package(s) being installed, after

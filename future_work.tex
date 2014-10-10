@@ -10,12 +10,12 @@ Additionally, other concepts including non-strict version specifications, e.g.,
 load statements can only be included in Lua module files.
 Integrating these capabilities into \easybuild{} will
 greatly enhance the value of both products, since it would allow HPC sites to
-effortlessly maintain module families and properties.
+maintain module families and properties with little effort.
 
 Although the required support is available, a deeper module hierarchy that
 better matches the toolchain concept in \easybuild{} is worth working out.
 Usually only the \texttt{Compiler} and \texttt{MPI} hierarchy levels are used,
-while \easybuild{} toolchains can also include math libraries. Extending
+while \easybuild{} toolchains typically also include math libraries. Extending
 the two-level hierarchy to capture this level of flexibility is not straightforward
 however; BLAS/LAPACK/FFT functionality can be provided by one single library (e.g.,
 Intel MKL), or by multiple distinct libraries (e.g., OpenBLAS, LAPACK and FFTW).

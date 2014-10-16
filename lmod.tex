@@ -1,12 +1,12 @@
 Lmod~\cite{laytonLmod,taccSecretSauce,taccLmod} is a Lua-based~\cite{LuaBook},
 modern alternative to the traditional environment modules implementations.
 It is a drop-in replacement for the Tcl/C
-and Tcl-only implementations, except for a few corner cases.
-It can consume module files written in both Tcl and
-Lua, and has as its primary design goal empowering users \markus{to do what?}
-and improving the user experience without hindering experts.
+and Tcl-only implementations, except for a few corner cases, and
+can consume module files written in both Tcl and
+Lua. Its primary design goals are to empower users to control their
+working environment and improve the user experience without hindering experts.
 \markus{I would split this sentence: ``...both Tcl and Lua. Its primary design
-goal is to improve user experience without hindering experts.''}
+goal is to improve user experience without hindering experts.''}\kenneth{reworded}
 
 Lmod began as a prototype designed to test ideas on how to manage a hierarchical
 module system.  Early on, it became clear that existing tools were inadequate; 
@@ -31,14 +31,14 @@ advanced notion of swapping hierarchical modules from the ground up, resolving
 the issues described in Section~\ref{sec:using_a_hierarchy}.
 
 Swapping one (core) compiler module for another using Lmod triggers
-a chain of events:  The loaded compiler module is unloaded, 
-causing the matching paths to be removed from \texttt{\small \$MODULEPATH}; 
- any loaded modules for MPI and other packages that depend on it
+a chain of events. The loaded compiler module is unloaded, 
+causing the matching paths to be removed from \texttt{\small \$MODULEPATH}.
+Subsequently, any loaded modules for MPI and other packages that depend on it
 are unloaded as well, because the respective module files are no longer available
 in the active module search path. These modules are marked \emph{inactive}.
 Next, the new compiler module is loaded, causing new entries
 to be added to the \texttt{\small \$MODULEPATH}. This triggers a search
-for a compatible module in the new module search path for each inactive module.
+for a compatible module in the new module search path for each of the inactive modules.
 
 For example, swapping a loaded \texttt{\small GCC} compiler module for the
 \texttt{\small {Clang}} module results in reloading the modules that
@@ -74,9 +74,9 @@ current context (determined by \texttt{\small \$MODULEPATH}).
 
 The ability to maintain a consistent set of hierarchical modules and navigate the
 module tree outside of the current \texttt{\small \$MODULEPATH} are among the key
-strengths of Lmod. There are, however, a number of other interesting features, many
-of which have been implemented in response to requests by the members of an
-energetic, enthusiastic, and demanding Lmod community. \markus{tone down $\rightarrow$ remove the ``enthusiastic''?}
+strengths of Lmod. There are however a number of other interesting features, many
+of which have been implemented in response to requests by the members of the
+vibrant and demanding Lmod community. \markus{tone down $\rightarrow$ remove the ``enthusiastic''?}\kenneth{done, used 'vibrant' instead of 'energetic, enthusiastic'}
 
 \subsection{The \texttt{\small ml} command and unload/swap shortcut}
 
@@ -141,9 +141,9 @@ associated software. Sites can easily add properties of their own.
 
 \subsection{Caching}
 
-Support for module properties does add a complication to the module
-system.  Without properties, the \texttt{\small avail} subcommand only requires the
-names of available module files, not their contents.  To support properties, however, Lmod
+Support for module properties does add a complication, however.
+Without properties, the \texttt{\small avail} subcommand only requires the
+names of available module files, not their contents.  However, to support properties Lmod
 must parse the contents of all module files, whether or not these files include
 properties. On some file systems this can be slow.  To mitigate this, Lmod supports
 \emph{caching} of module files, as reading one single (possibly large)
@@ -152,9 +152,9 @@ Caching also makes other subcommands, e.g., \texttt{\small module spider},
 significantly faster. An Lmod module file cache is also referred to as
 `spider cache'; both system-level and user-level caches are supported.
 
-Lmod contains hooks to check whether a cache is up-to-date and will automatically
+Lmod contains hooks to check whether a cache is up-to-date and will
 update a user-level cache when deemed necessary, i.e., when executing a particular
-subcommand takes too long. System cache files can be recomputed after (re)installing 
+subcommand is taking too long. System cache files can be recomputed after (re)installing 
 software and/or periodically via a dedicated cron job. Usually, the presence of a
 system-level cache eliminates the need for a user-level cache. Lmod trusts existing
 cache files in all cases except for the \texttt{\small load} subcommand, that is,

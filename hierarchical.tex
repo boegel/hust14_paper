@@ -2,7 +2,7 @@
 %highlighting how this makes things easier for end-users without limiting power users; forward references should
 %be made to the EasyBuild \& Lmod sections when the consequences of using a module naming scheme like this are discussed}
 
-The use of \emph{hierarchical naming schemes} is an excellent way to
+Using a \emph{hierarchical module naming scheme} is an excellent way to
 help users avoid the pitfalls described earlier. This approach
 makes it possible to organize environment modules in a more structured
 way. The key idea is to make modules available in a step-by-step fashion as
@@ -19,8 +19,8 @@ being loaded. Separate sub-directories for each version of each
 compiler store the software and module files that depend on
 that compiler. For the
 Open\,MPI example presented in Section~\ref{sec:Module_naming_scheme}, this means
-that the user only sees the module for OpenMPI 1.7.3 that depends on
-the current compiler of choice.
+that the user only sees the module for Open\,MPI 1.7.3 that depends on
+the current compiler of choice:
 
 {\small
 \begin{alltt}
@@ -36,7 +36,7 @@ the current compiler of choice.
 \end{alltt}
 }
 \noindent
-Such a hierarchy is not limited to a single level. The
+Such a module hierarchy is not limited to a single level. The
 module files for each MPI implementation, for example, can further extend
 \texttt{\small \$MODULEPATH} to make visible the modules that depend on the currently loaded compiler and MPI stack.
 
@@ -70,10 +70,11 @@ Finally, this structured organization of module files provides
 a number of new opportunities to enhance the user experience. One significant
 example is module \emph{swapping}: when the user chooses a new compiler or MPI
 stack by executing a command like \texttt{\small module swap GCC Intel}, the module
-system could (and should) automatically replace lower-level modules with new
-versions compatible with the user's new higher level selections.
+system could (and should) automatically replace higher-level modules with new
+versions compatible with the user's new lower-level selections.
 \markus{I'm confused... Shouldn't it be ``replace higher-level modules ...
-compatible with the user's new lower-level selections''?}
+compatible with the user's new lower-level selections''?}\kenneth{depends on how you look
+at the module tree, but I can see why your wording would be easier to follow}
 We strongly believe
 that this capability should be part of any robust module system; see
 Section~\ref{sec:using_a_hierarchy}.
@@ -84,27 +85,27 @@ Section~\ref{sec:using_a_hierarchy}.
 \label{sec:using_a_hierarchy}
 
 In theory, the commonly used Tcl/C and Tcl-only environment modules tools
-both support the concept of hierarchical modules; this is because these tools
+both support the concept of hierarchical modules. This is because these tools
 function in a way that is essentially independent of any particular choice in
-organizing the module files. In practice, some difficulties when using these tools
+organizing the module files. In practice however, some difficulties when using these tools
 with a module hierarchy come forward.
 
 \subsubsection{Visibility of modules}
 \label{sec:hierarchical_consequences_visibility}
 
 In the hierarchical scheme we describe above, a module is not available (visible)
-to the user until its higher-level \markus{Likewise ``lower-level''} modules are loaded.  This
+to the user until its lower-level modules are loaded.  This
 is by design, and has great advantages. But a module system should not leave to the
-user the burden of locating needed modules within a complicated directory structure.  Instead, the module system should provide a built-in, natural mechanism for exposing hierarchies and
-dependencies, and make it possible for users to load needed modules
+user the burden of locating modules of interest in a complicated directory structure.  Instead, the module system should provide a built-in, natural mechanism for exposing hierarchies and
+dependencies, and make it possible for users to load required modules
 without resorting to raw searches of the system's directory structure. In particular, the module system must provide a means for
-displaying relevant information about modules that are outside the 
-currently loaded \texttt{\small \$MODULEPATH}.
+displaying relevant information about modules that are outside of the
+current module search path.
 
-\subsubsection{Awareness of module path extensions}
+\subsubsection{Awareness of \texttt{\small \$MODULEPATH} extensions}
 \label{sec:hierarchical_consequences_extensions}
 
-The modules tool should be aware of the changes  to the module path that
+The modules tool should be aware of the changes to the module search path that
 occur when loading modules in a hierarchical scheme. This is what makes
 automatic module swapping possible. When the user executes \texttt{\small module swap} to replace one module with another, the tool needs to i) detect that a particular
 module depends on the module being swapped out (this requires an awareness of
@@ -116,10 +117,10 @@ account the correct order in which to (re)load those.
 \subsubsection{Module availability on different paths in the hierarchy}
 \label{sec:hierarchical_consequences_availability}
 
-The modules tool also needs to take into account the fact it may not always be
+The modules tool also needs to take into account that it may not always be
 possible to reload all dependent modules after swapping modules. When swapping
 one compiler for another for example, it is possible that no compatible version of a
-lower-level \markus{higher-level} module is available. Unless the modules tool deals with this issue
+higher-level \markus{higher-level}\kenneth{ok} module is available. Unless the modules tool deals with this issue
 appropriately, the user could end up stuck with a broken environment somewhere between
 the original state (before the swap) and the intended end state (in which all
 dependent modules are reloaded). Ideally, the modules tool should notify the user
@@ -130,7 +131,7 @@ the swap, and restore the original set of loaded modules.
 The existing Tcl/C and Tcl-only modules tools currently do not provide any of this
 functionality. At one point, the Tcl-only tool did briefly support reloading
 dependent modules after a \texttt{\small module swap}, but this capability later
-disappeared because of incompatibility with the Tcl/C tool.
+disappeared because of incompatibility with the Tcl/C version.
 
 % moved to lmod.tex
 
@@ -158,8 +159,9 @@ support staff maintaining the modules.
 
 In particular, a great deal of care must be exercised in constructing module files
 for a hierarchical software stack; failing to do so can produce unexpected results
-and inconsistent environments. One must think carefully about the necessary module
-path extensions required at different levels of the hierarchy, take dependencies into account, and the order in which users should load modules. Additionally, the
+and inconsistent environments. One must think carefully about the necessary module search
+path extensions required at different levels of the hierarchy, take dependencies
+into account, and consider the order in which users should load modules. Additionally, the
 module files must be designed such that they use the short name visible to users
 (e.g., \texttt{\small WRF/3.5}) rather than the `full' name relative to the top of
 the hierarchy (e.g., \texttt{\small MPI/GCC/4.8.2/OpenMPI/1.7.3/WRF/3.5}).

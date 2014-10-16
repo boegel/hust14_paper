@@ -12,18 +12,17 @@ Only one version is publicly available, SWTools v1.0, which was released Jan.~1s
 \emph{Smithy}~\cite{smithy} is a follow-up to SWTools, and is also being developed
 at NCCS/ORNL. It is compatible with the SWTools infrastructure and hence can be
 used as a drop-in replacement, but also supports an alternative approach using
-\emph{formulas} following the well-established \emph{Homebrew} package management 
-system for Mac~OS~X\footnote{\url{http://brew.sh/}}. As such, it provides
+\emph{formulas} following the well-established \emph{Homebrew}~\cite{homebrew} package
+management system for Mac~OS~X. As such, it provides
 supporting functionality readily available to be used in these formulas, and enables
-code reuse across formulas. Smithy is publicly
-available\footnote{https://github.com/AnthonyDiGirolamo/smithy} alongside detailed
+code reuse across formulas. Smithy is publicly available alongside detailed
 documentation. The development activity has slowed down significantly since
 Sept.~2013, with occasional changes mostly focusing on bug fixes.
 Smithy formulas are available for about 80 software
-packages\footnote{https://github.com/AnthonyDiGirolamo/smithy\_formulas}.
+packages.
 
 Another related project is the \emph{iVEC Build System (iBS)}, which is developed 
-by iVEC\footnote{http://www.ivec.org/} in Australia. Similarly to \easybuild{}
+by iVEC in Australia. Similarly to \easybuild{}
 it consists of a framework providing (some) commonly needed functionality, which
 picks up so-called ``iBS files" that implement the install procedure for a 
 particular software package. Both the main command (aptly named
@@ -38,25 +37,26 @@ control over which dependencies, software versions, compiler, architecture and
 various options should be used for installing a particular software package.
 Spack also supports some particularly useful options like automatically determining
 whether an update for a particular software package is available
-(by scraping the project's website), and automatically completing
-incomplete build specifications, e.g., dependency versions. Like
+(by scraping the project's website), automatically completing
+incomplete build specifications, optional/virtual dependencies, etc. Like
 \easybuild{}, the Python codebase is object-oriented, enabling code reuse and
 efficient maintainability; the \emph{packages} concept in it is quite similar to
 easyblocks in \easybuild{}. At the time of writing, Spack included support for about
-30 different software packages.
+50 different software packages.
 
 \markus{@Kenneth: One reviewer expressed severe concerns w.r.t. to the
 following paragraph. Do you see a chance to mitigate (at least some) of the
-statements?}
-\easybuild{} differs from these tools in a number of ways. First and foremost, it
-provides more flexibility than any of them. Although they provide some support
-for configuring their behavior, there is no control over certain aspects like the
+statements?}\kenneth{fixed, reworded to 'configurable' instead of 'flexible',
+which is more correct}
+\easybuild{} differs from these tools in a number of ways. First and foremost, it is
+more configurable than any of the other tools. Although they provide some support
+for configuring their behavior, there is no control over certain aspects like, for example, the
 module naming scheme being used. Second, several useful more advanced
 features are missing in most of them, like automatic dependency resolution (Spack
 being the exception here). Third, exactly reproducing previous installations is more
-difficult since these tools do not employ separate specification files; through
-easyconfig files this is particularly easy with \easybuild{} however.
-Fourth, none of these tools has been able to get a sizeable community going, which
+difficult since most of these tools do not employ separate specification files (again,
+except for Spack); through easyconfig files this is particularly easy with \easybuild{} however.
+Fourth, none of these tools has been able to get a sizable community going, which
 has significant implications with respect to user contributions and the number of supported
 software packages.
 Other issues only apply to some of them, e.g., limited code

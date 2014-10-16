@@ -9,6 +9,8 @@
 %\IncMargin{-\parindent}
 
 
+%\usepackage{balance}
+\usepackage{flushend}
 \usepackage[english]{babel}
 \usepackage{epsfig}
 \usepackage{amsmath}
@@ -74,7 +76,7 @@
 \fi}
 
 \remarktrue
-%\remarkfalse
+\remarkfalse
 
 \newif\ifpaper
 \long\def\paper#1{
@@ -100,7 +102,7 @@
 %\techreporttrue
 \techreportfalse
 
-\renewcommand{\baselinestretch}{0.885} %837} %0.8633}
+\renewcommand{\baselinestretch}{0.875} %837} %0.8633}
 
 
 \newcommand{\easybuild}{\mbox{EasyBuild}}
@@ -211,11 +213,11 @@ desired takebacks:
 \label{sec:conclusion}
 \input{conclusion}
 
-%\newpage
+\newpage
 \footnotesize
 %\bibliographystyle{IEEEtran}
 %\bibliography{ref}
-
+%\balance
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{IEEEabrv,main}

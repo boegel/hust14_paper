@@ -11,19 +11,15 @@ development. In November 2012, \easybuild{} v1.0 was released featuring
 a stable API. Under a `release early, release often' strategy with a new major
 release every 4 to 6 weeks, the development team has a strong focus on continuous,
 high quality maintenance, support, and improvement. At the time of
-writing, the latest release is \easybuild{} v1.14.0 (July 2014).
-\markus{Update?}
-\markus{Add ``Currently, \easybuild{} only supports x86/Power-based Linux clusters,
-however, support for Cray X-series systems is under development.''?}
+writing, the latest release is \easybuild{} v1.15.2 (Oct'14). This version
+only supports x86-based Linux systems, however support for other platforms
+(Linux/POWER, Cray, \ldots) is being developed.
 
-Under the motto ``\emph{building software with ease}", \easybuild{} provides
-\markus{tone down $\rightarrow$ aims to provide}
-an easy
+Under the motto ``\emph{building software with ease}", \easybuild{} aims to provide an easy
 yet powerful way to automatically install (scientific) software stacks, in a robust,
 consistent and reproducible way. Its design is deliberately made very flexible and
 modular (see Sections~\ref{sec:eb_configurability} and \ref{sec:eb_extensible})
-making it an ideally suited \markus{tone down $\rightarrow$ a well suited}
-platform for collaboration across HPC sites, as is
+making it a well suited platform for collaboration across HPC sites, as is
 confirmed by the steadily growing \easybuild{} community (see
 Section~\ref{sec:communities}).
 
@@ -43,7 +39,7 @@ multiple \emph{easyconfig files}.
 The \easybuild{} framework embodies the core of the tool,
 providing functionality commonly needed when installing scientific software on HPC
 systems. For example, it deals with downloading, unpacking, and patching of sources,
-loading module files for dependencies, setting up the build enviroment, autonomously
+loading module files for dependencies, setting up the build environment, autonomously
 running (interactive) shell commands, creating module files that match the
 specification files, etc.
 
@@ -58,12 +54,13 @@ can be tweaked and steered via different parameters known to the framework, for
 which values are either obtained from the provided specification files (see
 Section~\ref{sec:eb_easyconfigs}) or set to reasonable default values.
 
-In \easybuild{} v1.14.0 the framework source code consists of about 18\,000 lines
+In \easybuild{} v1.15.2 the framework source code consists of about 19\,000 lines
 of code, organized across about 125 Python modules in roughly a dozen Python
-package directories, next to over 6\,000 lines of code for tests. This provides some
+package directories, next to almost 7\,000 lines of code for tests. This provides some
 notion of the size of the \easybuild{} framework and the amount of supporting
 functionality it has to offer.
-\markus{Update?}
+\markus{Update?}\kenneth{done, I would leave the ',' for separating thousands?}
+\markus{To be honest, I don't care. I only changed it to make reviewer \#1 happy.}
 
 \subsubsection{Easyblocks}
 \label{sec:eb_easyblocks}
@@ -80,11 +77,13 @@ exit code.
 A distinction is made between \emph{software-specific} and \emph{generic} easyblocks.
 Software-specific easyblocks implement a build and install procedure which is
 entirely custom to one particular software package (e.g., WRF), while
-generic easyblocks implement a procedure using standard tools (e.g., CMake or
-make). Since easyblocks are implemented in an object-oriented scheme,
+generic easyblocks implement a procedure using standard tools (e.g., CMake).
+Since easyblocks are implemented in an object-oriented scheme,
 the step methods implemented by a particular easyblock can be reused in others via
-inheritance, enabling code reuse across build procedure implementations
-\markus{, a major advantage over script-based solutions}.
+inheritance, enabling code reuse across build procedure implementations.
+This is a major advantage over a script-based approach which typically involves
+lots of copy-pasting of code.
+\markus{, a major advantage over script-based solutions}
 
 For each software package being built, the \easybuild{} framework will determine
 which easyblock should be used, based on the name of the software package or the
@@ -95,16 +94,16 @@ software name could be found, a fallback mechanism will resort to using the gene
 \texttt{\small configure} -- \texttt{\small make} -- \texttt{\small make install}
 procedure.
 
-At the time of writing, the most recent release of \easybuild{} included 137
-software-specific easyblocks and 20 generic easyblocks \markus{Update?}, providing support for
+At the time of writing, the most recent release of \easybuild{} (v1.15.2) includes 139
+software-specific easyblocks and 20 generic easyblocks, providing support for
 automatically installing a wide range of software packages. Examples range
-from fairly easy-to-build programs like gzip, over commonly used \markus{commonly used $\rightarrow$ basic/essential?} tools like
+from fairly easy-to-build programs like gzip, over basic tools like
 compilers, various MPI stacks and commonly used libraries, to large scientific
-software packages that are notorious for their involved and painful install
+software packages that are notorious for their involved and tedious install
 procedures, such as CP2K, NWChem, OpenFOAM, QuantumESPRESSO, and WRF.
 \markus{One reviewer suggested to add a reference for OpenFOAM
 when it's first use (I removed this usage above ;-)). Do you see a need to add
-more references here? I don't...}
+more references here? I don't...}\kenneth{agreed, this paper is not about them, they're just examples}
 
 \subsubsection{Compiler toolchains}
 \label{sec:eb_toolchains}
@@ -149,7 +148,7 @@ examples include \texttt{\small buildopts} to specify options for the build comm
 and \texttt{\small dependencies} to list the software dependencies that should be
 taken into account. Note that easyconfig files only provide the bits of information required
 to determine the corresponding module name; the module name itself is computed
-by \easybuild{} framework by quering the module naming scheme being used, see also
+by \easybuild{} framework by querying the module naming scheme being used, see also
 Section~\ref{sec:eb_hmns}. The complete list of supported easyconfig parameters can
 be easily obtained via the \easybuild{} command line.
 
@@ -160,13 +159,13 @@ to the install directory, and also supports maintaining an easyconfig archive wh
 is updated on every successful installation. Therefore, reproducing installations
 becomes trivial.
 
-The latest release of \easybuild{} includes over 2\,500 easyconfig files, for
-500 different software packages. \markus{Update?}
+\easybuild{} v1.15.2 includes over 2\,800 easyconfig files, for
+511 different software packages. \markus{Update?}
 
 \subsection{Basic usage}
 \label{sec:eb_basic_usage}
 
-As the name suggests, \easybuild{} is \markus{intended to be} particularly easy to use. A script aptly named
+As the name suggests, \easybuild{} is intended to be particularly easy to use. A script aptly named
 \texttt{\small eb} is provided to interact with the \easybuild{} framework.
 Launching \texttt{\small eb} with an easyconfig file as an argument triggers a
 series of events. First, the easyconfig file will be parsed by the \easybuild{}
@@ -175,7 +174,7 @@ easyblock and build parameters should be used. Afterwards, the environment is
 prepared by loading the modules for the specified toolchain and dependencies---if
 those are available---and the toolchain support in the framework defines additional
 environment variables as discussed in Section~\ref{sec:eb_toolchains}. In case the
-required modules are not available, an appropriate error message is shown, unless
+required modules are not available an appropriate error message is shown, unless
 the automatic dependency resolution mechanism is enabled via the command line option
 \texttt{\small --robot} (see Section~\ref{sec:eb_dependency_resolution} for more
 details). Next,
@@ -194,7 +193,7 @@ specified by the provided easyconfig file:
 }
 \noindent
 Further details on using \texttt{\small eb} are beyond the scope of this paper; we
-refer to \texttt{\small eb --help} and the \easybuild{} wiki~\cite{ebwiki} for
+refer to \texttt{\small eb --help} and the \easybuild{} wiki pages~\cite{ebwiki} for
 extensive documentation.
 
 \subsection{Feature highlights}
@@ -211,7 +210,7 @@ a cluster resource manager like PBS.
 \subsubsection{Automatic dependency resolution}
 \label{sec:eb_dependency_resolution}
 
-\easybuild{} supports installing a entire software stack, including the required
+\easybuild{} supports installing an entire software stack, including the required
 toolchain if needed, with a single \texttt{\small eb} invocation. By enabling the
 \texttt{\small --robot} command line option, the dependency resolution mechanism will
 construct a full dependency graph for the software package(s) being installed, after
@@ -248,7 +247,7 @@ implementing a Python module in the required namespace (e.g.,
 environment variable to make sure that it is available in the Python search path at
 runtime. Every time \texttt{\small eb} is used, the framework will `scan' the Python 
 search path to determine the available options for each of the dynamically 
-extendible aspects. This provides \easybuild{} users the freedom to experiment with
+extendable aspects. This provides \easybuild{} users the freedom to experiment with
 functionality which is not (yet) available in the particular version they are using,
 or to extend the supported options for different aspects of \easybuild{} with
 additional site-specific options, e.g., easyblocks for in-house software packages or 
@@ -277,6 +276,6 @@ Letting \easybuild{} automatically generate module files under a specified
 (hierarchical) module naming scheme stands in stark contrast with the practice of
 manually creating module files while trying to consistently apply site policies. It avoids the
 various issues involved with manually creating module files with respect to consistency and
-correctness which were disscussed in Section~\ref{sec:traditional}, and as such
+correctness which were discussed in Section~\ref{sec:traditional}, and as such
 mostly relieves user support teams from another tedious task related to installing
 scientific software.

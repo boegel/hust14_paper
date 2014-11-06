@@ -1,0 +1,354 @@
+\documentclass[10pt,xcolor={usenames,dvipsnames}]{beamer}
+
+\usepackage{color}
+
+\usetheme[headernav]{TACC}
+
+\usecolortheme{TACCWhite}
+
+\setbeamertemplate{headline}{}  %Remove the header
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\setbeamerfont{block title}{size=\small}
+\setbeamerfont{block body}{size=\footnotesize}
+\setbeamerfont{block body alerted}{size=\footnotesize}
+
+
+\begin{document}
+
+%===============================================================================
+
+\title{Modern Scientific Software Management Using EasyBuild and Lmod}
+\author{%
+    Markus Geimer\inst{1}%
+    \and%
+    Kenneth Hoste\inst{2}%
+    \and
+    Robert McLay\inst{3}%
+}
+\institute{%
+    \inst{1} J{\"u}lich Supercomputing Centre, Germany%
+    \and%
+    \inst{2} Ghent University, Belgium%
+    \and%
+    \inst{3} Texas Advanced Computing Center, TX, USA%
+}
+\date{%
+    \small%
+    1\textsuperscript{st} International Workshop on HPC User Support Tools\\%
+    in conjunction with SC'14, New Orleans, LA, USA\\%
+    November 21, 2014%
+}
+
+\frame{\titlepage}
+
+%===============================================================================
+
+\begin{frame}{Motivation}
+\begin{itemize}
+    \item
+        HPC systems are typically used by large user communities
+        \begin{itemize}
+            \item
+                Widely varying demands
+            \item
+                Requires installation of many software packages
+                \begin{itemize}
+                    \item
+                        Sometimes identical/overlapping functionality
+                    \item
+                        Multiple versions
+                \end{itemize}
+        \end{itemize}
+    \vspace{1ex}
+    \item
+        Challenging for both users and administrators
+        \begin{itemize}
+            \item
+                Users: Setting up the environment to use the desired software
+                \begin{itemize}
+                    \item
+                        Common solution: Environment modules
+                \end{itemize}
+            \item
+                Administrators: Consistently install software
+                \begin{itemize}
+                    \item
+                        Many HPC codes use non-standard build procedures
+                    \item
+                        Successful installation steps often rarely documented
+                    \item
+                        \ldots not to mention shared between HPC sites
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Environment Modules}
+\begin{itemize}
+    \item
+        Shell-independent way to modify a user's environment
+    \item
+        Provide `\texttt{module}' command
+        \begin{itemize}
+            \item
+                Implemented as shell function (sh) or alias (csh)
+            \item
+                Evaluates commands printed to stdout by a helper tool
+                \begin{itemize}
+                    \item
+                        Original implementation written in C/Tcl
+                    \item
+                        Alternative Tcl-only variants
+                    \item
+                        Lmod, implemented in Lua
+                \end{itemize}
+        \end{itemize}
+    \item
+        Allows to, e.g., list, load, unload, and swap modules
+    \item
+        Each module corresponds to a modulefile found in \texttt{\$MODULEPATH}
+        \begin{itemize}
+            \item
+                Textual description of modifications to the user's environment\\
+                (e.g., \texttt{\$PATH}, \texttt{\$CPATH},
+                \texttt{\$LIBRARY\_PATH})
+            \item
+                Additional specifications such as conflicts, help texts, etc.
+        \end{itemize}
+\end{itemize}
+\vspace*{-5pt}
+\begin{center}
+    \begin{minipage}{0.9\textwidth}
+        \begin{exampleblock}{Example}
+            \ttfamily
+            \% module avail\\
+            foo/1.0 \enskip foo/1.7 \enskip bar/4.2\\
+            \% module load foo\\
+            \% module list\\
+            Currently Loaded Modulefiles:\\
+            ~1) foo/1.7
+        \end{exampleblock}
+    \end{minipage}
+\end{center}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Flat Module Naming Schemes (I)}
+\begin{itemize}
+    \item
+        HPC systems often feature multiple compilers \& MPI libraries
+        \begin{itemize}
+            \item
+                Packages built with different compilers/MPIs cannot
+                be mixed
+        \end{itemize}
+    \item
+        Common solution: encode dependency in module name\\
+        \enskip
+        \begin{minipage}{0.9\textwidth}
+            \begin{exampleblock}{Example}
+                \ttfamily
+                \% module avail OpenMPI\\
+                OpenMPI/1.7.3-GCC-4.8.2
+                    \quad OpenMPI/1.7.3-Intel-14.0
+            \end{exampleblock}
+        \end{minipage}
+    \smallskip
+    \item
+        Makes module names unwieldy for multiple dependencies\\
+        \enskip
+        \begin{minipage}{0.9\textwidth}
+            \begin{exampleblock}{Example}
+                \ttfamily
+                \% module avail WRF\\
+                WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
+                    \quad WRF/3.5-Intel-14.0-MVAPICH2-1.9
+            \end{exampleblock}
+        \end{minipage}
+    \smallskip
+    \item
+        In many cases, packages additionally also depend on a set of
+        mathematical libraries $\Rightarrow$ toolchains
+        \begin{itemize}
+            \item
+                Cryptic toolchain names
+                \begin{itemize}
+                    \item
+                        E.g., \texttt{goolf} = GCC+Open\,MPI+OpenBLAS+ScaLAPACK+FFTW
+                \end{itemize}
+            \item
+                Toolchain versions w/o direct relationship to encapsulated packages
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Flat Module Naming Schemes (II)}
+\begin{itemize}
+    \item
+        Total number of modules easily \cal{O}(100)
+    \item
+        Categorization can improve clarity\\
+        \enskip
+        \begin{minipage}{0.9\textwidth}
+            \begin{exampleblock}{Example}
+                \ttfamily
+                \% module avail\\
+                ----- <prefix>/compiler -----\\
+                GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
+                -------- <prefix>/mpi --------\\
+                OpenMPI/1.7.3-GCC-4.8.2 \quad OpenMPI/1.7.3-Intel-14.0
+            \end{exampleblock}
+        \end{minipage}
+    \smallskip
+    \item
+        But module listing can still be overwhelming
+    \item
+        Cumbersome to prevent loading incompatible modules
+        \begin{itemize}
+            \item
+                Conflicting modules have to be explicitly listed in modulefiles
+            \item
+                Maintenance nightmare when adding/removing new conflicting
+                packages
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Installing Scientific Software}
+\begin{itemize}
+    \item
+        Manual installation
+        \begin{itemize}
+            \item
+                Relies on (part of) user support staff
+            \item
+                Hard to enforce sharing of installation notes
+        \end{itemize}
+    \item
+        Package managers (rpm, yum, apt-get, etc.)
+        \begin{itemize}
+            \item
+                Limited support for installing multiple builds/versions of a
+                package
+            \item
+                Little support for common procedures $\Rightarrow$ copy/paste
+        \end{itemize}
+    \item
+        Scripting
+        \begin{itemize}
+            \item
+                Losely coulped collection of scripts to automate installations
+            \item
+                Often understood by only a few/single staff member(s)
+            \item
+                Even when publicly released, rarely flexible enough to
+                accommodate other sites needs
+        \end{itemize}
+\end{itemize}
+\begin{center}
+    \begin{minipage}{0.9\textwidth}
+        \begin{alertblock}{Wake-up call!}
+            Although many HPC sites around the world face these problems,
+            there is hardly any collaboration to address them!
+        \end{alertblock}
+    \end{minipage}
+\end{center}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Hierarchical Module Naming Scheme}
+\begin{itemize}
+    \item
+        Key idea: Make modules available step-by-step
+        \begin{itemize}
+            \item
+                Initially, only core modules (e.g., compilers) are visible
+            \item
+                When loaded, these modules extend \texttt{\$MODULEPATH} to make
+                dependent modules available
+        \end{itemize}
+        \enskip
+        \begin{minipage}{0.9\textwidth}
+            \begin{exampleblock}{Example}
+                \ttfamily
+                \% module avail\\
+                ------------ <prefix>/Core ------------\\
+                GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
+                \% module load GCC/4.8.2\\
+                \% module avail\\
+                ------------ <prefix>/Core ------------\\
+                GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
+                ----- <prefix>/Compiler/GCC/4.8.2 -----\\
+                OpenMPI/1.7.3
+            \end{exampleblock}
+        \end{minipage}
+    \smallskip
+    \item
+        Major advantages:
+        \begin{itemize}
+            \item
+                Intuitive, short module names
+            \item
+                Only shows modules which are meaningful in the current context\\
+                $\Rightarrow$ Prevents many user mistakes
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Challenges When Deploying a HMNS}
+\begin{itemize}
+    \item
+        Visibility of modules
+        \begin{itemize}
+            \item
+                How to locate packages w/o manually exploring the entire
+                hierarchy?
+        \end{itemize}
+    \item
+        Awareness of \texttt{\$MODULEPATH} extensions
+        \begin{itemize}
+            \item
+                Does swapping a module require reloading of other modules due
+                to changes in the module search path?
+        \end{itemize}
+    \item
+        Module availability on different paths in the hierarchy
+        \begin{itemize}
+            \item
+                What if a dependent module is not available in the target
+                module search path after swapping a module lower in the
+                hierarchy?
+        \end{itemize}
+    \item
+        Creating and maintaining a module hierarchy requires even more care
+\end{itemize}
+\begin{center}
+    \begin{minipage}{0.9\textwidth}
+        \begin{alertblock}{Houston, we've had a problem!}
+            \begin{itemize}
+                \item
+                    None of the usability challenges is addressed by the
+                    C/Tcl or Tcl-only modules implementation
+                \item
+                    None of existing scientific software installation tools
+                    supports hierarchical modules
+            \end{itemize}
+        \end{alertblock}
+    \end{minipage}
+\end{center}
+\end{frame}
+
+%===============================================================================
+
+\end{document}

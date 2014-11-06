@@ -19,7 +19,7 @@
 
 %===============================================================================
 
-\title{Modern Scientific Software Management Using EasyBuild and Lmod}
+\title{\textbf{Modern Scientific Software Management Using EasyBuild and Lmod}}
 \author{%
     Markus Geimer\inst{1}%
     \and%
@@ -30,64 +30,73 @@
 \institute{%
     \inst{1} J{\"u}lich Supercomputing Centre, Germany%
     \and%
-    \inst{2} Ghent University, Belgium%
+    \inst{2} HPC-UGent, Ghent University, Belgium%
     \and%
     \inst{3} Texas Advanced Computing Center, TX, USA%
 }
 \date{%
     \small%
-    1\textsuperscript{st} International Workshop on HPC User Support Tools\\%
+    1\textsuperscript{st} International Workshop on HPC User Support Tools (HUST-14)\\%
     in conjunction with SC'14, New Orleans, LA, USA\\%
     November 21, 2014%
 }
 
-\frame{\titlepage}
-
-%===============================================================================
-
-\begin{frame}{Motivation}
-\begin{itemize}
-    \item
-        HPC systems are typically used by large user communities
-        \begin{itemize}
-            \item
-                Widely varying demands
-            \item
-                Requires installation of many software packages
-                \begin{itemize}
-                    \item
-                        Sometimes identical/overlapping functionality
-                    \item
-                        Multiple versions
-                \end{itemize}
-        \end{itemize}
-    \vspace{1ex}
-    \item
-        Challenging for both users and administrators
-        \begin{itemize}
-            \item
-                Users: Setting up the environment to use the desired software
-                \begin{itemize}
-                    \item
-                        Common solution: Environment modules
-                \end{itemize}
-            \item
-                Administrators: Consistently install software
-                \begin{itemize}
-                    \item
-                        Many HPC codes use non-standard build procedures
-                    \item
-                        Successful installation steps often rarely documented
-                    \item
-                        \ldots not to mention shared between HPC sites
-                \end{itemize}
-        \end{itemize}
-\end{itemize}
+\begin{frame}[noframenumbering]
+\titlepage
 \end{frame}
 
 %===============================================================================
 
-\begin{frame}{Environment Modules}
+% proper slide numbers in lower right-hand corner
+\addtobeamertemplate{headline}{}{
+    \usebeamerfont{headline}
+    \usebeamercolor[fg]{headline}
+    \hspace{63.5em}
+    \vspace{-2.5em}
+    \scriptsize{\insertframenumber/\inserttotalframenumber}
+}
+
+%===============================================================================
+
+\begin{frame}{Motivation}
+    HPC systems are typically used by large user communities.
+    \begin{itemize}
+        \item
+            widely varying demands
+        \item
+            requires installation of many software packages
+            \begin{itemize}
+                \item
+                    sometimes identical/overlapping functionality
+                \item
+                    multiple versions
+            \end{itemize}
+    \end{itemize}
+    \vspace{1ex}
+    This is challenging for both users and administrators.
+    \begin{itemize}
+        \item
+            \emph{for users}: setting up the environment to use the desired software
+            \begin{itemize}
+                \item
+                    common solution: environment modules
+            \end{itemize}
+        \item
+            \emph{for administrators}: installing software in a consistent way
+            \begin{itemize}
+                \item
+                    many HPC applications use non-standard build procedures
+                \item
+                    successful installation steps often rarely documented
+                \item
+                    \ldots not to mention shared between HPC sites
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Environment modules}
 \begin{itemize}
     \item
         Shell-independent way to modify a user's environment
@@ -123,14 +132,14 @@
 \vspace*{-5pt}
 \begin{center}
     \begin{minipage}{0.9\textwidth}
-        \begin{exampleblock}{Example}
-            \ttfamily
-            \% module avail\\
+        \begin{exampleblock}{Example: available modules, loading a module}
+            \ttfamily\small{
+            \$ module avail\\
             foo/1.0 \enskip foo/1.7 \enskip bar/4.2\\
-            \% module load foo\\
-            \% module list\\
+            \$ module load foo\\
+            \$ module list\\
             Currently Loaded Modulefiles:\\
-            ~1) foo/1.7
+            ~1) foo/1.7}
         \end{exampleblock}
     \end{minipage}
 \end{center}
@@ -138,24 +147,24 @@
 
 %===============================================================================
 
-\begin{frame}{Flat Module Naming Schemes (I)}
+\begin{frame}{Flat module naming schemes (I)}
 \begin{itemize}
     \item
         HPC systems often feature multiple compilers \& MPI libraries
         \begin{itemize}
             \item
-                Packages built with different compilers/MPIs cannot
+                packages built with different compilers/MPIs can not
                 be mixed
         \end{itemize}
     \item
         Common solution: encode dependency in module name\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example}
-                \ttfamily
-                \% module avail OpenMPI\\
+            \begin{exampleblock}{Example: encoding compiler in name of MPI module}
+                \ttfamily\small{
+                \$ module avail OpenMPI\\
                 OpenMPI/1.7.3-GCC-4.8.2
-                    \quad OpenMPI/1.7.3-Intel-14.0
+                    \quad OpenMPI/1.7.3-Intel-14.0}
             \end{exampleblock}
         \end{minipage}
     \smallskip
@@ -163,11 +172,11 @@
         Makes module names unwieldy for multiple dependencies\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example}
-                \ttfamily
-                \% module avail WRF\\
+            \begin{exampleblock}{Example: long module name for application modules}
+                \ttfamily\small{
+                \$ module avail WRF\\
                 WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
-                    \quad WRF/3.5-Intel-14.0-MVAPICH2-1.9
+                    \quad WRF/3.5-Intel-14.0-MVAPICH2-1.9}
             \end{exampleblock}
         \end{minipage}
     \smallskip
@@ -189,7 +198,7 @@
 
 %===============================================================================
 
-\begin{frame}{Flat Module Naming Schemes (II)}
+\begin{frame}{Flat module naming schemes (II)}
 \begin{itemize}
     \item
         Total number of modules easily \cal{O}(100)
@@ -198,17 +207,17 @@
         \enskip
         \begin{minipage}{0.9\textwidth}
             \begin{exampleblock}{Example}
-                \ttfamily
-                \% module avail\\
+                \ttfamily\small{
+                \$ module avail\\
                 ----- <prefix>/compiler -----\\
                 GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
                 -------- <prefix>/mpi --------\\
-                OpenMPI/1.7.3-GCC-4.8.2 \quad OpenMPI/1.7.3-Intel-14.0
+                OpenMPI/1.7.3-GCC-4.8.2 \quad OpenMPI/1.7.3-Intel-14.0}
             \end{exampleblock}
         \end{minipage}
     \smallskip
     \item
-        But module listing can still be overwhelming
+        Yet module listing can still be overwhelming
     \item
         Cumbersome to prevent loading incompatible modules
         \begin{itemize}
@@ -223,7 +232,7 @@
 
 %===============================================================================
 
-\begin{frame}{Installing Scientific Software}
+\begin{frame}{Installing scientific software}
 \begin{itemize}
     \item
         Manual installation
@@ -267,48 +276,44 @@
 
 %===============================================================================
 
-\begin{frame}{Hierarchical Module Naming Scheme}
-\begin{itemize}
-    \item
-        Key idea: Make modules available step-by-step
-        \begin{itemize}
-            \item
-                Initially, only core modules (e.g., compilers) are visible
-            \item
-                When loaded, these modules extend \texttt{\$MODULEPATH} to make
-                dependent modules available
-        \end{itemize}
-        \enskip
-        \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example}
-                \ttfamily
-                \% module avail\\
-                ------------ <prefix>/Core ------------\\
-                GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
-                \% module load GCC/4.8.2\\
-                \% module avail\\
-                ------------ <prefix>/Core ------------\\
-                GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
-                ----- <prefix>/Compiler/GCC/4.8.2 -----\\
-                OpenMPI/1.7.3
-            \end{exampleblock}
-        \end{minipage}
+\begin{frame}{Hierarchical module naming scheme}
+    Key idea: make modules available step-by-step.
+    \begin{itemize}
+        \item
+            Initially, only `core' modules (e.g., compilers) are visible
+        \item
+            these extend \texttt{\$MODULEPATH} on load, to make
+            more modules available
+    \end{itemize}
+    \enskip
+    \begin{minipage}{0.9\textwidth}
+        \begin{exampleblock}{Example}
+            \ttfamily\footnotesize{
+            \$ module avail\\
+            ------------ <prefix>/Core ------------\\
+            GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
+            \$ module load GCC/4.8.2\\
+            \$ module avail\\
+            ------------ <prefix>/Core ------------\\
+            GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
+            ----- <prefix>/Compiler/GCC/4.8.2 -----\\
+            OpenMPI/1.7.3}
+        \end{exampleblock}
+    \end{minipage}
     \smallskip
-    \item
-        Major advantages:
-        \begin{itemize}
-            \item
-                Intuitive, short module names
-            \item
-                Only shows modules which are meaningful in the current context\\
-                $\Rightarrow$ Prevents many user mistakes
-        \end{itemize}
-\end{itemize}
+    Major advantages:
+    \begin{itemize}
+        \item
+            Intuitive, short module names
+        \item
+            Only shows modules which are meaningful in the current context\\
+            $\Rightarrow$ Prevents many user mistakes!
+    \end{itemize}
 \end{frame}
 
 %===============================================================================
 
-\begin{frame}{Challenges When Deploying a HMNS}
+\begin{frame}{Challenges with using a module hierarchy}
 \begin{itemize}
     \item
         Visibility of modules
@@ -353,5 +358,137 @@
 \end{frame}
 
 %===============================================================================
+
+\begin{frame}{Tools for using a module hierarchy}
+    \begin{itemize}
+        \item adequate tools for dealing with a module hierarchy are \emph{indispensable}
+        \item EasyBuild
+        \item Lmod
+    \end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{EasyBuild: building software with ease}
+    \begin{figure}[centering]
+        \includegraphics[height=1.2cm]{easybuild_logo.jpg}
+    \end{figure}
+    \begin{itemize}
+        \item collection of Python packages and modules, GPLv2 licensed
+        \item original implementation by HPC-UGent, now a thriving community
+        \item community-driven development, new release every 4-6 weeks
+        \item latest release: EasyBuild v1.15.2 (Oct'14)
+    \end{itemize}
+
+    The EasyBuild \emph{framework} leverages \emph{easyblocks} to \textbf{automatically
+    build and install (scientific) software} using a particular \emph{compiler toolchain},
+    as specified by one or multiple \emph{easyconfig files}.
+
+    \begin{itemize}
+        \item \emph{framework}: core of EasyBuild, provides supporting functionality
+        \item \emph{easyblock}: Python module, implements a (generic) build procedure
+        \item \emph{easyconfig}: build spec: software name/version, toolchain, etc.
+    \end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{EasyBuild: feature highlights}
+    \begin{itemize}
+        \item fully autonomously building and installing (scientific) software
+        \item highly configurable, via config files/environment/command line
+        \item thorough logging of executed procedure
+        \item generating of module files
+        \item automatic dependency resolution
+        \item dynamically extendable with additional easyblocks, toolchains, etc.
+        \item \emph{support for module hierarchies}, via custom module naming scheme
+        \item over different software packages supported, including
+              CP2K, NAMD, NWChem, OpenFOAM, PETSc, QuantumESPRESSO, WRF, \ldots
+    \end{itemize}
+    \begin{exampleblock}{Building/installing WRF (and all dependencies) \emph{with a single command} (!)}
+        \texttt{eb WRF-3.5-goolf-1.6.10.eb --robot}
+    \end{exampleblock}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Lmod: a modern modules tool}
+    Lmod empowers users to \textbf{control their working environment} while improving the user
+    experience of interacting with module files, without hindering experts.
+    \begin{itemize}
+        \item \small{(almost)} drop-in alternative for Tcl-based module tools
+        \item written in Lua, available since Oct'08
+        \item developed by Robert McLay (TACC, UT Austin)
+        \item frequent releases, driven by community demands and feedback
+    \end{itemize}
+    \begin{exampleblock}{Example: swapping modules using \texttt{ml} shorthand}
+        \ttfamily
+        \$ ml -GCC Clang\\
+        The following have been reloaded:\\
+        1) FFTW/3.3.2 2) MPICH/3.1.1
+    \end{exampleblock}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Lmod: feature highlights}
+    \begin{itemize}
+        \item \emph{module hierarchy-aware} design and functionality
+        \begin{itemize}
+            \item searching across entire module tree with \texttt{spider} subcommand
+            \item automatic reloading of dependent modules on \texttt{module swap}
+        \end{itemize}
+        \item caching of module files, for responsive subcommands (e.g., \texttt{avail})
+        \item customizable behavior via provided hooks
+        \item \texttt{ml} shorthand command, load/unload shortcuts
+        \item various advanced features, including:
+        \begin{itemize}
+            \item defining module families
+            \item assigning properties to modules
+            \item stack-based definition of environment variables (\texttt{pushenv})
+            \item user-definable collections of modules
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{EasyBuild and Lmod communities}
+\begin{itemize}
+    \item bar
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Synergy between EasyBuild and Lmod}
+\begin{itemize}
+    \item bar
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Future work}
+\begin{itemize}
+    \item bar
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Related work}
+\begin{itemize}
+    \item bar
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Conclusion}
+\begin{itemize}
+    \item bar
+\end{itemize}
+\end{frame}
 
 \end{document}

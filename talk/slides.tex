@@ -62,32 +62,32 @@
     HPC systems are typically used by large user communities.
     \begin{itemize}
         \item
-            widely varying demands
+            Widely varying demands
         \item
-            requires installation of many software packages
+            Requires installation of many software packages
             \begin{itemize}
                 \item
-                    sometimes identical/overlapping functionality (e.g., MPI libraries)
+                    Sometimes identical/overlapping functionality (e.g., MPI libraries)
                 \item
-                    multiple versions/builds
+                    Multiple versions/builds
             \end{itemize}
     \end{itemize}
-    \vspace{1ex}
+    \medskip
     This is challenging for both users and administrators.
     \begin{itemize}
         \item
-            \emph{for users}: setting up the environment to use the desired software
+            \emph{For users}: setting up the environment to use the desired software
             \begin{itemize}
                 \item
-                    common solution: environment modules
+                    Common solution: environment modules
             \end{itemize}
         \item
-            \emph{for administrators}: installing software in a consistent way
+            \emph{For administrators}: installing software in a consistent way
             \begin{itemize}
                 \item
-                    many HPC applications use non-standard build procedures
+                    Many HPC applications use non-standard build procedures
                 \item
-                    successful installation steps often barely documented
+                    Successful installation steps often barely documented
                 \item
                     \ldots not to mention sharing of good practices between HPC sites
             \end{itemize}
@@ -101,20 +101,14 @@
     \item
         Shell-independent way to modify a user's environment
     \item
-        Provide `\texttt{module}' command
+        Provide `\texttt{module}' command, evaluating output of a helper tool
         \begin{itemize}
             \item
-                Implemented as shell function (sh) or alias (csh)
+                Original implementation written in C/Tcl
             \item
-                Evaluates commands printed to stdout by a helper tool
-                \begin{itemize}
-                    \item
-                        Original implementation written in C/Tcl
-                    \item
-                        Alternative Tcl-only variants
-                    \item
-                        Lmod, implemented in Lua
-                \end{itemize}
+                Alternative Tcl-only variants
+            \item
+                Lmod, implemented in Lua
         \end{itemize}
     \item
         Allows to, e.g., list, load, unload, and swap modules
@@ -129,17 +123,17 @@
                 Additional specifications such as conflicts, help texts, etc.
         \end{itemize}
 \end{itemize}
-\vspace*{-5pt}
+\vspace*{-10pt}
 \begin{center}
     \begin{minipage}{0.9\textwidth}
         \begin{exampleblock}{Example: available modules, loading a module}
-            \ttfamily\small{
+            \ttfamily
             \$ module avail\\
-            foo/1.0 \enskip foo/1.7 \enskip bar/4.2\\
+            foo/1.0 \quad foo/1.7 \quad bar/4.2\\
             \$ module load foo\\
             \$ module list\\
             Currently Loaded Modulefiles:\\
-            ~1) foo/1.7}
+            ~1) foo/1.7
         \end{exampleblock}
     \end{minipage}
 \end{center}
@@ -153,7 +147,7 @@
         HPC systems often feature multiple compilers \& MPI libraries
         \begin{itemize}
             \item
-                packages built with different compilers/MPIs can not
+                Packages built with different compilers/MPIs can not
                 be mixed
         \end{itemize}
     \item
@@ -161,10 +155,10 @@
         \enskip
         \begin{minipage}{0.9\textwidth}
             \begin{exampleblock}{Example: encoding compiler in name of MPI module}
-                \ttfamily\small{
+                \ttfamily
                 \$ module avail OpenMPI\\
                 OpenMPI/1.7.3-GCC-4.8.2
-                    \quad OpenMPI/1.7.3-Intel-14.0}
+                    \quad OpenMPI/1.7.3-Intel-14.0
             \end{exampleblock}
         \end{minipage}
     \smallskip
@@ -172,11 +166,11 @@
         Makes module names unwieldy for multiple dependencies\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example: long module name for application modules}
-                \ttfamily\small{
+            \begin{exampleblock}{Example: long module names for application modules}
+                \ttfamily
                 \$ module avail WRF\\
                 WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
-                    \quad WRF/3.5-Intel-14.0-MVAPICH2-1.9}
+                    \quad WRF/3.5-Intel-14.0-MVAPICH2-1.9
             \end{exampleblock}
         \end{minipage}
     \smallskip
@@ -185,11 +179,7 @@
         mathematical libraries $\Rightarrow$ toolchains
         \begin{itemize}
             \item
-                Cryptic toolchain names
-                \begin{itemize}
-                    \item
-                        E.g., \texttt{goolf} = GCC+Open\,MPI+OpenBLAS+ScaLAPACK+FFTW
-                \end{itemize}
+                Cryptic toolchain names (e.g., `\texttt{goolfc}')
             \item
                 Toolchain versions w/o direct relationship to encapsulated packages
         \end{itemize}
@@ -206,13 +196,13 @@
         Categorization can improve clarity\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example}
-                \ttfamily\small{
+            \begin{exampleblock}{Example: categorization via module search paths}
+                \ttfamily
                 \$ module avail\\
-                ----- <prefix>/compiler -----\\
+                ---------- <prefix>/compiler ----------\\
                 GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
-                -------- <prefix>/mpi --------\\
-                OpenMPI/1.7.3-GCC-4.8.2 \quad OpenMPI/1.7.3-Intel-14.0}
+                ------------- <prefix>/mpi ------------\\
+                OpenMPI/1.7.3-GCC-4.8.2 \quad OpenMPI/1.7.3-Intel-14.0
             \end{exampleblock}
         \end{minipage}
     \smallskip
@@ -224,8 +214,8 @@
             \item
                 Conflicting modules have to be explicitly listed in modulefiles
             \item
-                Maintenance nightmare when adding/removing new conflicting
-                packages
+                Maintenance nightmare when adding/removing new packages
+                conflicting with others
         \end{itemize}
 \end{itemize}
 \end{frame}
@@ -282,13 +272,13 @@
         \item
             Initially, only `core' modules (e.g., compilers) are visible
         \item
-            these extend \texttt{\$MODULEPATH} on load, to make
+            These extend \texttt{\$MODULEPATH} on load, to make
             more modules available
     \end{itemize}
-    \enskip
+    \quad\quad
     \begin{minipage}{0.9\textwidth}
-        \begin{exampleblock}{Example}
-            \ttfamily\footnotesize{
+        \begin{exampleblock}{Example: a simple module hierarchy}
+            \ttfamily
             \$ module avail\\
             ------------ <prefix>/Core ------------\\
             GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
@@ -297,17 +287,17 @@
             ------------ <prefix>/Core ------------\\
             GCC/4.8.2 \quad Intel/14.0 \quad Clang/3.4\\
             ----- <prefix>/Compiler/GCC/4.8.2 -----\\
-            OpenMPI/1.7.3}
+            OpenMPI/1.7.3
         \end{exampleblock}
     \end{minipage}
-    \smallskip
+
+    \medskip
     Major advantages:
     \begin{itemize}
         \item
             Intuitive, short module names
         \item
-            Only shows modules which are meaningful in the current context\\
-            $\Rightarrow$ Prevents many user mistakes!
+            Only shows modules which are meaningful in the current context
     \end{itemize}
 \end{frame}
 
@@ -370,49 +360,109 @@
 %===============================================================================
 
 \begin{frame}{EasyBuild: building software with ease}
-    \begin{figure}[centering]
-        \includegraphics[height=1.2cm]{easybuild_logo.jpg}
-    \end{figure}
-    \begin{itemize}
-        \item collection of Python packages and modules, GPLv2 licensed
-        \item original implementation by HPC-UGent, now a thriving community
-        \item community-driven development, new release every 4-6 weeks
-        \item latest release: EasyBuild v1.15.2 (Oct'14)
-        \item well documented: \url{http://easybuild.readthedocs.org}
-    \end{itemize}
+\begin{figure}[centering]
+    \includegraphics[height=1.2cm]{easybuild_logo.jpg}
+\end{figure}
+\begin{itemize}
+    \item
+        Collection of Python packages and modules
+        \begin{itemize}
+            \item
+                Licensed under GPLv2
+        \end{itemize}
+    \item
+        Original implementation by HPC-UGent, since 2009
+    \item
+        Now a thriving community
+        \begin{itemize}
+            \item Driving development
+            \item Actively contributing
+        \end{itemize}
+    \item
+        New release every 4--6 weeks
+        \begin{itemize}
+            \item Latest release: EasyBuild v1.15.2 (Oct'14)
+        \end{itemize}
+    \item
+        Well documented: \url{http://easybuild.readthedocs.org}
+\end{itemize}
+\end{frame}
 
-    The EasyBuild \emph{framework} leverages \emph{easyblocks} to \textbf{automatically
-    build and install (scientific) software} using a particular \emph{compiler toolchain},
-    as specified by one or multiple \emph{easyconfig files}.
+%===============================================================================
 
-    \begin{itemize}
-        \item \emph{framework}: core of EasyBuild, provides supporting functionality
-        \item \emph{easyblock}: Python module, implements a (generic) build procedure
-        \item \emph{easyconfig}: build spec: software name/version, toolchain, etc.
-    \end{itemize}
+\begin{frame}{EasyBuild: high-level design overview}
+\begin{itemize}
+    \item
+        EasyBuild \emph{framework}
+        \begin{itemize}
+            \item
+                Core of EasyBuild
+            \item
+                Provides supporting functionality
+        \end{itemize}
+    \item
+        EasyBuild \emph{easyblock}
+        \begin{itemize}
+            \item
+                Python module
+            \item
+                Implements a (generic) build procedure
+        \end{itemize}
+    \item
+        EasyBuild \emph{easyconfig}
+        \begin{itemize}
+            \item
+                Build specification: software name/version, toolchain, etc.
+        \end{itemize}
+\end{itemize}
+
+\medskip\quad\quad
+\begin{minipage}{0.9\textwidth}
+    \begin{block}{Putting it all together}
+        The EasyBuild \emph{framework} leverages \emph{easyblocks} to
+        \textbf{automatically build and install (scientific) software} using a
+        particular \emph{compiler toolchain}, as specified by one or multiple
+        \emph{easyconfig files}.
+    \end{block}
+\end{minipage}
 \end{frame}
 
 %===============================================================================
 
 \begin{frame}{EasyBuild: feature highlights}
-    \begin{itemize}
-        \item fully autonomously building and installing (scientific) software
-        \item highly configurable, via config files/environment/command line
-        \item thorough logging of executed procedure
-        \item generating of module files
-        \item automatic dependency resolution
-        \item dynamically extendable with additional easyblocks, toolchains, etc.
-        \item \emph{support for module hierarchies}, via custom module naming scheme
-        \item over different software packages supported, including
-              CP2K, NAMD, NWChem, OpenFOAM, PETSc, QuantumESPRESSO, WRF, \ldots
-    \end{itemize}
-    \begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Building/installing WRF (and all dependencies) \emph{with a single command} (!)}
-        \ttfamily\small
+\begin{itemize}
+    \item
+        Fully autonomously building and installing (scientific) software
+        \begin{itemize}
+            \item
+                Automatic dependency resolution
+            \item
+                Automatic generation of modulefiles
+        \end{itemize}
+    \item
+        Thorough logging of executed procedure
+    \item
+        Highly configurable, via config files/environment/command line
+    \item
+        Dynamically extendable with additional easyblocks, toolchains, etc.
+    \item
+        \emph{Support for module hierarchies}, via custom module naming scheme
+    \item
+        Supports over 500 different software packages
+        \begin{itemize}
+            \item
+                Including CP2K, NAMD, NWChem, OpenFOAM, PETSc, QuantumESPRESSO,
+                WRF, \ldots
+        \end{itemize}
+\end{itemize}
+\quad\quad
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{Example: building/installing WRF \& dependencies \emph{with a single command} (!)}
+        \ttfamily
         \$ eb WRF-3.5-goolf-1.6.10.eb --robot\\
         \$ module load WRF/3.5-goolf-1.6.10
     \end{exampleblock}
-    \end{minipage}
+\end{minipage}
 \end{frame}
 
 %===============================================================================
@@ -428,16 +478,16 @@
     \end{itemize}
     \begin{minipage}{0.9\textwidth}
     \begin{exampleblock}{Example: swapping modules using \texttt{ml} shorthand in a module hierarchy}
-        \ttfamily\footnotesize{
+        \ttfamily
         \$ ml\\
         Currently loaded modules:\\
-        1) GCC/4.8.2 2) MPICH/3.1.1 3) FFTW/3.3.2\\
+        ~1) GCC/4.8.2 \quad 2) MPICH/3.1.1 \quad 3) FFTW/3.3.2\\
         \$ ml -GCC Clang\\
         The following have been reloaded:\\
-        1) FFTW/3.3.2 2) MPICH/3.1.1\\
+        ~1) FFTW/3.3.2 \quad 2) MPICH/3.1.1\\
         \$ ml\\
         Currently loaded modules:\\
-        1) Clang/3.4 2) MPICH/3.1.1 3) FFTW/3.3.2}
+        ~1) Clang/3.4 \quad 2) MPICH/3.1.1 \quad 3) FFTW/3.3.2
     \end{exampleblock}
     \end{minipage}
 \end{frame}

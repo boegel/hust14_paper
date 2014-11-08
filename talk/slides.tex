@@ -147,7 +147,7 @@
         HPC systems often feature multiple compilers \& MPI libraries
         \begin{itemize}
             \item
-                Packages built with different compilers/MPIs can not
+                Packages built with different compilers/MPIs should not
                 be mixed
         \end{itemize}
     \item
@@ -245,7 +245,7 @@
         Scripting
         \begin{itemize}
             \item
-                Losely coulped collection of scripts to automate installations
+                Loosely coupled collection of scripts to automate installations
             \item
                 Often understood by only a few/single staff member(s)
             \item
@@ -297,7 +297,7 @@
         \item
             Intuitive, short module names
         \item
-            Only shows modules which are meaningful in the current context
+            Only shows modules which are compatible in the current context
     \end{itemize}
 \end{frame}
 
@@ -471,8 +471,9 @@
     Lmod empowers users to \textbf{control their working environment} while improving the user
     experience of interacting with module files, without hindering experts.
     \begin{itemize}
-        \item \small{(almost)} drop-in alternative for Tcl-based module tools
-        \item written in Lua, available since Oct'08
+        \item drop-in alternative for Tcl-based module tools (a few
+          edge cases)
+        \item written in Lua, available since Oct'08, reads Tcl modulefiles
         \item developed by Robert McLay (TACC, UT Austin)
         \item frequent releases, driven by community demands and feedback
     \end{itemize}
@@ -502,7 +503,7 @@
             \item automatic reloading of dependent modules on \texttt{module swap}
         \end{itemize}
         \item caching of module files, for responsive subcommands (e.g., \texttt{avail})
-        \item customizable behavior via provided hooks
+        \item site customizable behavior via provided hooks
         \item \texttt{ml} shorthand command, load/unload shortcuts
         \item various advanced features, including:
         \begin{itemize}
@@ -559,7 +560,20 @@
 
 \begin{frame}{Synergy between EasyBuild and Lmod}
 \begin{itemize}
-    \item bar
+  \item
+    EasyBuild can easily build hundreds of packages $\Rightarrow$ \\
+    overwhelming users
+  \item
+    Lmod can help with support for hierarchical modules trees which EB
+    now can create.
+  \item
+    Lmod has significantly improve the speed of certain operations \\
+    (e.g. \texttt{module --terse avail})
+  \item
+    Lmod has added new functions like \texttt{pushenv} a stack based \\
+    definition env. vars. such as \texttt{CC}.
+  \item
+    Synergy between EB and Lmod has made both tools much better.
 \end{itemize}
 \end{frame}
 
@@ -567,15 +581,37 @@
 
 \begin{frame}{Future work}
 \begin{itemize}
-    \item bar
+    \item EB is planning to add support for Lmod features:
+      \begin{itemize}
+        \item Properties
+        \item Families
+        \item Non-strict version loads: \texttt{\bf load(atleast("GCC","4.8"))}
+      \end{itemize}
+    \item Lmod supports a single hierarchy: Core $\Rightarrow$
+      Compiler $\Rightarrow$ MPI
+    \item It would be nice to a ``matrix'' of dependencies such as
+      parallel library with support for multiple version BLAS libraries
 \end{itemize}
 \end{frame}
 
 %===============================================================================
 
-\begin{frame}{Related work}
+\begin{frame}{Related work: Build}
 \begin{itemize}
-    \item bar
+    \item SWTools/Smithy (NICS/ORNL): formulas for 80 packages
+    \item iBS (iVEC):
+    \item Spack(LLNL): 
+\end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Related work: Environment Modules}
+\begin{itemize}
+    \item Environment Modules (TcL/C based module system)
+    \item Cmod (C based Module system)
+    \item pymodule (python based module system)
+    \item none currently support hierarchical module layouts.
 \end{itemize}
 \end{frame}
 
@@ -583,7 +619,14 @@
 
 \begin{frame}{Conclusion}
 \begin{itemize}
-    \item bar
+    \item building software for HPC system is difficult and painful.
+    \item flat module file layout requires users to load the matching
+      packages correctly.
+    \item EasyBuild can simplify the building of packages and
+      share knowledge between HPC centers
+    \item EasyBuild can create hierarchical module trees
+    \item Lmod can make it easier for your users to manage the large
+      number of packages.
 \end{itemize}
 \end{frame}
 

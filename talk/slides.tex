@@ -379,7 +379,8 @@ Other tools similar to environment modules: Dotkit, Softenv.
             Modules tool with which users interact with must be \textit{hierarchy-aware}
         \item
             Complexity of maintaining a module hierarchy begs for \textit{automation}
-    \end{itemize}
+    \end{itemize}~\\
+
     Two recent tools provide the necessary support:
     \begin{itemize}    
     \item
@@ -469,26 +470,16 @@ Other tools similar to environment modules: Dotkit, Softenv.
 %===============================================================================
 
 \begin{frame}{EasyBuild: building software with ease}
-\begin{figure}[centering]
-    \includegraphics[height=1.2cm]{easybuild_logo.jpg}
-\end{figure}
+\begin{figure}[centering]\includegraphics[height=1.2cm]{easybuild_logo.jpg}\end{figure}
 \begin{itemize}
     \item
-        Software build and installation framework
+        Open source (GPLv2) framework for building and installing software
     \item
         Collection of Python packages and modules
-        \begin{itemize}
-            \item
-                Licensed under GPLv2
-        \end{itemize}
     \item
         Original implementation by HPC-UGent, since 2009
     \item
-        Now a thriving community
-        \begin{itemize}
-            \item Driving development
-            \item Actively contributing
-        \end{itemize}
+        Thriving community: actively contributing, driving development
     \item
         New release every 4--6 weeks
         \begin{itemize}
@@ -532,9 +523,11 @@ Other tools similar to environment modules: Dotkit, Softenv.
 \begin{minipage}{0.9\textwidth}
     \begin{exampleblock}{Example: building/installing WRF \& dependencies \emph{with a single command} (!)}
         \ttfamily
-        \$ eb WRF-3.5-goolf-1.6.10.eb --robot\\
-        \$ module spider WRF
-        ...
+        \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
+        \$ module spider WRF\\
+        ...\\
+        This module can only be loaded through the following modules:\\
+        GCC/4.7.2, OpenMPI/1.6.4
     \end{exampleblock}
 \end{minipage}
 \end{frame}
@@ -583,6 +576,40 @@ Other tools similar to environment modules: Dotkit, Softenv.
     \end{block}
 \end{minipage}
 \end{frame}
+
+%===============================================================================
+
+\begin{frame}{Example use case}
+
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{Build and install WRF in a module hierarchy}
+        \ttfamily
+         \$ export EASYBUILD\_MODULE\_NAMING\_SCHEME=MyHMNS\\
+         \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
+         \$ eb WRF-3.5-ictce-5.3.0.eb --robot
+    \end{exampleblock}
+\end{minipage}
+
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{List existing WRF modules, load GCC build}
+        \ttfamily
+         \$ module spider WRF\\
+         ...\\
+         \$ ml GCC OpenMPI WRF
+    \end{exampleblock}
+\end{minipage}
+
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{Swap to Intel build of WRF}
+        \ttfamily
+         \$ ml -GCC -OpenMPI +icc +ifort +impi\\
+         The following have been reloaded:\\
+         ...
+    \end{exampleblock}
+\end{minipage}
+
+\end{frame}
+
 %===============================================================================
 
 \begin{frame}{EasyBuild and Lmod communities}
@@ -667,41 +694,6 @@ Other tools similar to environment modules: Dotkit, Softenv.
         Synergy between EasyBuild and Lmod has made both tools significantly better!
     \end{block}
 \end{minipage}
-\end{frame}
-
-%===============================================================================
-
-\begin{frame}{Example use case: WRF}
-
-\begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Build and install WRF in a module hierarchy}
-        \ttfamily
-         \$ export EASYBUILD\_MODULE\_NAMING\_SCHEME=MyHMNS\\
-         \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
-         \$ eb WRF-3.5-ictce-5.3.0.eb --robot
-    \end{exampleblock}
-\end{minipage}
-
-\begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{List existing WRF modules, load GCC build}
-        \ttfamily
-         \$ module spider WRF\\
-         ...\\
-         This module can only be loaded through the following modules:\\
-         ...\\
-         \$ ml GCC OpenMPI WRF
-    \end{exampleblock}
-\end{minipage}
-
-\begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Swap to Intel build of WRF}
-        \ttfamily
-         \$ ml -GCC -OpenMPI +icc +ifort +impi\\
-         The following have been reloaded:
-         ...
-    \end{exampleblock}
-\end{minipage}
-
 \end{frame}
 
 %===============================================================================

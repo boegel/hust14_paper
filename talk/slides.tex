@@ -21,18 +21,9 @@
 
 \title{\textbf{Modern Scientific Software Management Using EasyBuild and Lmod}}
 \author{%
-    Markus Geimer\inst{1}%
-    \and%
-    Kenneth Hoste\inst{2}%
-    \and
-    Robert McLay\inst{3}%
-}
-\institute{%
-    \inst{1} J{\"u}lich Supercomputing Centre, Germany%
-    \and%
-    \inst{2} HPC-UGent, Ghent University, Belgium%
-    \and%
-    \inst{3} Texas Advanced Computing Center, TX, USA%
+    \textit{Markus Geimer (J{\"u}lich Supercomputing Centre, Germany)}\\~\\
+    Kenneth Hoste (HPC-UGent, Ghent University, Belgium)\\~\\
+    Robert McLay (Texas Advanced Computing Center, TX, USA)
 }
 \date{%
     \small%
@@ -89,7 +80,7 @@
                 \item
                     Successful installation steps often barely documented
                 \item
-                    \ldots not to mention sharing of good practices between HPC sites
+                    Lack of sharing of good practices between HPC sites
             \end{itemize}
     \end{itemize}
 \end{frame}
@@ -104,16 +95,14 @@
         Provide `\texttt{module}' command, evaluating output of a helper tool
         \begin{itemize}
             \item
-                Original implementation written in C/Tcl
-            \item
-                Alternative Tcl-only variants
+                Original implementations are Tcl-based (Tcl/C, Tcl-only)
             \item
                 Lmod, implemented in Lua
         \end{itemize}
     \item
         Allows to, e.g., list, load, unload, and swap modules
     \item
-        Each module corresponds to a modulefile found in \texttt{\$MODULEPATH}
+        Each module corresponds to a module file found in \texttt{\$MODULEPATH}
         \begin{itemize}
             \item
                 Textual description of modifications to the user's environment\\
@@ -179,9 +168,9 @@
         mathematical libraries $\Rightarrow$ toolchains
         \begin{itemize}
             \item
-                Cryptic toolchain names (e.g., `\texttt{goolfc}')
+                Cryptic toolchain names (e.g., `\texttt{goolf}')
             \item
-                Toolchain versions w/o direct relationship to encapsulated packages
+                Toolchain version w/o direct relationship to encapsulated packages
         \end{itemize}
 \end{itemize}
 \end{frame}
@@ -212,7 +201,7 @@
         Cumbersome to prevent loading incompatible modules
         \begin{itemize}
             \item
-                Conflicting modules have to be explicitly listed in modulefiles
+                Names of conflicting modules must be explicitly listed in module files
             \item
                 Maintenance nightmare when adding/removing new packages
                 conflicting with others
@@ -228,7 +217,7 @@
         Manual installation
         \begin{itemize}
             \item
-                Relies on (part of) user support staff
+                Heavily relies on manpower of (part of) user support staff
             \item
                 Hard to enforce sharing of installation notes
         \end{itemize}
@@ -239,7 +228,7 @@
                 Limited support for installing multiple builds/versions of a
                 package
             \item
-                Little support for common procedures $\Rightarrow$ copy/paste
+                Not well suited to idiosyncrasies of scientific software
         \end{itemize}
     \item
         Scripting
@@ -267,12 +256,12 @@
 %===============================================================================
 
 \begin{frame}{Hierarchical module naming scheme}
-    Key idea: make modules available step-by-step.
+    \textbf{Key idea}: make modules available step-by-step.
     \begin{itemize}
         \item
             Initially, only `core' modules (e.g., compilers) are visible
         \item
-            These extend \texttt{\$MODULEPATH} on load, to make
+            These extend \texttt{\$MODULEPATH} on load, makes
             more modules available
     \end{itemize}
     \quad\quad
@@ -316,7 +305,7 @@
         Awareness of \texttt{\$MODULEPATH} extensions
         \begin{itemize}
             \item
-                Does swapping a module require reloading of other modules due
+                Does swapping modules require reloading of other modules due
                 to changes in the module search path?
         \end{itemize}
     \item
@@ -328,20 +317,54 @@
                 hierarchy?
         \end{itemize}
     \item
-        Creating and maintaining a module hierarchy requires even more care
+        Creating and maintaining a module hierarchy requires special care
+        \begin{itemize}
+            \item
+                Appropriate hierarchy level, correctly handling dependencies, \ldots
+        \end{itemize}
 \end{itemize}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Software build and installation tools}
+\begin{itemize}
+    \item SWTools (NICS/ORNL):
+    \item Smithy (NICS/ORNL):
+    \item iBS (iVEC):
+    \item Spack (LLNL): 
+\end{itemize}
+
 \begin{center}
     \begin{minipage}{0.9\textwidth}
-        \begin{alertblock}{Houston, we've \emph{had} a problem!}
+        \begin{alertblock}{Houston, we \emph{had} a problem!}
             \footnotesize
             \begin{itemize}
-                \item
-                    None of the usability challenges is addressed by the
-                    C/Tcl or Tcl-only modules implementation.
-                \item
-                    None of existing scientific software installation tools
-                    supports hierarchical modules.
+            \item No support for organising modules hierarchically
+            \item Lack of sizeable communities up until now
             \end{itemize}
+        \end{alertblock}
+    \end{minipage}
+\end{center}
+
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Module tools}
+Different implementations of environment modules system:
+\begin{itemize}
+    \item Cmod (C based): now obsolete (last updated in 1998)
+    \item Tcl-based implementations (TcL/C or Tcl-only): common practice
+    \item pymodule (Python based): experimental/incomplete
+\end{itemize}
+Other tools similar to environment modules: Dotkit, Softenv.
+
+\begin{center}
+    \begin{minipage}{0.9\textwidth}
+        \begin{alertblock}{Houston, we \emph{had} a problem!}
+            \footnotesize
+            Module hierarchy usability challenges are not adressed by any of these.
         \end{alertblock}
     \end{minipage}
 \end{center}
@@ -349,122 +372,42 @@
 
 %===============================================================================
 
-\begin{frame}{EasyBuild: building software with ease}
-\begin{figure}[centering]
-    \includegraphics[height=1.2cm]{easybuild_logo.jpg}
-\end{figure}
-\begin{itemize}
+\begin{frame}{Tools for dealing with a module hierarchy}
+    Adequate tools for dealing with a module hierarchy are indispensable.
+    \begin{itemize}
+        \item
+            Modules tool with which users interact with must be \textit{hierarchy-aware}
+        \item
+            Complexity of maintaining a module hierarchy begs for \textit{automation}
+    \end{itemize}
+    Two recent tools provide the necessary support:
+    \begin{itemize}    
     \item
-        Collection of Python packages and modules
+        \textbf{Lmod}: \url{https://www.tacc.utexas.edu/tacc-projects/lmod}
         \begin{itemize}
-            \item
-                Licensed under GPLv2
+            \item specifically developed for using a hierarchical module tree
+            \item provides required hierarchy-specific features
         \end{itemize}
     \item
-        Original implementation by HPC-UGent, since 2009
-    \item
-        Now a thriving community
+        \textbf{EasyBuild}: \url{http://hpcugent.github.io/easybuild}
         \begin{itemize}
-            \item Driving development
-            \item Actively contributing
+            \item automates software installation process, generates module files
+            \item provides full control over module naming scheme
+            \item includes support for organising modules hierarchically
         \end{itemize}
-    \item
-        New release every 4--6 weeks
-        \begin{itemize}
-            \item Latest release: EasyBuild v1.15.2 (Oct'14)
-        \end{itemize}
-    \item
-        Well documented: \url{http://easybuild.readthedocs.org}
-\end{itemize}
-\end{frame}
-
-%===============================================================================
-
-\begin{frame}{EasyBuild: high-level design overview}
-\begin{itemize}
-    \item
-        EasyBuild \emph{framework}
-        \begin{itemize}
-            \item
-                Core of EasyBuild
-            \item
-                Provides supporting functionality
-        \end{itemize}
-    \item
-        EasyBuild \emph{easyblock}
-        \begin{itemize}
-            \item
-                Python module
-            \item
-                Implements a (generic) build procedure
-        \end{itemize}
-    \item
-        EasyBuild \emph{easyconfig}
-        \begin{itemize}
-            \item
-                Build specification: software name/version, toolchain, etc.
-        \end{itemize}
-\end{itemize}
-
-\medskip\quad\quad
-\begin{minipage}{0.9\textwidth}
-    \begin{block}{Putting it all together}
-        The EasyBuild \emph{framework} leverages \emph{easyblocks} to
-        \textbf{automatically build and install (scientific) software} using a
-        particular \emph{compiler toolchain}, as specified by one or multiple
-        \emph{easyconfig files}.
-    \end{block}
-\end{minipage}
-\end{frame}
-
-%===============================================================================
-
-\begin{frame}{EasyBuild: feature highlights}
-\begin{itemize}
-    \item
-        Fully autonomously building and installing (scientific) software
-        \begin{itemize}
-            \item
-                Automatic dependency resolution
-            \item
-                Automatic generation of modulefiles
-        \end{itemize}
-    \item
-        Thorough logging of executed procedure
-    \item
-        Highly configurable, via config files/environment/command line
-    \item
-        Dynamically extendable with additional easyblocks, toolchains, etc.
-    \item
-        \emph{Support for module hierarchies}, via custom module naming scheme
-    \item
-        Supports over 500 different software packages
-        \begin{itemize}
-            \item
-                Including CP2K, NAMD, NWChem, OpenFOAM, PETSc, QuantumESPRESSO,
-                WRF, \ldots
-        \end{itemize}
-\end{itemize}
-\quad\quad
-\begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Example: building/installing WRF \& dependencies \emph{with a single command} (!)}
-        \ttfamily
-        \$ eb WRF-3.5-goolf-1.6.10.eb --robot\\
-        \$ module load WRF/3.5-goolf-1.6.10
-    \end{exampleblock}
-\end{minipage}
+    \end{itemize}
 \end{frame}
 
 %===============================================================================
 
 \begin{frame}{Lmod: a modern modules tool}
-Lmod empowers users to \textbf{control their working environment} while improving the user
-experience of interacting with module files, without hindering experts.
 \begin{itemize}
     \item
         Drop-in alternative for Tcl-based module tools (a few edge cases)
     \item
-        Written in Lua, available since Oct'08, reads Tcl modulefiles
+        Improves user experience, without hindering experts
+    \item
+        Written in Lua, available since Oct'08, reads Tcl module files
     \item
         Frequent releases, driven by community demands and feedback
 \end{itemize}
@@ -493,9 +436,9 @@ experience of interacting with module files, without hindering experts.
         \emph{Module hierarchy-aware} design and functionality
     \begin{itemize}
         \item
-            Searching across entire module tree with \texttt{spider} subcommand
+            Searching across entire module tree with `\texttt{spider}' subcommand
         \item
-            Automatic reloading of dependent modules on \texttt{module swap}
+            Automatic reloading of dependent modules on `\texttt{module swap}'
     \end{itemize}
     \item
         Caching of module files, for responsive subcommands
@@ -505,12 +448,16 @@ experience of interacting with module files, without hindering experts.
     \item
         \texttt{ml} shorthand command, load/unload shortcuts
     \item
-        Various advanced features, including:
+        Various other useful/advanced features, including:
     \begin{itemize}
         \item
-            Defining module families
+            Case-insensitive `\texttt{avail}' subcommand
         \item
-            Assigning properties to modules
+            Can send subcommand output to stdout (rather than to stderr)
+        \item
+            Defining module families (e.g., `\texttt{compiler}', `\texttt{mpi}')
+        \item
+            Assigning properties to modules (e.g., `\texttt{Phi-aware}')
         \item
             Stack-based definition of environment variables (\texttt{pushenv})
         \item
@@ -519,6 +466,123 @@ experience of interacting with module files, without hindering experts.
 \end{itemize}
 \end{frame}
 
+%===============================================================================
+
+\begin{frame}{EasyBuild: building software with ease}
+\begin{figure}[centering]
+    \includegraphics[height=1.2cm]{easybuild_logo.jpg}
+\end{figure}
+\begin{itemize}
+    \item
+        Software build and installation framework
+    \item
+        Collection of Python packages and modules
+        \begin{itemize}
+            \item
+                Licensed under GPLv2
+        \end{itemize}
+    \item
+        Original implementation by HPC-UGent, since 2009
+    \item
+        Now a thriving community
+        \begin{itemize}
+            \item Driving development
+            \item Actively contributing
+        \end{itemize}
+    \item
+        New release every 4--6 weeks
+        \begin{itemize}
+            \item Latest release: EasyBuild v1.15.2 (Oct'14)
+        \end{itemize}
+    \item
+        Supports over 500 different software packages
+        \begin{itemize}
+            \item
+                Including CP2K, NAMD, NWChem, OpenFOAM, PETSc, QuantumESPRESSO,
+                WRF, \ldots
+        \end{itemize}
+    \item
+        Well documented: \url{http://easybuild.readthedocs.org}
+\end{itemize}
+\end{frame}
+
+
+%===============================================================================
+
+\begin{frame}{EasyBuild: feature highlights}
+\begin{itemize}
+    \item
+        Fully autonomously building and installing (scientific) software
+        \begin{itemize}
+            \item
+                Automatic dependency resolution
+            \item
+                Automatic generation of module files
+        \end{itemize}
+    \item
+        Thorough logging of executed procedure
+    \item
+        Highly configurable, via config files/environment/command line
+    \item
+        Dynamically extendable with additional easyblocks, toolchains, etc.
+    \item
+        \emph{Support for module hierarchies}, via custom module naming scheme
+\end{itemize}
+\quad\quad
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{Example: building/installing WRF \& dependencies \emph{with a single command} (!)}
+        \ttfamily
+        \$ eb WRF-3.5-goolf-1.6.10.eb --robot\\
+        \$ module spider WRF
+        ...
+    \end{exampleblock}
+\end{minipage}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{EasyBuild: high-level design overview}
+\begin{itemize}
+    \item
+        EasyBuild \emph{framework}
+        \begin{itemize}
+            \item
+                Core of EasyBuild
+            \item
+                Provides supporting functionality for building and installing software
+        \end{itemize}
+    \item
+        \emph{easyblock}
+        \begin{itemize}
+            \item
+                Python module
+            \item
+                Implements a (generic) software build/install procedure
+        \end{itemize}
+    \item
+        \emph{easyconfig} file
+        \begin{itemize}
+            \item
+                Build specification: software name/version, toolchain, etc.
+        \end{itemize}
+    \item
+        compiler \emph{toolchain}
+        \begin{itemize}
+            \item
+                Compilers with accompanying libraries (MPI, BLAS/LAPACK, etc.)
+        \end{itemize}
+\end{itemize}
+
+\medskip\quad\quad
+\begin{minipage}{0.9\textwidth}
+    \begin{block}{Putting it all together}
+        The EasyBuild \emph{framework} leverages \emph{easyblocks} to
+        automatically build and install (scientific) software using a
+        particular \emph{compiler toolchain}, as specified by one or multiple
+        \emph{easyconfig files}.
+    \end{block}
+\end{minipage}
+\end{frame}
 %===============================================================================
 
 \begin{frame}{EasyBuild and Lmod communities}
@@ -532,10 +596,14 @@ experience of interacting with module files, without hindering experts.
                 EasyBuild
                 \begin{itemize}
                     \item
-                        $\sim$70 subscribers to mailing list
+                        Over 80 subscribers to mailing list
                     \item
-                        Used by various sites around the world\\
-                        (e.g., INL, U. Auckland, JSC, Bayer AG)
+                        About a dozen active members on \texttt{\#easybuild} IRC channel
+                    \item
+                        Users and contributors at HPC sites around the world\\
+                        (e.g., JSC, Stanford, U. Auckland, Bayer AG, \ldots)
+                    \item
+                        Six 3-day EasyBuild `hackathons', at various European HPC sites
                 \end{itemize}
             \item
                 Lmod
@@ -544,7 +612,7 @@ experience of interacting with module files, without hindering experts.
                         $\sim$50 subscribers to mailing list
                     \item
                         Deployed by a couple of hundred HPC sites\\
-                        (e.g., Stanford, Harvard, TACC, U. Warwick, JSC, Total)
+                        (e.g., Stanford, Harvard, TACC, U. Warwick, JSC, Total, \ldots)
                     \item
                         Number of users $\cal{O}$(10,000)
                 \end{itemize}
@@ -565,10 +633,10 @@ experience of interacting with module files, without hindering experts.
 \begin{frame}{Synergy between EasyBuild and Lmod}
 \begin{itemize}
     \item
-        EasyBuild can easily build hundreds of packages
+        EasyBuild can easily build and install hundreds of packages
         \begin{itemize}
             \item[$\Rightarrow$]
-                Overwhelming for users
+                Lots of modules, overwhelming for users
         \end{itemize}
     \item
         Lmod's support for hierarchical modules trees can help
@@ -582,23 +650,58 @@ experience of interacting with module files, without hindering experts.
         \begin{itemize}
             \item[$\Rightarrow$]
                 Lmod has significantly improved the speed of certain operations \\
-                (e.g. \texttt{module --terse avail})
+                (e.g., \texttt{module --terse avail})
         \end{itemize}
     \item
         Feature requests from the EasyBuild community
         \begin{itemize}
             \item[$\Rightarrow$]
-                Lmod has added new functions like \texttt{pushenv} a stack-based \\
-                definition environment variables such as \texttt{CC}.
+                Lmod has added new functionality, for example stack-based definition of
+                environment variables using `\texttt{pushenv}'
         \end{itemize}
 \end{itemize}
 
 \medskip\quad\quad
 \begin{minipage}{0.9\textwidth}
     \begin{block}{Bottom line}
-        Synergy between EasyBuild and Lmod has made both tools much better!
+        Synergy between EasyBuild and Lmod has made both tools significantly better!
     \end{block}
 \end{minipage}
+\end{frame}
+
+%===============================================================================
+
+\begin{frame}{Example use case: WRF}
+
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{Build and install WRF in a module hierarchy}
+        \ttfamily
+         \$ export EASYBUILD\_MODULE\_NAMING\_SCHEME=MyHMNS\\
+         \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
+         \$ eb WRF-3.5-ictce-5.3.0.eb --robot
+    \end{exampleblock}
+\end{minipage}
+
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{List existing WRF modules, load GCC build}
+        \ttfamily
+         \$ module spider WRF\\
+         ...\\
+         This module can only be loaded through the following modules:\\
+         ...\\
+         \$ ml GCC OpenMPI WRF
+    \end{exampleblock}
+\end{minipage}
+
+\begin{minipage}{0.9\textwidth}
+    \begin{exampleblock}{Swap to Intel build of WRF}
+        \ttfamily
+         \$ ml -GCC -OpenMPI +icc +ifort +impi\\
+         The following have been reloaded:
+         ...
+    \end{exampleblock}
+\end{minipage}
+
 \end{frame}
 
 %===============================================================================
@@ -613,7 +716,7 @@ experience of interacting with module files, without hindering experts.
             \item
                 Families
             \item
-                Non-strict version loads: \texttt{\bf load(atleast("GCC","4.8"))}
+                Non-strict version loads: \texttt{load(atleast("GCC","4.8"))}
         \end{itemize}
     \smallskip
     \item
@@ -635,27 +738,6 @@ experience of interacting with module files, without hindering experts.
     \item
         Extend EasyBuild to support multiple module naming schemes concurrently
         (e.g., to gradually move from one layout to another)
-\end{itemize}
-\end{frame}
-
-%===============================================================================
-
-\begin{frame}{Related work: Build}
-\begin{itemize}
-    \item SWTools/Smithy (NICS/ORNL): formulas for 80 packages
-    \item iBS (iVEC):
-    \item Spack(LLNL): 
-\end{itemize}
-\end{frame}
-
-%===============================================================================
-
-\begin{frame}{Related work: Environment Modules}
-\begin{itemize}
-    \item Environment Modules (TcL/C based module system)
-    \item Cmod (C based Module system)
-    \item pymodule (python based module system)
-    \item none currently support hierarchical module layouts.
 \end{itemize}
 \end{frame}
 

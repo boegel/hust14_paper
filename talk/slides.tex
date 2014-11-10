@@ -337,24 +337,14 @@
             \begin{itemize}
                 \item
                     None of the usability challenges is addressed by the
-                    C/Tcl or Tcl-only modules implementation
+                    C/Tcl or Tcl-only modules implementation.
                 \item
                     None of existing scientific software installation tools
-                    supports hierarchical modules
+                    supports hierarchical modules.
             \end{itemize}
         \end{alertblock}
     \end{minipage}
 \end{center}
-\end{frame}
-
-%===============================================================================
-
-\begin{frame}{Tools for using a module hierarchy}
-    \begin{itemize}
-        \item adequate tools for dealing with a module hierarchy are \emph{indispensable}
-        \item EasyBuild
-        \item Lmod
-    \end{itemize}
 \end{frame}
 
 %===============================================================================
@@ -468,16 +458,18 @@
 %===============================================================================
 
 \begin{frame}{Lmod: a modern modules tool}
-    Lmod empowers users to \textbf{control their working environment} while improving the user
-    experience of interacting with module files, without hindering experts.
-    \begin{itemize}
-        \item drop-in alternative for Tcl-based module tools (a few
-          edge cases)
-        \item written in Lua, available since Oct'08, reads Tcl modulefiles
-        \item developed by Robert McLay (TACC, UT Austin)
-        \item frequent releases, driven by community demands and feedback
-    \end{itemize}
-    \begin{minipage}{0.9\textwidth}
+Lmod empowers users to \textbf{control their working environment} while improving the user
+experience of interacting with module files, without hindering experts.
+\begin{itemize}
+    \item
+        Drop-in alternative for Tcl-based module tools (a few edge cases)
+    \item
+        Written in Lua, available since Oct'08, reads Tcl modulefiles
+    \item
+        Frequent releases, driven by community demands and feedback
+\end{itemize}
+\quad\quad
+\begin{minipage}{0.9\textwidth}
     \begin{exampleblock}{Example: swapping modules using \texttt{ml} shorthand in a module hierarchy}
         \ttfamily
         \$ ml\\
@@ -490,29 +482,41 @@
         Currently loaded modules:\\
         ~1) Clang/3.4 \quad 2) MPICH/3.1.1 \quad 3) FFTW/3.3.2
     \end{exampleblock}
-    \end{minipage}
+\end{minipage}
 \end{frame}
 
 %===============================================================================
 
 \begin{frame}{Lmod: feature highlights}
+\begin{itemize}
+    \item
+        \emph{Module hierarchy-aware} design and functionality
     \begin{itemize}
-        \item \emph{module hierarchy-aware} design and functionality
-        \begin{itemize}
-            \item searching across entire module tree with \texttt{spider} subcommand
-            \item automatic reloading of dependent modules on \texttt{module swap}
-        \end{itemize}
-        \item caching of module files, for responsive subcommands (e.g., \texttt{avail})
-        \item site customizable behavior via provided hooks
-        \item \texttt{ml} shorthand command, load/unload shortcuts
-        \item various advanced features, including:
-        \begin{itemize}
-            \item defining module families
-            \item assigning properties to modules
-            \item stack-based definition of environment variables (\texttt{pushenv})
-            \item user-definable collections of modules
-        \end{itemize}
+        \item
+            Searching across entire module tree with \texttt{spider} subcommand
+        \item
+            Automatic reloading of dependent modules on \texttt{module swap}
     \end{itemize}
+    \item
+        Caching of module files, for responsive subcommands
+        (e.g., \texttt{avail})
+    \item
+        Site-customizable behavior via provided hooks
+    \item
+        \texttt{ml} shorthand command, load/unload shortcuts
+    \item
+        Various advanced features, including:
+    \begin{itemize}
+        \item
+            Defining module families
+        \item
+            Assigning properties to modules
+        \item
+            Stack-based definition of environment variables (\texttt{pushenv})
+        \item
+            User-definable collections of modules
+    \end{itemize}
+\end{itemize}
 \end{frame}
 
 %===============================================================================
@@ -560,37 +564,77 @@
 
 \begin{frame}{Synergy between EasyBuild and Lmod}
 \begin{itemize}
-  \item
-    EasyBuild can easily build hundreds of packages $\Rightarrow$ \\
-    overwhelming users
-  \item
-    Lmod can help with support for hierarchical modules trees which EB
-    now can create.
-  \item
-    Lmod has significantly improve the speed of certain operations \\
-    (e.g. \texttt{module --terse avail})
-  \item
-    Lmod has added new functions like \texttt{pushenv} a stack based \\
-    definition env. vars. such as \texttt{CC}.
-  \item
-    Synergy between EB and Lmod has made both tools much better.
+    \item
+        EasyBuild can easily build hundreds of packages
+        \begin{itemize}
+            \item[$\Rightarrow$]
+                Overwhelming for users
+        \end{itemize}
+    \item
+        Lmod's support for hierarchical modules trees can help
+        \begin{itemize}
+            \item[$\Rightarrow$]
+                Support for using Lmod and hierarchical module naming schemes
+                was added to EasyBuild
+        \end{itemize}
+    \item
+        EasyBuild uncovered performance issues in Lmod
+        \begin{itemize}
+            \item[$\Rightarrow$]
+                Lmod has significantly improved the speed of certain operations \\
+                (e.g. \texttt{module --terse avail})
+        \end{itemize}
+    \item
+        Feature requests from the EasyBuild community
+        \begin{itemize}
+            \item[$\Rightarrow$]
+                Lmod has added new functions like \texttt{pushenv} a stack-based \\
+                definition environment variables such as \texttt{CC}.
+        \end{itemize}
 \end{itemize}
+
+\medskip\quad\quad
+\begin{minipage}{0.9\textwidth}
+    \begin{block}{Bottom line}
+        Synergy between EasyBuild and Lmod has made both tools much better!
+    \end{block}
+\end{minipage}
 \end{frame}
 
 %===============================================================================
 
 \begin{frame}{Future work}
 \begin{itemize}
-    \item EB is planning to add support for Lmod features:
-      \begin{itemize}
-        \item Properties
-        \item Families
-        \item Non-strict version loads: \texttt{\bf load(atleast("GCC","4.8"))}
-      \end{itemize}
-    \item Lmod supports a single hierarchy: Core $\Rightarrow$
-      Compiler $\Rightarrow$ MPI
-    \item It would be nice to a ``matrix'' of dependencies such as
-      parallel library with support for multiple version BLAS libraries
+    \item
+        EasyBuild is planning to add support for Lmod-specific features
+        \begin{itemize}
+            \item
+                Properties
+            \item
+                Families
+            \item
+                Non-strict version loads: \texttt{\bf load(atleast("GCC","4.8"))}
+        \end{itemize}
+    \smallskip
+    \item
+        The hierarchy concept needs further investigation
+        \begin{itemize}
+            \item
+                Lmod currently supports a single hierarchy:
+                Core $\Rightarrow$ Compiler $\Rightarrow$ MPI
+            \item
+                Traditional EasyBuild toolchains also contain multiple math
+                libraries\\
+                $\Rightarrow$ Multi-dimensional module hierarchy (``matrix'')
+        \end{itemize}
+    \smallskip
+    \item
+        Improve EasyBuild's dependency resolution mechanism to support
+        subtoolchains
+    \smallskip
+    \item
+        Extend EasyBuild to support multiple module naming schemes concurrently
+        (e.g., to gradually move from one layout to another)
 \end{itemize}
 \end{frame}
 
@@ -619,14 +663,19 @@
 
 \begin{frame}{Conclusion}
 \begin{itemize}
-    \item building software for HPC system is difficult and painful.
-    \item flat module file layout requires users to load the matching
-      packages correctly.
-    \item EasyBuild can simplify the building of packages and
-      share knowledge between HPC centers
-    \item EasyBuild can create hierarchical module trees
-    \item Lmod can make it easier for your users to manage the large
-      number of packages.
+    \item
+        Building software for HPC system is difficult and painful.
+    \item
+        Flat module file layout requires users to load the matching
+        packages correctly.
+    \item
+        EasyBuild can simplify the building of packages and share
+        knowledge between HPC centers.
+    \item
+        EasyBuild can create hierarchical module trees.
+    \item
+        Lmod can make it easier for your users to manage the large
+        number of packages.
 \end{itemize}
 \end{frame}
 

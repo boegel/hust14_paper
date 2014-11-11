@@ -301,6 +301,7 @@
                 How to locate packages w/o manually exploring the entire
                 hierarchy?
         \end{itemize}
+    \smallskip
     \item
         Awareness of \texttt{\$MODULEPATH} extensions
         \begin{itemize}
@@ -308,6 +309,7 @@
                 Does swapping modules require reloading of other modules due
                 to changes in the module search path?
         \end{itemize}
+    \smallskip
     \item
         Module availability on different paths in the hierarchy
         \begin{itemize}
@@ -316,6 +318,7 @@
                 module search path after swapping a module lower in the
                 hierarchy?
         \end{itemize}
+    \smallskip
     \item
         Creating and maintaining a module hierarchy requires special care
         \begin{itemize}
@@ -329,10 +332,36 @@
 
 \begin{frame}{Software build and installation tools}
 \begin{itemize}
-    \item SWTools (NICS/ORNL):
-    \item Smithy (NICS/ORNL):
-    \item iBS (iVEC):
-    \item Spack (LLNL): 
+    \item
+        SWTools (NICS/ORNL)
+        \begin{itemize}
+            \item
+                Only one public release (2011)
+        \end{itemize}
+    \item
+        Smithy (NICS/ORNL)
+        \begin{itemize}
+            \item
+                Follow-up to SWTools, also supports formulas ($\sim$80 packages)
+            \item
+                Available on GitHub, since 2013 mostly bug fixes
+        \end{itemize}
+    \item
+        iBS (iVEC)
+        \begin{itemize}
+            \item
+                Not yet publicly available
+        \end{itemize}
+    \item
+        Spack (LLNL)
+        \begin{itemize}
+            \item
+                Powerful and well-documented command-line interface
+            \item
+                Supports $\sim$50 packages
+            \item
+                Available on GitHub
+        \end{itemize}
 \end{itemize}
 
 \begin{center}
@@ -340,7 +369,7 @@
         \begin{alertblock}{Houston, we \emph{had} a problem!}
             \footnotesize
             \begin{itemize}
-            \item No support for organising modules hierarchically
+            \item No support for organizing modules hierarchically
             \item Lack of sizeable communities up until now
             \end{itemize}
         \end{alertblock}
@@ -354,11 +383,20 @@
 \begin{frame}{Module tools}
 Different implementations of environment modules system:
 \begin{itemize}
-    \item Cmod (C based): now obsolete (last updated in 1998)
-    \item Tcl-based implementations (TcL/C or Tcl-only): common practice
-    \item pymodule (Python based): experimental/incomplete
+    \item
+        Cmod (C based): now obsolete (last updated in 1998)
+    \item
+        Tcl-based implementations (Tcl/C or Tcl-only): common practice
+    \item
+        pymodule (Python based): experimental/incomplete
 \end{itemize}
-Other tools similar to environment modules: Dotkit, Softenv.
+Tools similar to environment modules (no longer actively developed):
+\begin{itemize}
+    \item
+        Dotkit: last updated in 2008
+    \item
+        Softenv: last updated in 2007
+\end{itemize}
 
 \begin{center}
     \begin{minipage}{0.9\textwidth}
@@ -373,30 +411,35 @@ Other tools similar to environment modules: Dotkit, Softenv.
 %===============================================================================
 
 \begin{frame}{Tools for dealing with a module hierarchy}
-    Adequate tools for dealing with a module hierarchy are indispensable.
-    \begin{itemize}
-        \item
-            Modules tool with which users interact with must be \textit{hierarchy-aware}
-        \item
-            Complexity of maintaining a module hierarchy begs for \textit{automation}
-    \end{itemize}~\\
+Adequate tools for dealing with a module hierarchy are indispensable.
+\begin{itemize}
+    \item
+        Modules tool that users interact with must be \textit{hierarchy-aware}
+    \item
+        Complexity of maintaining a module hierarchy begs for \textit{automation}
+\end{itemize}~\\
 
-    Two recent tools provide the necessary support:
-    \begin{itemize}    
+Two recent tools provide the necessary support:
+\begin{itemize}    
     \item
         \textbf{Lmod}: \url{https://www.tacc.utexas.edu/tacc-projects/lmod}
         \begin{itemize}
-            \item specifically developed for using a hierarchical module tree
-            \item provides required hierarchy-specific features
+            \item
+                Specifically developed for using a hierarchical module tree
+            \item
+                Provides required hierarchy-specific features
         \end{itemize}
     \item
         \textbf{EasyBuild}: \url{http://hpcugent.github.io/easybuild}
         \begin{itemize}
-            \item automates software installation process, generates module files
-            \item provides full control over module naming scheme
-            \item includes support for organising modules hierarchically
+            \item
+                Automates software installation process, generates module files
+            \item
+                Provides full control over module naming scheme
+            \item
+                Includes support for organizing modules hierarchically
         \end{itemize}
-    \end{itemize}
+\end{itemize}
 \end{frame}
 
 %===============================================================================
@@ -559,7 +602,7 @@ Other tools similar to environment modules: Dotkit, Softenv.
                 Build specification: software name/version, toolchain, etc.
         \end{itemize}
     \item
-        compiler \emph{toolchain}
+        Compiler \emph{toolchain}
         \begin{itemize}
             \item
                 Compilers with accompanying libraries (MPI, BLAS/LAPACK, etc.)
@@ -581,6 +624,7 @@ Other tools similar to environment modules: Dotkit, Softenv.
 
 \begin{frame}{Example use case}
 
+\quad\quad
 \begin{minipage}{0.9\textwidth}
     \begin{exampleblock}{Build and install WRF in a module hierarchy}
         \ttfamily
@@ -590,6 +634,7 @@ Other tools similar to environment modules: Dotkit, Softenv.
     \end{exampleblock}
 \end{minipage}
 
+\quad\quad
 \begin{minipage}{0.9\textwidth}
     \begin{exampleblock}{List existing WRF modules, load GCC build}
         \ttfamily
@@ -599,6 +644,7 @@ Other tools similar to environment modules: Dotkit, Softenv.
     \end{exampleblock}
 \end{minipage}
 
+\quad\quad
 \begin{minipage}{0.9\textwidth}
     \begin{exampleblock}{Swap to Intel build of WRF}
         \ttfamily
@@ -738,18 +784,44 @@ Other tools similar to environment modules: Dotkit, Softenv.
 \begin{frame}{Conclusion}
 \begin{itemize}
     \item
-        Building software for HPC system is difficult and painful.
+        Building software for HPC systems is difficult and painful
     \item
-        Flat module file layout requires users to load the matching
-        packages correctly.
+        Flat module layout is common practice, but has many drawbacks
+        \begin{itemize}
+            \item
+                Overwhelming number of modules
+            \item
+                Unwieldy module names due to dependencies
+            \item
+                Loading compatible modules is the user's responsibility
+        \end{itemize}
     \item
-        EasyBuild can simplify the building of packages and share
-        knowledge between HPC centers.
+        Hierarchical module organization helps significantly
+        \begin{itemize}
+            \item
+                Fewer visible modules, only compatible ones
+            \item
+                Needs adequate tool support, though
+        \end{itemize}
     \item
-        EasyBuild can create hierarchical module trees.
+        EasyBuild
+        \begin{itemize}
+            \item
+                simplifies the building of packages
+            \item
+                supports the creation of hierarchical module trees
+            \item
+                helps to share knowledge between HPC centers
+        \end{itemize}
     \item
-        Lmod can make it easier for your users to manage the large
-        number of packages.
+        Lmod
+        \begin{itemize}
+            \item
+                provides hierarchy-specific features
+        \end{itemize}
+    \item
+        Both tools significantly benefit from collaboration and
+        communities
 \end{itemize}
 \end{frame}
 

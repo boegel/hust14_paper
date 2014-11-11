@@ -100,7 +100,7 @@
                 Lmod, implemented in Lua
         \end{itemize}
     \item
-        Allows to, e.g., list, load, unload, and swap modules
+        Allows to, for example, list, load, unload, and swap modules
     \item
         Each module corresponds to a module file found in \texttt{\$MODULEPATH}
         \begin{itemize}
@@ -298,12 +298,14 @@
         Visibility of modules
         \begin{itemize}
             \item
+                Initially only core modules show up in output of `\texttt{module avail}'
+            \item
                 How to locate packages w/o manually exploring the entire
                 hierarchy?
         \end{itemize}
     \smallskip
     \item
-        Awareness of \texttt{\$MODULEPATH} extensions
+        Awareness of changes to \texttt{\$MODULEPATH}
         \begin{itemize}
             \item
                 Does swapping modules require reloading of other modules due
@@ -483,6 +485,8 @@ Two recent tools provide the necessary support:
             Searching across entire module tree with `\texttt{spider}' subcommand
         \item
             Automatic reloading of dependent modules on `\texttt{module swap}'
+        \item
+            Marking missing dependent modules as inactive after `\texttt{module swap}'
     \end{itemize}
     \item
         Caching of module files, for responsive subcommands
@@ -747,7 +751,7 @@ Two recent tools provide the necessary support:
 \begin{frame}{Future work}
 \begin{itemize}
     \item
-        EasyBuild is planning to add support for Lmod-specific features
+        Add support for Lmod-specific features in EasyBuild
         \begin{itemize}
             \item
                 Properties
@@ -799,25 +803,25 @@ Two recent tools provide the necessary support:
         Hierarchical module organization helps significantly
         \begin{itemize}
             \item
-                Fewer visible modules, only compatible ones
+                Fewer visible modules (only compatible ones), short module names
             \item
-                Needs adequate tool support, though
+                Requires adequate tool support, however
         \end{itemize}
     \item
         EasyBuild
         \begin{itemize}
             \item
-                simplifies the building of packages
+                Automates building and installing (scientific) software, incl.~modules
             \item
-                supports the creation of hierarchical module trees
+                Supports maintaining hierarchical module trees
             \item
-                helps to share knowledge between HPC centers
+                Helps to share knowledge between HPC centers
         \end{itemize}
     \item
         Lmod
         \begin{itemize}
             \item
-                provides hierarchy-specific features
+                Provides required hierarchy-specific features (and a lot more)
         \end{itemize}
     \item
         Both tools significantly benefit from collaboration and

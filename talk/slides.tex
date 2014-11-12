@@ -9,11 +9,6 @@
 \setbeamertemplate{headline}{}  %Remove the header
 \setbeamertemplate{blocks}[rounded][shadow=true]
 
-\setbeamerfont{block title}{size=\small}
-\setbeamerfont{block body}{size=\footnotesize}
-\setbeamerfont{block title example}{size=\footnotesize}
-\setbeamerfont{block body alerted}{size=\scriptsize} % 'body example' doesn't work...
-
 
 \begin{document}
 
@@ -115,7 +110,8 @@
 \vspace*{-10pt}
 \begin{center}
     \begin{minipage}{0.9\textwidth}
-        \begin{exampleblock}{Example: available modules, loading a module}
+        \begin{exampleblock}{\footnotesize Example: available modules, loading a module}
+            \scriptsize
             \ttfamily
             \$ module avail\\
             foo/1.0 \quad foo/1.7 \quad bar/4.2\\
@@ -143,7 +139,8 @@
         Common solution: encode dependency in module name\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example: encoding compiler in name of MPI module}
+            \begin{exampleblock}{\footnotesize Example: encoding compiler in name of MPI module}
+                \scriptsize
                 \ttfamily
                 \$ module avail OpenMPI\\
                 OpenMPI/1.7.3-GCC-4.8.2
@@ -155,7 +152,8 @@
         Makes module names unwieldy for multiple dependencies\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example: long module names for application modules}
+            \begin{exampleblock}{\footnotesize Example: long module names for application modules}
+                \scriptsize
                 \ttfamily
                 \$ module avail WRF\\
                 WRF/3.5-GCC-4.8.2-OpenMPI-1.7.3
@@ -185,7 +183,8 @@
         Categorization can improve clarity\\
         \enskip
         \begin{minipage}{0.9\textwidth}
-            \begin{exampleblock}{Example: categorization via module search paths}
+            \begin{exampleblock}{\footnotesize Example: categorization via module search paths}
+                \scriptsize
                 \ttfamily
                 \$ module avail\\
                 ---------- <prefix>/compiler ----------\\
@@ -244,7 +243,7 @@
 \end{itemize}
 \begin{center}
     \begin{minipage}{0.9\textwidth}
-        \begin{alertblock}{Wake-up call!}
+        \begin{alertblock}{\small Wake-up call!}
             \footnotesize
             Although many HPC sites around the world face these problems,
             there is hardly any collaboration to address them!
@@ -266,7 +265,8 @@
     \end{itemize}
     \quad\quad
     \begin{minipage}{0.9\textwidth}
-        \begin{exampleblock}{Example: a simple module hierarchy}
+        \begin{exampleblock}{\footnotesize Example: a simple module hierarchy}
+            \scriptsize
             \ttfamily
             \$ module avail\\
             ------------ <prefix>/Core ------------\\
@@ -368,7 +368,7 @@
 
 \begin{center}
     \begin{minipage}{0.9\textwidth}
-        \begin{alertblock}{Houston, we \emph{had} a problem!}
+        \begin{alertblock}{\small Houston, we \emph{had} a problem!}
             \footnotesize
             \begin{itemize}
             \item No support for organizing modules hierarchically
@@ -402,7 +402,7 @@ Tools similar to environment modules (no longer actively developed):
 
 \begin{center}
     \begin{minipage}{0.9\textwidth}
-        \begin{alertblock}{Houston, we \emph{had} a problem!}
+        \begin{alertblock}{\small Houston, we \emph{had} a problem!}
             \footnotesize
             Module hierarchy usability challenges are not adressed by any of these.
         \end{alertblock}
@@ -459,7 +459,8 @@ Two recent tools provide the necessary support:
 \end{itemize}
 \quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Example: swapping modules using \texttt{ml} shorthand in a module hierarchy}
+    \begin{exampleblock}{\footnotesize Example: swapping modules using \texttt{ml} shorthand in a module hierarchy}
+        \scriptsize
         \ttfamily
         \$ ml\\
         Currently loaded modules:\\
@@ -568,7 +569,8 @@ Two recent tools provide the necessary support:
 \end{itemize}
 \quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Example: building/installing WRF \& dependencies \emph{with a single command} (!)}
+    \begin{exampleblock}{\footnotesize Example: building/installing WRF \& dependencies \emph{with a single command} (!)}
+        \scriptsize
         \ttfamily
         \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
         \$ module spider WRF\\
@@ -615,7 +617,8 @@ Two recent tools provide the necessary support:
 
 \medskip\quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{block}{Putting it all together}
+    \begin{block}{\small Putting it all together}
+        \footnotesize
         The EasyBuild \emph{framework} leverages \emph{easyblocks} to
         automatically build and install (scientific) software using a
         particular \emph{compiler toolchain}, as specified by one or multiple
@@ -630,31 +633,34 @@ Two recent tools provide the necessary support:
 
 \quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Build and install WRF in a module hierarchy}
+    \begin{exampleblock}{\footnotesize Build and install WRF in a module hierarchy}
+        \scriptsize
         \ttfamily
-         \$ export EASYBUILD\_MODULE\_NAMING\_SCHEME=MyHMNS\\
-         \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
-         \$ eb WRF-3.5-ictce-5.3.0.eb --robot
+        \$ export EASYBUILD\_MODULE\_NAMING\_SCHEME=MyHMNS\\
+        \$ eb WRF-3.5-goolf-1.4.10.eb --robot\\
+        \$ eb WRF-3.5-ictce-5.3.0.eb --robot
     \end{exampleblock}
 \end{minipage}
 
 \quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{List existing WRF modules, load GCC build}
+    \begin{exampleblock}{\footnotesize List existing WRF modules, load GCC build}
+        \scriptsize
         \ttfamily
-         \$ module spider WRF\\
-         ...\\
-         \$ ml GCC OpenMPI WRF
+        \$ module spider WRF\\
+        ...\\
+        \$ ml GCC OpenMPI WRF
     \end{exampleblock}
 \end{minipage}
 
 \quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{exampleblock}{Swap to Intel build of WRF}
+    \begin{exampleblock}{\footnotesize Swap to Intel build of WRF}
+        \scriptsize
         \ttfamily
-         \$ ml -GCC -OpenMPI +icc +ifort +impi\\
-         The following have been reloaded:\\
-         ...
+        \$ ml -GCC -OpenMPI +icc +ifort +impi\\
+        The following have been reloaded:\\
+        ...
     \end{exampleblock}
 \end{minipage}
 
@@ -740,7 +746,8 @@ Two recent tools provide the necessary support:
 
 \medskip\quad\quad
 \begin{minipage}{0.9\textwidth}
-    \begin{block}{Bottom line}
+    \begin{block}{\small Bottom line}
+        \footnotesize
         Synergy between EasyBuild and Lmod has made both tools significantly better!
     \end{block}
 \end{minipage}

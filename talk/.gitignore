@@ -17,6 +17,7 @@
 *.aux.make
 *.d
 *.auxbbl.make
+*.auxbbl.make.temp
 *.auxtarget.make
 *.nav.make
 *.out
